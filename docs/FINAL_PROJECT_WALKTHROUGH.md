@@ -30,9 +30,10 @@ Using `<T>`, our base servlet automatically discovers which model it is handling
 ## Phase 3: CDI Services (The "Helpers")
 We integrated **Contexts and Dependency Injection** to manage business logic.
 
-### [CONCEPT: SCOPES & @Inject](file:///home/abednegokaume/IdeaProjects/maven-projects/cohort12/JEE%20NOTES.txt#L80)
-- **@ApplicationScoped**: [HospitalMaintenanceService.java](file:///home/abednegokaume/IdeaProjects/maven-projects/VitalTrack/src/main/java/app/utility/HospitalMaintenanceService.java) lives for the entire app lifecycle.
-- **@Inject**: Used to automatically provide services to our servlets without manual instantiation.
+### [CONCEPT: SCOPES, @Inject & QUALIFIERS](file:///home/abednegokaume/IdeaProjects/maven-projects/cohort12/JEE%20NOTES.txt#L80)
+- **@ApplicationScoped**: Used to define singletons like [StandardMaintenanceService.java](file:///home/abednegokaume/IdeaProjects/maven-projects/VitalTrack/src/main/java/app/utility/StandardMaintenanceService.java).
+- **@Inject**: Used to automatically provide services to our servlets.
+- **Qualifiers**: We created [MaintenanceQualifier.java](file:///home/abednegokaume/IdeaProjects/maven-projects/VitalTrack/src/main/java/app/utility/MaintenanceQualifier.java) to resolve **Dependency Ambiguity**. This allows our [HospitalEquipmentAction](file:///home/abednegokaume/IdeaProjects/maven-projects/VitalTrack/src/main/java/app/action/HospitalEquipmentAction.java) to choose between `URGENT` and `STANDARD` helpers just by their "hat" (annotation).
 
 ---
 
@@ -62,6 +63,7 @@ The user interface is built using **JSP**, **JSTL**, and **EL**.
 | **Java Bean** | `HospitalEquipment.java` | A simple box with labels and handles. |
 | **Servlet** | `HospitalBaseAction.java` | A waiter who takes orders and brings food. |
 | **CDI Inject** | `@Inject` | Asking the computer to bring us a helper. |
+| **Qualifier** | `@MaintenanceQualifier` | A special "Hat" to choose the right helper. |
 | **Filter** | `HospitalAuthenticationFilter.java` | A security guard at the door. |
 | **Listener** | `HospitalStockMonitorListener.java` | An alarm that rings on opening day. |
 | **JSP / EL** | `index.jsp` | The big TV screen showing all the info. |
