@@ -10,11 +10,11 @@ VitalTrack provides a centralized, automated system for tracking the lifecycle o
 Based on our Generic Framework, we will implement the following entities:
 
 1.  **Equipment**:
-    *   `id`, `name`, `serialNumber`, `purchaseDate`, `lastCalibrationDate`, `nextCalibrationDate`, `status` (Active, Maintenance, Retired).
+    *   `id`, `name`, `serialNumber`, `purchaseDate`, `lastCalibrationDate`, `nextCalibrationDate`, `equipmentStatus` (Active, Maintenance, Retired).
 2.  **MedicalSupply**:
     *   `id`, `name`, `category`, `quantity`, `unitOfMeasure`, `expiryDate`, `reorderLevel`.
 3.  **Technician**:
-    *   `id`, `name`, `specialization`, `contactInfo`, `status` (Available, On-Call).
+    *   `id`, `name`, `specialization`, `contactInfo`, `equipmentStatus` (Available, On-Call).
 4.  **MaintenanceLog**:
     *   `id`, `equipmentId`, `technicianId`, `serviceDate`, `actionTaken`, `notes`.
 
