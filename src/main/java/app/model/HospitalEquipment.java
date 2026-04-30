@@ -8,9 +8,9 @@ public class HospitalEquipment implements Serializable {
     private String name;
     private String serialNumber;
     private Date purchaseDate;
-    private Date lastCallibrationDate;
-    private Date nextCallibrationDate;
-    private EquipmentStatus equipmentStatus;
+    private Date lastCalibrationDate;
+    private Date nextCalibrationDate;
+    private String status;
 
     public HospitalEquipment() {
     }
@@ -47,28 +47,28 @@ public class HospitalEquipment implements Serializable {
         this.purchaseDate = purchaseDate;
     }
 
-    public Date getLastCallibrationDate() {
-        return lastCallibrationDate;
+    public Date getLastCalibrationDate() {
+        return lastCalibrationDate;
     }
 
-    public void setLastCalibrationDate(Date lastCallibrationDate) {
-        this.lastCallibrationDate = lastCallibrationDate;
+    public void setLastCalibrationDate(Date lastCalibrationDate) {
+        this.lastCalibrationDate = lastCalibrationDate;
     }
 
-    public Date getNextCallibrationDate() {
-        return nextCallibrationDate;
+    public Date getNextCalibrationDate() {
+        return nextCalibrationDate;
     }
 
-    public void setNextCalibrationDate(Date nextCallibrationDate) {
-        this.nextCallibrationDate = nextCallibrationDate;
+    public void setNextCalibrationDate(Date nextCalibrationDate) {
+        this.nextCalibrationDate = nextCalibrationDate;
     }
 
-    public EquipmentStatus getStatus() {
-        return equipmentStatus;
+    public String getStatus() {
+        return status;
     }
-
-    public void setStatus(EquipmentStatus equipmentStatus) {
-        this.equipmentStatus = equipmentStatus;
+ 
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

@@ -1,9 +1,8 @@
 package app.action;
 
-import app.model.HospitalEquipment;
 import app.model.HospitalMaintenanceLog;
 import jakarta.servlet.annotation.WebServlet;
 
-@WebServlet("/maintenance")
+@WebServlet("/maintenancelog")
 public class HospitalMaintenanceLogAction extends HospitalBaseAction<HospitalMaintenanceLog> {
 }

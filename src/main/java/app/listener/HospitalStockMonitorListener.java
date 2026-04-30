@@ -7,9 +7,16 @@ import jakarta.servlet.annotation.WebListener;
 import java.net.http.WebSocket;
 @WebListener
 public class HospitalStockMonitorListener implements ServletContextListener {
+    @jakarta.inject.Inject
+    private app.utility.DatabaseInitializer dbInitializer;
+
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         System.out.println("GOOD MORNING!! HOSPITAL IS OPENING......");
+        
+        // Initialize the Database Tables
+        dbInitializer.initialize();
+
         System.out.println("Scanning the available stock....");
         // Implement stock check here
 

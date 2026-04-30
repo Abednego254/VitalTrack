@@ -166,14 +166,18 @@
         <div class="nav-links">
             <a href="index.jsp">Dashboard</a>
             <a href="equipment">Equipment</a>
-            <a href="supplies">Supplies</a>
-            <a href="maintenance">Maintenance</a>
+            <a href="medicalsupply">Supplies</a>
+            <a href="technician">Technicians</a>
+            <a href="maintenancelog">Maintenance</a>
         </div>
     </nav>
 
     <header class="hero">
-        <h2>Hospital Command Center</h2>
-        <p>Real-time monitoring of medical assets, supply levels, and technician availability.</p>
+        <!-- [CONCEPT: @Named & EL] -->
+        <!-- We can call hospitalInfo by its name tag directly! -->
+        <h1>${hospitalInfo.name} Dashboard</h1>
+        <p>${hospitalInfo.tagline}</p>
+        <p>${hospitalInfo.location}</p>
     </header>
 
     <main class="container">
@@ -187,21 +191,21 @@
             <span class="badge badge-success">Online</span>
         </div>
 
-        <div class="card" onclick="location.href='supplies'">
+        <div class="card" onclick="location.href='medicalsupply'">
             <div class="card-icon">📦</div>
             <h3>Medical Supplies</h3>
             <p>Monitor inventory levels and expiration dates for consumable stocks.</p>
             <span class="badge badge-success">Stock OK</span>
         </div>
 
-        <div class="card" onclick="location.href='technicians'">
+        <div class="card" onclick="location.href='technician'">
             <div class="card-icon">👨‍🔧</div>
             <h3>Technicians</h3>
             <p>View availability and specialization of service personnel.</p>
             <span class="badge badge-warning">2 On-Call</span>
         </div>
 
-        <div class="card" onclick="location.href='maintenance'">
+        <div class="card" onclick="location.href='maintenancelog'">
             <div class="card-icon">📝</div>
             <h3>Maintenance Logs</h3>
             <p>Historical records of all equipment servicing and repairs.</p>
