@@ -7,7 +7,7 @@ public class HospitalTechnician implements Serializable {
     private String name;
     private String specialization;
     private String contactInfo;
-    private TechnicianStatus technicianStatus;
+    private String status;
 
     public HospitalTechnician() {}
 
@@ -43,11 +43,11 @@ public class HospitalTechnician implements Serializable {
         this.contactInfo = contactInfo;
     }
 
-    public TechnicianStatus getTechnicianStatus() {
-        return technicianStatus;
+    public String getStatus() {
+        return status;
     }
 
-    public void setTechnicianStatus(TechnicianStatus technicianStatus) {
-        this.technicianStatus = technicianStatus;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

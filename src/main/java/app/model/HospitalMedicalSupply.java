@@ -8,8 +8,9 @@ public class HospitalMedicalSupply implements Serializable {
     private String name;
     private String category;
     private int quantity;
-    private UnitsOfMeasure unitsOfMeasure;
-    private Date expirationDate;
+    private String unitOfMeasure;
+    private Date expiryDate;
+    private int reorderLevel;
 
     public HospitalMedicalSupply() {
     }
@@ -46,19 +47,27 @@ public class HospitalMedicalSupply implements Serializable {
         this.quantity = quantity;
     }
 
-    public UnitsOfMeasure getUnitsOfMeasure() {
-        return unitsOfMeasure;
+    public String getUnitOfMeasure() {
+        return unitOfMeasure;
     }
 
-    public void setUnitsOfMeasure(UnitsOfMeasure unitsOfMeasure) {
-        this.unitsOfMeasure = unitsOfMeasure;
+    public void setUnitOfMeasure(String unitOfMeasure) {
+        this.unitOfMeasure = unitOfMeasure;
     }
 
-    public Date getExpirationDate() {
-        return expirationDate;
+    public Date getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
-        this.expirationDate = expirationDate;
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public int getReorderLevel() {
+        return reorderLevel;
+    }
+
+    public void setReorderLevel(int reorderLevel) {
+        this.reorderLevel = reorderLevel;
     }
 }
