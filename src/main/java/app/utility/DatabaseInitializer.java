@@ -1,5 +1,6 @@
 package app.utility;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.io.BufferedReader;
@@ -10,9 +11,13 @@ import java.sql.Statement;
 import java.util.stream.Collectors;
 
 /**
- * [CONCEPT: DATABASE INITIALIZATION]
- * This helper reads our "Building Plan" (schema.sql) and builds 
+ * [CONCEPT: DATABASE INITIALIZATION + @PostConstruct]
+ * This helper reads our "Building Plan" (schema.sql) and builds
  * the drawers (tables) in our MySQL vault.
+ *
+ * @PostConstruct means: "As soon as I am born and my dependencies
+ * are injected, run initialize() automatically — no one needs to
+ * call me manually!"
  */
 @ApplicationScoped
 public class DatabaseInitializer {
@@ -20,6 +25,7 @@ public class DatabaseInitializer {
     @Inject
     private DataSourceHelper dataSourceHelper;
 
+    @PostConstruct
     public void initialize() {
         System.out.println("********** BUILDER: Starting to build the drawers... **********");
         

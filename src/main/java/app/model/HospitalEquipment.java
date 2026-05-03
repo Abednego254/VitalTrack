@@ -1,15 +1,33 @@
 package app.model;
 
+import app.framework.DbColumn;
+import app.framework.DbTable;
+
 import java.io.Serializable;
 import java.util.Date;
 
+@DbTable(name = "HospitalEquipment")
 public class HospitalEquipment implements Serializable {
+    
+    @DbColumn(name = "id", type = "BIGINT", primaryKey = true, autoIncrement = true)
     private Long id;
+
+    @DbColumn(name = "name", type = "VARCHAR(255)")
     private String name;
+
+    @DbColumn(name = "serialNumber", type = "VARCHAR(255)")
     private String serialNumber;
+
+    @DbColumn(name = "purchaseDate", type = "DATE")
     private Date purchaseDate;
+
+    @DbColumn(name = "lastCalibrationDate", type = "DATE")
     private Date lastCalibrationDate;
+
+    @DbColumn(name = "nextCalibrationDate", type = "DATE")
     private Date nextCalibrationDate;
+
+    @DbColumn(name = "status", type = "VARCHAR(255)")
     private String status;
 
     public HospitalEquipment() {

@@ -1,12 +1,21 @@
 package app.model;
 
+import app.framework.DbColumn;
+import app.framework.DbTable;
+
 import java.io.Serializable;
 
+@DbTable(name = "HospitalTechnician")
 public class HospitalTechnician implements Serializable {
+    @DbColumn(name = "id", type = "BIGINT", autoIncrement = true)
     private Long id;
+    @DbColumn(name = "name", type = "VARCHAR(255)")
     private String name;
+    @DbColumn(name = "specialization", type = "VARCHAR(255)")
     private String specialization;
+    @DbColumn(name = "contactInfo", type = "VARCHAR(255)")
     private String contactInfo;
+    @DbColumn(name = "status", type = "VARCHAR(255)")
     private String status;
 
     public HospitalTechnician() {}

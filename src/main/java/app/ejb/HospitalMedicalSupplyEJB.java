@@ -1,0 +1,45 @@
+package app.ejb;
+
+import app.dao.GenericDao;
+import app.model.HospitalMedicalSupply;
+import app.utility.DataSourceHelper;
+import app.utility.validation.Validate;
+import jakarta.annotation.PostConstruct;
+import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
+import java.util.List;
+
+
+@Stateless
+public class HospitalMedicalSupplyEJB {
+
+    @Inject
+    private DataSourceHelper dataSourceHelper;
+
+    @Inject
+    @Named("ValidMedicalSupply")
+    private Validate<HospitalMedicalSupply> validateMedicalSupply;
+
+    private GenericDao<HospitalMedicalSupply, Long> supplyDao;
+
+    @PostConstruct
+    public void init() {
+        this.supplyDao = new GenericDao<>(HospitalMedicalSupply.class, dataSourceHelper);
+    }
+
+    public void save(HospitalMedicalSupply supply) throws Exception {
+        validateMedicalSupply.printValidation();
+        if (validateMedicalSupply.process(supply)) {
+            supplyDao.save(supply);
+        } else {
+            System.out.println("Bouncer says: 'Sorry, this supply has bad data! Cannot save.'");
+            throw new IllegalArgumentException("Equipment data is invalid!");
+        }
+    }
+
+    public List<HospitalMedicalSupply> findAll() throws Exception {
+        return supplyDao.findAll();
+    }
+}
