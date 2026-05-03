@@ -13,13 +13,13 @@ public class HospitalStockMonitorListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         System.out.println("GOOD MORNING!! HOSPITAL IS OPENING......");
-        
-        // Initialize the Database Tables
-        dbInitializer.initialize();
+
+        // [CONCEPT: @PostConstruct]
+        // We no longer need to call dbInitializer.initialize() here!
+        // The DatabaseInitializer does it automatically via @PostConstruct
+        // as soon as the CDI container creates and injects it.
 
         System.out.println("Scanning the available stock....");
-        // Implement stock check here
-
         System.out.println("Stock check complete. All bandages are safe!");
     }
 
