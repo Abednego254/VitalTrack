@@ -1,50 +1,48 @@
 package app.ejb;
 
+import app.dao.GenericDao;
 import app.model.HospitalEquipment;
 import app.utility.DataSourceHelper;
+import app.utility.validation.Validate;
+import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
 public class HospitalEquipmentEJB {
+    
     @Inject
     private DataSourceHelper dataSourceHelper;
 
-    public void save(HospitalEquipment hospitalEquipment) throws Exception {
-        String sql = "INSERT INTO HospitalEquipment (name, serialNumber, status) VALUES (?, ?, ?)";
+    // [CONCEPT: CDI Specific Injection]
+    // We tell CDI: "Hey, give me the specific Bouncer named 'ValidEquipment'!"
+    @Inject
+    @Named("ValidEquipment")
+    private Validate<HospitalEquipment> validator;
 
-        try(Connection connection = dataSourceHelper.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, hospitalEquipment.getName());
-            preparedStatement.setString(2, hospitalEquipment.getSerialNumber());
-            preparedStatement.setString(3, hospitalEquipment.getStatus());
-            preparedStatement.executeUpdate();
-            System.out.println("*** EQUIPMENT EJB: Saved [" + hospitalEquipment.getName() + "] to vault! ***");
+    private GenericDao<HospitalEquipment, Long> equipmentDao;
+
+    @PostConstruct
+    public void init() {
+        this.equipmentDao = new GenericDao<>(HospitalEquipment.class, dataSourceHelper);
+    }
+
+    public void save(HospitalEquipment hospitalEquipment) throws Exception {
+        // [CONCEPT: Bouncers at the Door]
+        // Before we hand the box to the Storage Worker, the Bouncer checks it!
+        validator.printValidation();
+        if (validator.process(hospitalEquipment)) {
+            equipmentDao.save(hospitalEquipment);
+        } else {
+            System.out.println("Bouncer says: 'Sorry, this equipment has bad data! Cannot save.'");
+            throw new IllegalArgumentException("Equipment data is invalid!");
         }
     }
 
     public List<HospitalEquipment> findAll() throws Exception {
-        List<HospitalEquipment> list = new ArrayList<>();
-        String sql = "SELECT * FROM HospitalEquipment";
-
-        try(Connection connection = dataSourceHelper.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        ResultSet resultSet = preparedStatement.executeQuery()) {
-            while (resultSet.next()) {
-                HospitalEquipment hospitalEquipment = new HospitalEquipment();
-                hospitalEquipment.setId(resultSet.getLong("id"));
-                hospitalEquipment.setName(resultSet.getString("name"));
-                hospitalEquipment.setSerialNumber(resultSet.getString("serialNumber"));
-                hospitalEquipment.setStatus(resultSet.getString("status"));
-                list.add(hospitalEquipment);
-            }
-        }
-        return list;
+        return equipmentDao.findAll();
     }
 }

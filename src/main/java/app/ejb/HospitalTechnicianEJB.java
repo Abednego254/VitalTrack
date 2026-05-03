@@ -1,13 +1,13 @@
 package app.ejb;
 
+import app.dao.GenericDao;
 import app.model.HospitalTechnician;
 import app.utility.DataSourceHelper;
+import app.utility.validation.Validate;
+import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
+import jakarta.inject.Named;
 import java.util.List;
 
 /**
@@ -20,41 +20,29 @@ public class HospitalTechnicianEJB {
 
     @Inject
     private DataSourceHelper dataSourceHelper;
+    
+    @Inject
+    @Named("ValidTechnician")
+    private Validate<HospitalTechnician> validator;
+    
+    private GenericDao<HospitalTechnician, Long> technicianDao;
+
+    @PostConstruct
+    public void init() {
+        this.technicianDao = new GenericDao<>(HospitalTechnician.class, dataSourceHelper);
+    }
 
     public void save(HospitalTechnician technician) throws Exception {
-        String sql = "INSERT INTO HospitalTechnician (name, specialization, contactInfo, status) VALUES (?, ?, ?, ?)";
-
-        try (Connection conn = dataSourceHelper.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, technician.getName());
-            stmt.setString(2, technician.getSpecialization());
-            stmt.setString(3, technician.getContactInfo());
-            stmt.setString(4, technician.getStatus());
-            stmt.executeUpdate();
-
-            System.out.println("*** TECHNICIAN EJB: Saved [" + technician.getName() + "] to vault! ***");
+        validator.printValidation();
+        if (validator.process(technician)) {
+            technicianDao.save(technician);
+        } else {
+            System.out.println("Bouncer says: 'Sorry, this technician has bad data! Cannot save.'");
+            throw new IllegalArgumentException("Technician data is invalid!");
         }
     }
 
     public List<HospitalTechnician> findAll() throws Exception {
-        List<HospitalTechnician> list = new ArrayList<>();
-        String sql = "SELECT * FROM HospitalTechnician";
-
-        try (Connection conn = dataSourceHelper.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                HospitalTechnician tech = new HospitalTechnician();
-                tech.setId(rs.getLong("id"));
-                tech.setName(rs.getString("name"));
-                tech.setSpecialization(rs.getString("specialization"));
-                tech.setContactInfo(rs.getString("contactInfo"));
-                tech.setStatus(rs.getString("status"));
-                list.add(tech);
-            }
-        }
-        return list;
+        return technicianDao.findAll();
     }
 }
