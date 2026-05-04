@@ -29,7 +29,7 @@
             <a href="index.jsp" class="back-btn">← Home</a>
         </div>
         <div class="card">
-            <form action="maintenance" method="POST">
+            <form action="maintenancelog" method="POST">
                 <div class="form-group">
                     <label for="equipmentId">Equipment ID</label>
                     <input type="number" id="equipmentId" name="equipmentId" placeholder="e.g. 1" required>
@@ -52,7 +52,7 @@
                 </div>
                 <button type="submit" class="btn">Save Log 🔒</button>
             </form>
-            <a href="maintenance?view=list" class="view-list">View Maintenance History →</a>
+            <a href="maintenancelog?view=list" class="view-list">View Maintenance History →</a>
         </div>
     </div>
 </body>

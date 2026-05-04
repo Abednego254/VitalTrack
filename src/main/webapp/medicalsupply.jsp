@@ -28,7 +28,7 @@
             <a href="index.jsp" class="back-btn">← Home</a>
         </div>
         <div class="card">
-            <form action="supplies" method="POST">
+            <form action="medicalsupply" method="POST">
                 <div class="form-group">
                     <label for="name">Supply Name</label>
                     <input type="text" id="name" name="name" placeholder="e.g. Surgical Mask" required>
@@ -45,9 +45,17 @@
                     <label for="unitOfMeasure">Unit of Measure</label>
                     <input type="text" id="unitOfMeasure" name="unitOfMeasure" placeholder="e.g. Boxes, Pieces" required>
                 </div>
+                <div class="form-group">
+                    <label for="reorderLevel">Reorder Level</label>
+                    <input type="number" id="reorderLevel" name="reorderLevel" value="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="expiryDate">Expiry Date</label>
+                    <input type="date" id="expiryDate" name="expiryDate">
+                </div>
                 <button type="submit" class="btn">Save to Vault 🔒</button>
             </form>
-            <a href="supplies?view=list" class="view-list">View Supply Inventory →</a>
+            <a href="medicalsupply?view=list" class="view-list">View Supply Inventory →</a>
         </div>
     </div>
 </body>

@@ -22,6 +22,9 @@ public class HospitalMedicalSupplyEJB {
     @Named("ValidMedicalSupply")
     private Validate<HospitalMedicalSupply> validateMedicalSupply;
 
+    @Inject
+    private jakarta.enterprise.event.Event<app.model.AuditTrail> auditTrailEvent;
+
     private GenericDao<HospitalMedicalSupply, Long> supplyDao;
 
     @PostConstruct
@@ -32,6 +35,7 @@ public class HospitalMedicalSupplyEJB {
     public void save(HospitalMedicalSupply supply) throws Exception {
         validateMedicalSupply.printValidation();
         if (validateMedicalSupply.process(supply)) {
+            auditTrailEvent.fire(new app.model.AuditTrail("Created new Medical Supply: " + supply.getName()));
             supplyDao.save(supply);
         } else {
             System.out.println("Bouncer says: 'Sorry, this supply has bad data! Cannot save.'");

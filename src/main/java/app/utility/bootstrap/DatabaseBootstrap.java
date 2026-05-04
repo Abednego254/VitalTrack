@@ -1,16 +1,20 @@
 package app.utility.bootstrap;
 
+import app.model.AuditTrail;
 import app.model.HospitalEquipment;
 import app.model.HospitalMaintenanceLog;
 import app.model.HospitalMedicalSupply;
 import app.model.HospitalTechnician;
+import app.model.User;
 import app.utility.DataSourceHelper;
 import app.utility.db.TableGenerator;
+import app.dao.GenericDao;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 import java.sql.Connection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -34,13 +38,28 @@ public class DatabaseBootstrap implements Bootstrap {
         entities.add(HospitalMedicalSupply.class);
         entities.add(HospitalTechnician.class);
         entities.add(HospitalMaintenanceLog.class);
+        entities.add(User.class);
+        entities.add(AuditTrail.class);
 
         // We give them to the Table Generator Builder
         try (Connection conn = dataSourceHelper.getConnection()) {
             TableGenerator.generateTables(conn, entities);
-            System.out.println("Morning Checklist: Database is READY!");
+            System.out.println("Morning Checklist: Database tables created/verified!");
+            
+            // Seed a default admin user if none exists
+            GenericDao<User, Long> userDao = new GenericDao<>(User.class, dataSourceHelper);
+            List<User> users = userDao.findAll();
+            if (users.isEmpty()) {
+                System.out.println("Morning Checklist: No users found. Creating default Admin user...");
+                User admin = new User();
+                admin.setUsername("admin");
+                admin.setPassword("AdminPass"); // The user requested AdminPass
+                admin.setRole("ADMIN");
+                userDao.save(admin);
+            }
+            
         } catch (Exception e) {
-            System.err.println("Morning Checklist: Failed to connect to database!");
+            System.err.println("Morning Checklist: Failed to connect to database or seed users! " + e.getMessage());
         }
     }
 }

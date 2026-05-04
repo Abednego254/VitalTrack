@@ -28,7 +28,7 @@
             <a href="index.jsp" class="back-btn">← Home</a>
         </div>
         <div class="card">
-            <form action="technicians" method="POST">
+            <form action="technician" method="POST">
                 <div class="form-group">
                     <label for="name">Full Name</label>
                     <input type="text" id="name" name="name" required>
@@ -51,7 +51,7 @@
                 </div>
                 <button type="submit" class="btn">Register Technician 🔒</button>
             </form>
-            <a href="technicians?view=list" class="view-list">View Staff List →</a>
+            <a href="technician?view=list" class="view-list">View Staff List →</a>
         </div>
     </div>
 </body>

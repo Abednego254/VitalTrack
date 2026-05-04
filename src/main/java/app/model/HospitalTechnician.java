@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @DbTable(name = "HospitalTechnician")
 public class HospitalTechnician implements Serializable {
-    @DbColumn(name = "id", type = "BIGINT", autoIncrement = true)
+    @DbColumn(name = "id", type = "BIGINT", primaryKey = true, autoIncrement = true)
     private Long id;
     @DbColumn(name = "name", type = "VARCHAR(255)")
     private String name;

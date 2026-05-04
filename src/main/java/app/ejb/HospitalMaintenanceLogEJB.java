@@ -25,6 +25,9 @@ public class HospitalMaintenanceLogEJB {
     @Named("ValidMaintenanceLog")
     private Validate<HospitalMaintenanceLog> validator;
     
+    @Inject
+    private jakarta.enterprise.event.Event<app.model.AuditTrail> auditTrailEvent;
+
     private GenericDao<HospitalMaintenanceLog, Long> logDao;
 
     @PostConstruct
@@ -35,6 +38,7 @@ public class HospitalMaintenanceLogEJB {
     public void save(HospitalMaintenanceLog log) throws Exception {
         validator.printValidation();
         if (validator.process(log)) {
+            auditTrailEvent.fire(new app.model.AuditTrail("Created new Maintenance Log for Equipment ID: " + log.getEquipmentId()));
             logDao.save(log);
         } else {
             System.out.println("Bouncer says: 'Sorry, this maintenance log has bad data! Cannot save.'");

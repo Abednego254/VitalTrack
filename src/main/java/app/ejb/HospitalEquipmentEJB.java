@@ -1,11 +1,13 @@
 package app.ejb;
 
 import app.dao.GenericDao;
+import app.model.AuditTrail;
 import app.model.HospitalEquipment;
 import app.utility.DataSourceHelper;
 import app.utility.validation.Validate;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Stateless;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -23,6 +25,9 @@ public class HospitalEquipmentEJB {
     @Named("ValidEquipment")
     private Validate<HospitalEquipment> validator;
 
+    @Inject
+    private Event<AuditTrail> auditTrailEvent;
+
     private GenericDao<HospitalEquipment, Long> equipmentDao;
 
     @PostConstruct
@@ -35,6 +40,7 @@ public class HospitalEquipmentEJB {
         // Before we hand the box to the Storage Worker, the Bouncer checks it!
         validator.printValidation();
         if (validator.process(hospitalEquipment)) {
+            auditTrailEvent.fire(new AuditTrail("Created new Hospital Equipment: " + hospitalEquipment.getName()));
             equipmentDao.save(hospitalEquipment);
         } else {
             System.out.println("Bouncer says: 'Sorry, this equipment has bad data! Cannot save.'");
