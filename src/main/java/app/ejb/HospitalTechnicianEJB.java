@@ -25,6 +25,9 @@ public class HospitalTechnicianEJB {
     @Named("ValidTechnician")
     private Validate<HospitalTechnician> validator;
     
+    @Inject
+    private jakarta.enterprise.event.Event<app.model.AuditTrail> auditTrailEvent;
+
     private GenericDao<HospitalTechnician, Long> technicianDao;
 
     @PostConstruct
@@ -35,6 +38,7 @@ public class HospitalTechnicianEJB {
     public void save(HospitalTechnician technician) throws Exception {
         validator.printValidation();
         if (validator.process(technician)) {
+            auditTrailEvent.fire(new app.model.AuditTrail("Created new Technician: " + technician.getName()));
             technicianDao.save(technician);
         } else {
             System.out.println("Bouncer says: 'Sorry, this technician has bad data! Cannot save.'");

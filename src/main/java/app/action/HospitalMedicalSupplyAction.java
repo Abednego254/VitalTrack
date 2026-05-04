@@ -49,6 +49,11 @@ public class HospitalMedicalSupplyAction extends HospitalBaseAction<HospitalMedi
             String reorder = request.getParameter("reorderLevel");
             supply.setReorderLevel(reorder != null && !reorder.isEmpty() ? Integer.parseInt(reorder) : 10);
 
+            String expiryDate = request.getParameter("expiryDate");
+            if (expiryDate != null && !expiryDate.isEmpty()) {
+                supply.setExpiryDate(java.sql.Date.valueOf(expiryDate));
+            }
+
             supplyEJB.save(supply);
             response.sendRedirect(request.getContextPath() + "/medicalsupply?view=list");
         } catch (Exception e) {

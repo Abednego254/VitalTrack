@@ -60,6 +60,21 @@ public class HospitalEquipmentAction extends HospitalBaseAction<HospitalEquipmen
             equipment.setSerialNumber(request.getParameter("serialNumber"));
             equipment.setStatus(request.getParameter("status"));
 
+            String purchaseDate = request.getParameter("purchaseDate");
+            if (purchaseDate != null && !purchaseDate.isEmpty()) {
+                equipment.setPurchaseDate(java.sql.Date.valueOf(purchaseDate));
+            }
+
+            String lastCal = request.getParameter("lastCalibrationDate");
+            if (lastCal != null && !lastCal.isEmpty()) {
+                equipment.setLastCalibrationDate(java.sql.Date.valueOf(lastCal));
+            }
+
+            String nextCal = request.getParameter("nextCalibrationDate");
+            if (nextCal != null && !nextCal.isEmpty()) {
+                equipment.setNextCalibrationDate(java.sql.Date.valueOf(nextCal));
+            }
+
             // 2. Hand it to the EJB Specialist to save
             equipmentEJB.save(equipment);
 

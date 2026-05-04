@@ -38,10 +38,24 @@
                     <input type="text" id="serialNumber" name="serialNumber" required>
                 </div>
                 <div class="form-group">
+                    <label for="purchaseDate">Purchase Date</label>
+                    <input type="date" id="purchaseDate" name="purchaseDate">
+                </div>
+                <div class="form-group">
+                    <label for="lastCalibrationDate">Last Calibration Date</label>
+                    <input type="date" id="lastCalibrationDate" name="lastCalibrationDate">
+                </div>
+                <div class="form-group">
+                    <label for="nextCalibrationDate">Next Calibration Date</label>
+                    <input type="date" id="nextCalibrationDate" name="nextCalibrationDate">
+                </div>
+                <div class="form-group">
                     <label for="status">Status</label>
                     <select id="status" name="status">
                         <option value="Active">Active</option>
                         <option value="Maintenance">Maintenance</option>
+                        <option value="Calibration Due">Calibration Due</option>
+                        <option value="Decommissioned">Decommissioned</option>
                     </select>
                 </div>
                 <button type="submit" class="btn">Save to Vault 🔒</button>

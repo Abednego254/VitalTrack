@@ -2,19 +2,17 @@ package app.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpSession;
-
-import java.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.*;
+import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
 
-
-
-
-
-
-@WebFilter(urlPatterns = {"/maintenance", "/technicians"})
+/**
+ * [CONCEPT: Web Filter / Interceptor]
+ * This is the Bouncer at the Front Door.
+ * It stands in front of the ENTIRE application ("/*").
+ */
+@WebFilter(urlPatterns = {"/*"})
 public class HospitalAuthenticationFilter implements Filter {
 
     @Override
@@ -26,11 +24,28 @@ public class HospitalAuthenticationFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
 
-        boolean isLoggedIn = (session != null && session.getAttribute("username") != null);
-        if(isLoggedIn){
+        String path = req.getServletPath();
+
+        // 1. Let people pass if they are just trying to login or logout
+        //    Also, allow CSS, JS, and images to load freely
+        boolean isLoginRequest = path.equals("/login") || path.equals("/login.jsp");
+        boolean isLogoutRequest = path.equals("/logout");
+        boolean isStaticResource = path.endsWith(".css") || path.endsWith(".js") || path.endsWith(".png");
+
+        if (isLoginRequest || isLogoutRequest || isStaticResource) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 2. For all other rooms, check if they have a VIP pass (Session)
+        boolean isLoggedIn = (session != null && session.getAttribute("loggedInUser") != null);
+        
+        if (isLoggedIn) {
+            // They have a pass! Let them in.
             filterChain.doFilter(request, response);
         } else {
-            resp.sendRedirect(req.getContextPath() + "/index.jsp");
+            // No pass! Kick them back to the login page.
+            resp.sendRedirect(req.getContextPath() + "/login");
         }
     }
 
