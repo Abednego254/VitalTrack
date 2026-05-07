@@ -11,15 +11,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * [CONCEPT: Generic DAO Layer]
- * This is our "Storage Room Worker".
- * Instead of Servlets going to the database, they hand data to the EJB,
- * and the EJB hands it to this worker.
- *
- * This worker uses the "Magical Sticky Notes" (@DbTable and @DbColumn)
- * to figure out exactly how to save or fetch the data.
- */
 public class GenericDao<T, ID> {
 
     private final Class<T> entityClass;
@@ -33,21 +24,17 @@ public class GenericDao<T, ID> {
         this.entityClass = entityClass;
         this.dataSourceHelper = dataSourceHelper;
 
-        // 1. Look for the @DbTable sticky note on the class
         if (!entityClass.isAnnotationPresent(DbTable.class)) {
             throw new RuntimeException("Missing @DbTable on " + entityClass.getName());
         }
 
-        // 2. Read the table name from the sticky note
         this.tableName = entityClass.getAnnotation(DbTable.class).name();
 
-        // 3. Look at all the fields and find the @DbColumn sticky notes
         for (Field field : entityClass.getDeclaredFields()) {
             if (field.isAnnotationPresent(DbColumn.class)) {
                 field.setAccessible(true);
                 columns.add(field);
 
-                // 4. Find the special ID field
                 if (field.getAnnotation(DbColumn.class).primaryKey()) {
                     idField = field;
                 }

@@ -10,17 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * [CONCEPT: Database Generation from Annotations]
- * This utility reads our Magical Sticky Notes (@DbTable and @DbColumn)
- * and actually creates the tables in the database automatically!
- */
 public class TableGenerator {
 
     public static void generateTables(Connection conn, Set<Class<?>> entityClasses) {
         for (Class<?> clazz : entityClasses) {
 
-            // Only look at classes that have a @DbTable sticky note!
             if (!clazz.isAnnotationPresent(DbTable.class)) continue;
 
             DbTable table = clazz.getAnnotation(DbTable.class);
@@ -31,7 +25,6 @@ public class TableGenerator {
 
             for (Field field : clazz.getDeclaredFields()) {
 
-                // Look for fields with the @DbColumn sticky note
                 if (!field.isAnnotationPresent(DbColumn.class)) continue;
 
                 DbColumn col = field.getAnnotation(DbColumn.class);

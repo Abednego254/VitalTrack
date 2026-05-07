@@ -17,11 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * [CONCEPT: Strategy Pattern Implementation]
- * This is one specific item on our morning checklist.
- * Its job is to make sure the database is ready and all tables exist.
- */
 @ApplicationScoped
 public class DatabaseBootstrap implements Bootstrap {
 
@@ -44,7 +39,7 @@ public class DatabaseBootstrap implements Bootstrap {
         // We give them to the Table Generator Builder
         try (Connection conn = dataSourceHelper.getConnection()) {
             TableGenerator.generateTables(conn, entities);
-            System.out.println("Morning Checklist: Database tables created/verified!");
+            System.out.println("Morning Checklist: Database tables created!");
             
             // Seed a default admin user if none exists
             GenericDao<User, Long> userDao = new GenericDao<>(User.class, dataSourceHelper);
@@ -53,7 +48,7 @@ public class DatabaseBootstrap implements Bootstrap {
                 System.out.println("Morning Checklist: No users found. Creating default Admin user...");
                 User admin = new User();
                 admin.setUsername("admin");
-                admin.setPassword("AdminPass"); // The user requested AdminPass
+                admin.setPassword("AdminPass");
                 admin.setRole("ADMIN");
                 userDao.save(admin);
             }
