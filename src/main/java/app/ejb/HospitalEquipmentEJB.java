@@ -19,8 +19,6 @@ public class HospitalEquipmentEJB {
     @Inject
     private DataSourceHelper dataSourceHelper;
 
-    // [CONCEPT: CDI Specific Injection]
-    // We tell CDI: "Hey, give me the specific Bouncer named 'ValidEquipment'!"
     @Inject
     @Named("ValidEquipment")
     private Validate<HospitalEquipment> validator;
@@ -36,8 +34,7 @@ public class HospitalEquipmentEJB {
     }
 
     public void save(HospitalEquipment hospitalEquipment) throws Exception {
-        // [CONCEPT: Bouncers at the Door]
-        // Before we hand the box to the Storage Worker, the Bouncer checks it!
+
         validator.printValidation();
         if (validator.process(hospitalEquipment)) {
             auditTrailEvent.fire(new AuditTrail("Created new Hospital Equipment: " + hospitalEquipment.getName()));

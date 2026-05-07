@@ -14,10 +14,6 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
-/**
- * [CONCEPT: EJB Timer Service - @Schedule]
- * This is a robot worker that does a task automatically based on a clock.
- */
 @Singleton
 public class EmailReminderBean {
 
@@ -27,12 +23,7 @@ public class EmailReminderBean {
     @Inject
     private Event<AuditTrail> auditTrailEvent;
 
-    /**
-     * This method runs every 30 seconds automatically.
-     * We set persistent = false so it doesn't try to remember missed tasks after
-     * server restart.
-     */
-    @Schedule(second = "*/30", minute = "*", hour = "*", persistent = false)
+    @Schedule(second = "0", minute = "*/5", hour = "*", persistent = false)
     public void sendReminders() {
         System.out.println(">>> ROBOT: Constructing a real email reminder...");
 
