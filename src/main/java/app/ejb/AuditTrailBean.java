@@ -15,13 +15,13 @@ import jakarta.jms.Queue;
 public class AuditTrailBean {
 
     @Inject
-    private JMSContext context;
+    private DataSourceHelper dataSourceHelper;
+
+    @Inject
+    private JMSContext jmsContext;
 
     @Resource(lookup = "java:/jms/queue/VitalTrackAppQueue")
     private Queue auditQueue;
-
-    @Inject
-    private DataSourceHelper dataSourceHelper;
 
     private GenericDao<AuditTrail, Long> auditTrailDao;
 
@@ -37,7 +37,7 @@ public class AuditTrailBean {
         // 1. Save to our local database
         auditTrailDao.save(auditTrail);
 
-        // 2. Send to the external system via JMS Queue
-        context.createProducer().send(auditQueue, "VitalTrack Log Backup: " + auditTrail.getActivity());
+        // 2. Send to External Server via JMS (The "Producer")
+        jmsContext.createProducer().send(auditQueue, auditTrail.getActivity());
     }
 }
