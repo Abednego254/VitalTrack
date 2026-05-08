@@ -1,11 +1,13 @@
 package app.ejb;
 
 import app.dao.GenericDao;
+import app.model.AuditTrail;
 import app.model.HospitalTechnician;
 import app.utility.DataSourceHelper;
 import app.utility.validation.Validate;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Stateless;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.util.List;
@@ -26,7 +28,7 @@ public class HospitalTechnicianEJB {
     private Validate<HospitalTechnician> validator;
     
     @Inject
-    private jakarta.enterprise.event.Event<app.model.AuditTrail> auditTrailEvent;
+    private Event<AuditTrail> auditTrailEvent;
 
     private GenericDao<HospitalTechnician, Long> technicianDao;
 
@@ -38,7 +40,7 @@ public class HospitalTechnicianEJB {
     public void save(HospitalTechnician technician) throws Exception {
         validator.printValidation();
         if (validator.process(technician)) {
-            auditTrailEvent.fire(new app.model.AuditTrail("Created new Technician: " + technician.getName()));
+            auditTrailEvent.fire(new AuditTrail("Created new Technician: " + technician.getName()));
             technicianDao.save(technician);
         } else {
             System.out.println("Bouncer says: 'Sorry, this technician has bad data! Cannot save.'");
