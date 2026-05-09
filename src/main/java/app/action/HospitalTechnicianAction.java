@@ -37,6 +37,14 @@ public class HospitalTechnicianAction extends HospitalBaseAction<HospitalTechnic
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        // SECURITY: Only ADMIN can add new technicians
+        String userRole = (String) request.getSession().getAttribute("role");
+        if (!"ADMIN".equals(userRole)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Only Hospital Admins can register new Technicians.");
+            return;
+        }
+
         try {
             HospitalTechnician technician = new HospitalTechnician();
             technician.setName(request.getParameter("name"));

@@ -1,5 +1,6 @@
 package app.listeners;
 
+import app.ejb.EmailReminderBean;
 import app.utility.bootstrap.Bootstrap;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
@@ -15,6 +16,9 @@ public class AppContextListener implements ServletContextListener {
     @Any
     private Instance<Bootstrap> bootstraps;
 
+    @Inject
+    private EmailReminderBean emailReminderBean;
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("==================================================");
@@ -29,6 +33,9 @@ public class AppContextListener implements ServletContextListener {
         System.out.println("==================================================");
         System.out.println(" HOSPITAL MANAGER: All chores done. We are open!");
         System.out.println("==================================================");
+
+        // EXTRA: Send the daily report to technicians immediately on startup
+        emailReminderBean.sendReminders();
     }
 
     @Override
