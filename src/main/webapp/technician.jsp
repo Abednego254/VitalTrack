@@ -38,8 +38,12 @@
                     <input type="text" id="specialization" name="specialization" placeholder="e.g. Biomedical Engineer" required>
                 </div>
                 <div class="form-group">
-                    <label for="contactInfo">Contact Info</label>
-                    <input type="text" id="contactInfo" name="contactInfo" placeholder="e.g. email or phone" required>
+                    <label for="email">Whitelist Email (Login)</label>
+                    <input type="email" id="email" name="email" placeholder="e.g. tech@hospital.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactInfo">Phone / Extra Info</label>
+                    <input type="text" id="contactInfo" name="contactInfo" placeholder="e.g. 0712345678" required>
                 </div>
                 <div class="form-group">
                     <label for="status">Status</label>

@@ -51,4 +51,31 @@ public class HospitalTechnicianEJB {
     public List<HospitalTechnician> findAll() throws Exception {
         return technicianDao.findAll();
     }
+
+    public HospitalTechnician authenticate(String email, String password) {
+        List<HospitalTechnician> techs = technicianDao.findAll();
+        for (HospitalTechnician t : techs) {
+            // WHITELIST CHECK: Match email
+            if (t.getEmail() != null && t.getEmail().equalsIgnoreCase(email)) {
+                // FIRST LOGIN CHECK: If password is null, they haven't set it yet
+                if (t.getPassword() == null) {
+                    return t; // Let them in to set password
+                }
+                // REGULAR LOGIN: Check password
+                if (t.getPassword().equals(password)) {
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void setPassword(Long techId, String password) throws Exception {
+        HospitalTechnician tech = technicianDao.findById(techId);
+        if (tech != null) {
+            tech.setPassword(password);
+            technicianDao.update(tech);
+            auditTrailEvent.fire(new AuditTrail("Technician " + tech.getName() + " set their security password."));
+        }
+    }
 }

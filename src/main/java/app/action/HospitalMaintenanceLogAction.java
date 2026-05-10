@@ -1,6 +1,8 @@
 package app.action;
 
+import app.ejb.HospitalEquipmentEJB;
 import app.ejb.HospitalMaintenanceLogEJB;
+import app.model.HospitalEquipment;
 import app.model.HospitalMaintenanceLog;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
@@ -16,12 +18,19 @@ public class HospitalMaintenanceLogAction extends HospitalBaseAction<HospitalMai
     @EJB
     private HospitalMaintenanceLogEJB maintenanceEJB;
 
+    @EJB
+    private HospitalEquipmentEJB equipmentEJB;
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             List<HospitalMaintenanceLog> items = maintenanceEJB.findAll();
             request.setAttribute("items", items);
+
+            // Fetch equipment list for the dropdown
+            List<HospitalEquipment> equipmentList = equipmentEJB.findAll();
+            request.setAttribute("equipments", equipmentList);
 
             String view = request.getParameter("view");
             if ("list".equals(view)) {
@@ -41,9 +50,11 @@ public class HospitalMaintenanceLogAction extends HospitalBaseAction<HospitalMai
             HospitalMaintenanceLog log = new HospitalMaintenanceLog();
 
             String eqId = request.getParameter("equipmentId");
-            String techId = request.getParameter("technicianId");
+            // SMART LOGIC: Get technician ID from the session automatically
+            Long techId = (Long) request.getSession().getAttribute("techId");
+            
             log.setEquipmentId(eqId != null && !eqId.isEmpty() ? Long.parseLong(eqId) : null);
-            log.setTechnicianId(techId != null && !techId.isEmpty() ? Long.parseLong(techId) : null);
+            log.setTechnicianId(techId);
             log.setActionTaken(request.getParameter("actionTaken"));
             log.setNotes(request.getParameter("notes"));
 

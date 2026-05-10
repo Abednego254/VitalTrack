@@ -50,6 +50,7 @@ public class HospitalTechnicianAction extends HospitalBaseAction<HospitalTechnic
             technician.setName(request.getParameter("name"));
             technician.setSpecialization(request.getParameter("specialization"));
             technician.setContactInfo(request.getParameter("contactInfo"));
+            technician.setEmail(request.getParameter("email"));
             technician.setStatus(request.getParameter("status"));
 
             technicianEJB.save(technician);

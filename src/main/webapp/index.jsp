@@ -166,9 +166,12 @@
         <div class="nav-links">
             <a href="index.jsp">Dashboard</a>
             <a href="equipment">Equipment</a>
-            <a href="medicalsupply">Supplies</a>
-            <a href="technician">Technicians</a>
+            <c:if test="${role == 'ADMIN'}">
+                <a href="medicalsupply">Supplies</a>
+                <a href="technician">Technicians</a>
+            </c:if>
             <a href="maintenancelog">Maintenance</a>
+            <a href="maintenancelog?view=list">History</a>
         </div>
     </nav>
 
@@ -191,26 +194,37 @@
             <span class="badge badge-success">Online</span>
         </div>
 
-        <div class="card" onclick="location.href='medicalsupply'">
-            <div class="card-icon">📦</div>
-            <h3>Medical Supplies</h3>
-            <p>Monitor inventory levels and expiration dates for consumable stocks.</p>
-            <span class="badge badge-success">Stock OK</span>
-        </div>
+        <c:if test="${role == 'ADMIN'}">
+            <div class="card" onclick="location.href='medicalsupply'">
+                <div class="card-icon">📦</div>
+                <h3>Medical Supplies</h3>
+                <p>Monitor inventory levels and expiration dates for consumable stocks.</p>
+                <span class="badge badge-success">Stock OK</span>
+            </div>
 
-        <div class="card" onclick="location.href='technician'">
-            <div class="card-icon">👨‍🔧</div>
-            <h3>Technicians</h3>
-            <p>View availability and specialization of service personnel.</p>
-            <span class="badge badge-warning">2 On-Call</span>
-        </div>
+            <div class="card" onclick="location.href='technician'">
+                <div class="card-icon">👨‍🔧</div>
+                <h3>Technicians</h3>
+                <p>View availability and specialization of service personnel.</p>
+                <span class="badge badge-warning">2 On-Call</span>
+            </div>
+        </c:if>
 
-        <div class="card" onclick="location.href='maintenancelog'">
+        <div class="card" onclick="location.href='maintenancelog?view=list'">
             <div class="card-icon">📝</div>
-            <h3>Maintenance Logs</h3>
-            <p>Historical records of all equipment servicing and repairs.</p>
-            <span class="badge badge-success">Secure</span>
+            <h3>${role == 'TECHNICIAN' ? 'Maintenance Command Center' : 'Maintenance Logs'}</h3>
+            <p>${role == 'TECHNICIAN' ? 'Access your superpower: View and manage every repair and calibration across the hospital.' : 'Historical records of all equipment servicing and repairs.'}</p>
+            <span class="badge badge-success">${role == 'TECHNICIAN' ? 'Superpower Active' : 'Secure'}</span>
         </div>
+
+        <c:if test="${role == 'ADMIN'}">
+            <div class="card" onclick="location.href='audit-trail'" style="border: 2px solid var(--primary);">
+                <div class="card-icon" style="background: #e0e7ff;">🛡️</div>
+                <h3>System Audit Trail</h3>
+                <p>Advanced security logs tracking all system activities and events.</p>
+                <span class="badge badge-info" style="background: #e0e7ff; color: #4338ca;">Admin Only</span>
+            </div>
+        </c:if>
     </main>
 
     <footer>
