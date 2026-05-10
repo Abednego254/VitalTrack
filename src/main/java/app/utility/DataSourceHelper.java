@@ -7,11 +7,6 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/**
- * [CONCEPT: JNDI & Container-Managed Resources]
- * This class no longer manages DB credentials. 
- * Instead, it asks WildFly for a "DataSource" by its JNDI name.
- */
 @ApplicationScoped
 public class DataSourceHelper {
 

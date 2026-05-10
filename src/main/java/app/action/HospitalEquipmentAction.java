@@ -2,7 +2,11 @@ package app.action;
 
 import app.ejb.HospitalEquipmentEJB;
 import app.model.HospitalEquipment;
+import app.utility.MaintenanceChoice;
+import app.utility.MaintenanceQualifier;
+import app.utility.MaintenanceService;
 import jakarta.ejb.EJB;
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +21,14 @@ public class HospitalEquipmentAction extends HospitalBaseAction<HospitalEquipmen
 
     @EJB
     private HospitalEquipmentEJB equipmentEJB;
+
+    @Inject
+    @MaintenanceQualifier(MaintenanceChoice.STANDARD)
+    private MaintenanceService standardMaintenance;
+
+    @Inject
+    @MaintenanceQualifier(MaintenanceChoice.URGENT)
+    private MaintenanceService urgentMaintenance;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -56,12 +68,17 @@ public class HospitalEquipmentAction extends HospitalBaseAction<HospitalEquipmen
                 equipment.setLastCalibrationDate(valueOf(lastCal));
             }
 
-            String nextCal = request.getParameter("nextCalibrationDate");
-            if (nextCal != null && !nextCal.isEmpty()) {
-                equipment.setNextCalibrationDate(valueOf(nextCal));
+            // SMART LOGIC: Calculate next calibration date automatically
+            String category = request.getParameter("maintenanceCategory");
+            if (equipment.getLastCalibrationDate() != null) {
+                if ("URGENT".equals(category)) {
+                    equipment.setNextCalibrationDate(urgentMaintenance.calculateNextMaintenanceDate(equipment.getLastCalibrationDate()));
+                } else {
+                    equipment.setNextCalibrationDate(standardMaintenance.calculateNextMaintenanceDate(equipment.getLastCalibrationDate()));
+                }
             }
 
-            equipmentEJB.save(equipment);
+                equipmentEJB.save(equipment);
 
             response.sendRedirect(request.getContextPath() + "/equipment?view=list");
         } catch (Exception e) {

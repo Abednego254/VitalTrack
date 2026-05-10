@@ -36,6 +36,7 @@
                         <th>Category</th>
                         <th>Quantity</th>
                         <th>Unit</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,8 +45,21 @@
                             <td>${item.id}</td>
                             <td>${item.name}</td>
                             <td>${item.category}</td>
-                            <td>${item.quantity}</td>
+                            <td>
+                                <span style="${item.quantity <= item.reorderLevel ? 'color: #ef4444; font-weight: bold;' : ''}">
+                                    ${item.quantity}
+                                </span>
+                            </td>
                             <td>${item.unitOfMeasure}</td>
+                            <td>
+                                <form action="medicalsupply" method="POST" style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <input type="hidden" name="mode" value="consume">
+                                    <input type="hidden" name="id" value="${item.id}">
+                                    <input type="hidden" name="name" value="${item.name}">
+                                    <input type="number" name="consumeQty" value="1" min="1" max="${item.quantity}" style="width: 50px; padding: 0.25rem; border-radius: 0.25rem; border: 1px solid var(--border);">
+                                    <button type="submit" style="background: #3b82f6; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 0.25rem; cursor: pointer; font-size: 0.8rem;">Use</button>
+                                </form>
+                            </td>
                         </tr>
                     </c:forEach>
                     <c:if test="${empty items}">

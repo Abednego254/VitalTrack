@@ -29,13 +29,13 @@ public class AppContextListener implements ServletContextListener {
         for (Bootstrap bootstrap : bootstraps) {
             bootstrap.process();
         }
-        
-        System.out.println("==================================================");
-        System.out.println(" HOSPITAL MANAGER: All chores done. We are open!");
-        System.out.println("==================================================");
 
         // EXTRA: Send the daily report to technicians immediately on startup
         emailReminderBean.sendReminders();
+
+        System.out.println("==================================================");
+        System.out.println(" HOSPITAL MANAGER: All chores done. We are open!");
+        System.out.println("==================================================");
     }
 
     @Override

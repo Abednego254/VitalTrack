@@ -46,8 +46,11 @@
                     <input type="date" id="lastCalibrationDate" name="lastCalibrationDate">
                 </div>
                 <div class="form-group">
-                    <label for="nextCalibrationDate">Next Calibration Date</label>
-                    <input type="date" id="nextCalibrationDate" name="nextCalibrationDate">
+                    <label for="maintenanceCategory">Maintenance Category</label>
+                    <select id="maintenanceCategory" name="maintenanceCategory">
+                        <option value="STANDARD">Standard (6 Months)</option>
+                        <option value="URGENT">Urgent (2 Months)</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="status">Status</label>
