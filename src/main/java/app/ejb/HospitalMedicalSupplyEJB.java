@@ -46,4 +46,12 @@ public class HospitalMedicalSupplyEJB {
     public List<HospitalMedicalSupply> findAll() throws Exception {
         return supplyDao.findAll();
     }
+
+    public HospitalMedicalSupply findById(Long id) throws Exception {
+        return supplyDao.findById(id);
+    }
+
+    public void update(HospitalMedicalSupply supply) throws Exception {
+        supplyDao.update(supply);
+    }
 }

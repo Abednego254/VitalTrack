@@ -2,7 +2,10 @@ package app.action;
 
 import app.ejb.HospitalMedicalSupplyEJB;
 import app.model.HospitalMedicalSupply;
+import app.model.MedicalSupplyConsumedEvent;
 import jakarta.ejb.EJB;
+import jakarta.enterprise.event.Event;
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +18,9 @@ public class HospitalMedicalSupplyAction extends HospitalBaseAction<HospitalMedi
 
     @EJB
     private HospitalMedicalSupplyEJB supplyEJB;
+
+    @Inject
+    private Event<MedicalSupplyConsumedEvent> consumptionEvent;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,6 +43,14 @@ public class HospitalMedicalSupplyAction extends HospitalBaseAction<HospitalMedi
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        String mode = request.getParameter("mode");
+
+        if ("consume".equals(mode)) {
+            handleConsumption(request, response);
+            return;
+        }
+
         try {
             HospitalMedicalSupply supply = new HospitalMedicalSupply();
             supply.setName(request.getParameter("name"));
@@ -58,6 +72,22 @@ public class HospitalMedicalSupplyAction extends HospitalBaseAction<HospitalMedi
             response.sendRedirect(request.getContextPath() + "/medicalsupply?view=list");
         } catch (Exception e) {
             throw new ServletException("Supply EJB had an accident: " + e.getMessage(), e);
+        }
+    }
+
+    private void handleConsumption(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        try {
+            Long id = Long.parseLong(request.getParameter("id"));
+            int qty = Integer.parseInt(request.getParameter("consumeQty"));
+            String name = request.getParameter("name");
+
+            // FIRE THE EVENT: This triggers the background check
+            consumptionEvent.fire(new MedicalSupplyConsumedEvent(id, name, qty));
+
+            response.sendRedirect(request.getContextPath() + "/medicalsupply?view=list");
+        } catch (Exception e) {
+            throw new ServletException("Consumption failed: " + e.getMessage(), e);
         }
     }
 }
