@@ -70,7 +70,7 @@ public class LoginAction extends HttpServlet {
                     session.setAttribute("techId", tech.getId());
 
                     // CHECK FOR FIRST LOGIN
-                    if (tech.getPassword() == null) {
+                    if (tech.getPassword() == null || tech.getPassword().startsWith("VT-TEMP-")) {
                         resp.sendRedirect(req.getContextPath() + "/set-password.jsp");
                     } else {
                         resp.sendRedirect(req.getContextPath() + "/index.jsp");

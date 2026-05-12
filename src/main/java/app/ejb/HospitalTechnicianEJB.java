@@ -1,11 +1,11 @@
 package app.ejb;
 
-import app.dao.GenericDao;
+import app.dao.HospitalTechnicianDao;
 import app.model.AuditTrail;
 import app.model.HospitalTechnician;
-import app.utility.DataSourceHelper;
+import app.model.TechnicianAddedEvent;
 import app.utility.validation.Validate;
-import jakarta.annotation.PostConstruct;
+import java.util.UUID;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -21,27 +21,30 @@ import java.util.List;
 public class HospitalTechnicianEJB {
 
     @Inject
-    private DataSourceHelper dataSourceHelper;
-    
-    @Inject
     @Named("ValidTechnician")
     private Validate<HospitalTechnician> validator;
     
     @Inject
     private Event<AuditTrail> auditTrailEvent;
 
-    private GenericDao<HospitalTechnician, Long> technicianDao;
+    @Inject
+    private HospitalTechnicianDao technicianDao;
 
-    @PostConstruct
-    public void init() {
-        this.technicianDao = new GenericDao<>(HospitalTechnician.class, dataSourceHelper);
-    }
+    @Inject
+    private Event<TechnicianAddedEvent> technicianAddedEvent;
 
     public void save(HospitalTechnician technician) throws Exception {
         validator.printValidation();
         if (validator.process(technician)) {
+            // Generate a temporary dummy password
+            String dummyPassword = "VT-TEMP-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
+            technician.setPassword(dummyPassword);
+
             auditTrailEvent.fire(new AuditTrail("Created new Technician: " + technician.getName()));
             technicianDao.save(technician);
+            
+            // Fire the email event
+            technicianAddedEvent.fire(new TechnicianAddedEvent(technician, dummyPassword));
         } else {
             System.out.println("Bouncer says: 'Sorry, this technician has bad data! Cannot save.'");
             throw new IllegalArgumentException("Technician data is invalid!");

@@ -18,11 +18,10 @@ public class GenericDao<T, ID> {
     private final List<Field> columns = new ArrayList<>();
     private Field idField;
 
-    private final DataSourceHelper dataSourceHelper;
+    private DataSourceHelper dataSourceHelper;
 
-    public GenericDao(Class<T> entityClass, DataSourceHelper dataSourceHelper) {
+    public GenericDao(Class<T> entityClass) {
         this.entityClass = entityClass;
-        this.dataSourceHelper = dataSourceHelper;
 
         if (!entityClass.isAnnotationPresent(DbTable.class)) {
             throw new RuntimeException("Missing @DbTable on " + entityClass.getName());
@@ -166,5 +165,13 @@ public class GenericDao<T, ID> {
         }
 
         return instance;
+    }
+
+    public DataSourceHelper getDs() {
+        return dataSourceHelper;
+    }
+
+    public void setDs(DataSourceHelper ds) {
+        this.dataSourceHelper = ds;
     }
 }

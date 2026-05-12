@@ -1,9 +1,7 @@
 package app.ejb;
 
-import app.dao.GenericDao;
+import app.dao.UserDao;
 import app.model.User;
-import app.utility.DataSourceHelper;
-import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 
@@ -13,14 +11,7 @@ import java.util.List;
 public class UserEJB {
 
     @Inject
-    private DataSourceHelper dataSourceHelper;
-
-    private GenericDao<User, Long> userDao;
-
-    @PostConstruct
-    public void init() {
-        this.userDao = new GenericDao<>(User.class, dataSourceHelper);
-    }
+    private UserDao userDao;
 
     public void save(User user) {
         userDao.save(user);

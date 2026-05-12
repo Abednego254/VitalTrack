@@ -184,9 +184,7 @@
     </header>
 
     <main class="container">
-        <!-- [CONCEPT: EL (Expression Language)] -->
-        <!-- In the future, we will use ${variable} to show real data! -->
-        
+
         <div class="card" onclick="location.href='equipment'">
             <div class="card-icon">⚙️</div>
             <h3>Medical Equipment</h3>

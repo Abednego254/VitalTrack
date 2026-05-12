@@ -1,8 +1,7 @@
 package app.action;
 
-import app.dao.GenericDao;
+import app.ejb.AuditTrailBean;
 import app.model.AuditTrail;
-import app.utility.DataSourceHelper;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,7 +14,7 @@ import java.util.List;
 public class AuditTrailAction extends HospitalBaseAction<AuditTrail> {
 
     @Inject
-    private DataSourceHelper dataSourceHelper;
+    private AuditTrailBean auditTrailBean;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -29,8 +28,7 @@ public class AuditTrailAction extends HospitalBaseAction<AuditTrail> {
         }
 
         try {
-            GenericDao<AuditTrail, Long> auditDao = new GenericDao<>(AuditTrail.class, dataSourceHelper);
-            List<AuditTrail> logs = auditDao.findAll();
+            List<AuditTrail> logs = auditTrailBean.findAll();
             
             // Sort by ID descending to show newest logs first
             logs.sort((a, b) -> b.getId().compareTo(a.getId()));
