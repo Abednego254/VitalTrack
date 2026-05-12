@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,10 +17,11 @@
         .card { background: var(--card); padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         .form-group { margin-bottom: 1.5rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-        .form-group input, .form-group textarea { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; font-family: inherit; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; font-family: inherit; }
         .form-group textarea { resize: vertical; min-height: 80px; }
         .btn { background: var(--primary); color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 700; cursor: pointer; width: 100%; font-size: 1rem; }
         .view-list { display: block; text-align: center; margin-top: 1.5rem; color: var(--primary); text-decoration: none; font-weight: 600; }
+        .tech-info { background: #fffbeb; color: #92400e; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.85rem; border-left: 4px solid var(--primary); }
     </style>
 </head>
 <body>
@@ -29,14 +31,18 @@
             <a href="index.jsp" class="back-btn">← Home</a>
         </div>
         <div class="card">
+            <div class="tech-info">
+                <strong>Technician:</strong> ${username} (Active Session)
+            </div>
             <form action="maintenancelog" method="POST">
                 <div class="form-group">
-                    <label for="equipmentId">Equipment ID</label>
-                    <input type="number" id="equipmentId" name="equipmentId" placeholder="e.g. 1" required>
-                </div>
-                <div class="form-group">
-                    <label for="technicianId">Technician ID</label>
-                    <input type="number" id="technicianId" name="technicianId" placeholder="e.g. 1" required>
+                    <label for="equipmentId">Target Equipment</label>
+                    <select id="equipmentId" name="equipmentId" required>
+                        <option value="">-- Select Equipment --</option>
+                        <c:forEach items="${equipments}" var="equip">
+                            <option value="${equip.id}">${equip.name} (${equip.serialNumber})</option>
+                        </c:forEach>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="serviceDate">Service Date</label>

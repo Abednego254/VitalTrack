@@ -1,6 +1,8 @@
 package app.action;
 
+import app.ejb.HospitalTechnicianEJB;
 import app.ejb.UserEJB;
+import app.model.HospitalTechnician;
 import app.model.User;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
@@ -17,6 +19,9 @@ public class LoginAction extends HttpServlet {
 
     @EJB
     private UserEJB userEJB;
+
+    @EJB
+    private HospitalTechnicianEJB technicianEJB;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -50,13 +55,31 @@ public class LoginAction extends HttpServlet {
                 HttpSession session = req.getSession(true);
                 session.setAttribute("loggedInUser", user);
                 session.setAttribute("username", user.getUsername());
+                session.setAttribute("role", user.getRole());
                 
                 // Redirect to the main dashboard/index
                 resp.sendRedirect(req.getContextPath() + "/index.jsp");
             } else {
-                // Fail! Send them back to the login page with an error
-                req.setAttribute("error", "Invalid username or password!");
-                req.getRequestDispatcher("/login.jsp").forward(req, resp);
+                // Try to authenticate as a Technician
+                HospitalTechnician tech = technicianEJB.authenticate(username, password);
+                if (tech != null) {
+                    HttpSession session = req.getSession(true);
+                    session.setAttribute("loggedInUser", tech);
+                    session.setAttribute("username", tech.getName());
+                    session.setAttribute("role", "TECHNICIAN");
+                    session.setAttribute("techId", tech.getId());
+
+                    // CHECK FOR FIRST LOGIN
+                    if (tech.getPassword() == null || tech.getPassword().startsWith("VT-TEMP-")) {
+                        resp.sendRedirect(req.getContextPath() + "/set-password.jsp");
+                    } else {
+                        resp.sendRedirect(req.getContextPath() + "/index.jsp");
+                    }
+                } else {
+                    // Fail! Send them back to the login page with an error
+                    req.setAttribute("error", "Invalid email/username or password!");
+                    req.getRequestDispatcher("/login.jsp").forward(req, resp);
+                }
             }
         }
     }

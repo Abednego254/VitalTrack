@@ -17,6 +17,10 @@ public class HospitalTechnician implements Serializable {
     private String contactInfo;
     @DbColumn(name = "status", type = "VARCHAR(255)")
     private String status;
+    @DbColumn(name = "email", type = "VARCHAR(255)")
+    private String email;
+    @DbColumn(name = "password", type = "VARCHAR(255)")
+    private String password;
 
     public HospitalTechnician() {}
 
@@ -58,5 +62,21 @@ public class HospitalTechnician implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

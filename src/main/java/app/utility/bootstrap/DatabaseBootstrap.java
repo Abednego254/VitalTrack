@@ -6,9 +6,9 @@ import app.model.HospitalMaintenanceLog;
 import app.model.HospitalMedicalSupply;
 import app.model.HospitalTechnician;
 import app.model.User;
+import app.dao.UserDao;
 import app.utility.DataSourceHelper;
 import app.utility.db.TableGenerator;
-import app.dao.GenericDao;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -21,6 +21,9 @@ public class DatabaseBootstrap implements Bootstrap {
 
     @Inject
     private DataSourceHelper dataSourceHelper;
+
+    @Inject
+    private UserDao userDao;
 
     @Override
     public void process() {
@@ -41,7 +44,6 @@ public class DatabaseBootstrap implements Bootstrap {
             System.out.println("Morning Checklist: Database tables created!");
             
             // Seed a default admin user if none exists
-            GenericDao<User, Long> userDao = new GenericDao<>(User.class, dataSourceHelper);
             if (userDao.findAll().isEmpty()) {
                 System.out.println("Morning Checklist: No users found. Creating default Admin user...");
                 User admin = new User();

@@ -1,10 +1,8 @@
 package app.ejb;
 
-import app.dao.GenericDao;
+import app.dao.HospitalMedicalSupplyDao;
 import app.model.HospitalMedicalSupply;
-import app.utility.DataSourceHelper;
 import app.utility.validation.Validate;
-import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -16,21 +14,14 @@ import java.util.List;
 public class HospitalMedicalSupplyEJB {
 
     @Inject
-    private DataSourceHelper dataSourceHelper;
-
-    @Inject
     @Named("ValidMedicalSupply")
     private Validate<HospitalMedicalSupply> validateMedicalSupply;
 
     @Inject
     private jakarta.enterprise.event.Event<app.model.AuditTrail> auditTrailEvent;
 
-    private GenericDao<HospitalMedicalSupply, Long> supplyDao;
-
-    @PostConstruct
-    public void init() {
-        this.supplyDao = new GenericDao<>(HospitalMedicalSupply.class, dataSourceHelper);
-    }
+    @Inject
+    private HospitalMedicalSupplyDao supplyDao;
 
     public void save(HospitalMedicalSupply supply) throws Exception {
         validateMedicalSupply.printValidation();

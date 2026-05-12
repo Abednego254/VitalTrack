@@ -1,12 +1,10 @@
 package app.ejb;
 
-import app.dao.GenericDao;
+import app.dao.HospitalEquipmentDao;
 import app.ejb.HospitalMedicalSupplyEJB;
 import app.model.AuditTrail;
 import app.model.HospitalEquipment;
 import app.model.HospitalMedicalSupply;
-import app.utility.DataSourceHelper;
-import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Schedule;
 import jakarta.ejb.Singleton;
@@ -32,18 +30,11 @@ public class EmailReminderBean {
     @Inject
     private Event<AuditTrail> auditTrailEvent;
 
-    @Inject
-    private DataSourceHelper dataSourceHelper;
-
     @EJB
     private HospitalMedicalSupplyEJB supplyEJB;
 
-    private GenericDao<HospitalEquipment, Long> equipmentDao;
-
-    @PostConstruct
-    public void init() {
-        this.equipmentDao = new GenericDao<>(HospitalEquipment.class, dataSourceHelper);
-    }
+    @Inject
+    private HospitalEquipmentDao equipmentDao;
 
     @Schedule(second = "0", minute = "*/60", hour = "*", persistent = false)
     public void sendReminders() {

@@ -1,10 +1,8 @@
 package app.ejb;
 
-import app.dao.GenericDao;
+import app.dao.HospitalMaintenanceLogDao;
 import app.model.HospitalMaintenanceLog;
-import app.utility.DataSourceHelper;
 import app.utility.validation.Validate;
-import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -19,21 +17,14 @@ import java.util.List;
 public class HospitalMaintenanceLogEJB {
 
     @Inject
-    private DataSourceHelper dataSourceHelper;
-    
-    @Inject
     @Named("ValidMaintenanceLog")
     private Validate<HospitalMaintenanceLog> validator;
     
     @Inject
     private jakarta.enterprise.event.Event<app.model.AuditTrail> auditTrailEvent;
 
-    private GenericDao<HospitalMaintenanceLog, Long> logDao;
-
-    @PostConstruct
-    public void init() {
-        this.logDao = new GenericDao<>(HospitalMaintenanceLog.class, dataSourceHelper);
-    }
+    @Inject
+    private HospitalMaintenanceLogDao logDao;
 
     public void save(HospitalMaintenanceLog log) throws Exception {
         validator.printValidation();
