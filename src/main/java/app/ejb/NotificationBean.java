@@ -8,7 +8,7 @@ import jakarta.enterprise.event.Observes;
 public class NotificationBean {
 
     public void onAuditTrailEvent(@Observes AuditTrail auditTrail) {
-        System.out.println(">>> NOTIFICATION SERVICE: Sending alert for activity: " + auditTrail.getActivity());
+        System.out.println(">>> NOTIFICATION SERVICE: Sending alert for activity: " + auditTrail.getAction());
 
         System.out.println(">>> NOTIFICATION SERVICE: Email sent to administrator.");
     }

@@ -121,6 +121,19 @@ public class GenericDao<T, ID> {
         return null;
     }
 
+    public void delete(ID id) {
+        try (Connection conn = dataSourceHelper.getConnection()) {
+            String idColName = idField.getAnnotation(DbColumn.class).name();
+            String sql = "DELETE FROM " + tableName + " WHERE " + idColName + " = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setObject(1, id);
+            ps.executeUpdate();
+            System.out.println("********** DAO: Deleted from " + tableName + " ID=" + id + " **********");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void update(T entity) {
         try (Connection conn = dataSourceHelper.getConnection()) {
             List<String> setClauses = new ArrayList<>();

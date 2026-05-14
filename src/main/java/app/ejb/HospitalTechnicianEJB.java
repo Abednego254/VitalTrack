@@ -77,4 +77,8 @@ public class HospitalTechnicianEJB {
             auditTrailEvent.fire(new AuditTrail("Technician " + tech.getName() + " set their security password."));
         }
     }
+
+    public void delete(Long id) throws Exception {
+        technicianDao.delete(id);
+    }
 }

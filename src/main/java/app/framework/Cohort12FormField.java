@@ -17,4 +17,8 @@ public @interface Cohort12FormField {
 
     boolean required() default true;
 
+    String select() default "";
+
+    String type() default "text";
+
 }

@@ -1,24 +1,39 @@
 package app.model;
 
+import app.framework.Cohort12Form;
+import app.framework.Cohort12FormField;
+import app.framework.Cohort12Table;
+import app.framework.Cohort12TableCol;
 import app.framework.DbColumn;
 import app.framework.DbTable;
+import app.framework.PageMenuItem;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @DbTable(name = "HospitalMaintenanceLog")
+@Cohort12Table(label = "Maintenance History", addLink = "maintenancelog/add", deleteLink = "maintenancelog/delete")
+@Cohort12Form(label = "Maintenance Log", actionUrl = "maintenancelog/save")
 public class HospitalMaintenanceLog implements Serializable {
     @DbColumn(name = "id", type = "BIGINT", primaryKey = true, autoIncrement = true)
     private Long id;
-    @DbColumn(name = "equipmentId", type = "Long")
+    @DbColumn(name = "equipmentId", type = "BIGINT")
+    @Cohort12TableCol(label = "Equipment ID")
+    @Cohort12FormField(label = "Equipment ID", placeholder = "1")
     private Long equipmentId;
-    @DbColumn(name = "technicianId", type = "Long")
+    @DbColumn(name = "technicianId", type = "BIGINT")
+    @Cohort12TableCol(label = "Tech ID")
     private Long technicianId;
     @DbColumn(name = "serviceDate", type = "DATE")
+    @Cohort12TableCol(label = "Date")
+    @Cohort12FormField(label = "Service Date", placeholder = "YYYY-MM-DD")
     private Date serviceDate;
     @DbColumn(name = "actionTaken", type = "VARCHAR(255)")
+    @Cohort12TableCol(label = "Action")
+    @Cohort12FormField(label = "Action Taken", placeholder = "Repair/Calibration")
     private String actionTaken;
-    @DbColumn(name = "notes", type = "VARCHAR(255)")
+    @DbColumn(name = "notes", type = "TEXT")
+    @Cohort12FormField(label = "Detailed Notes", placeholder = "... ")
     private String notes;
 
     public HospitalMaintenanceLog(){}
