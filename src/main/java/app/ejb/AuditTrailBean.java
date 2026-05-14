@@ -23,16 +23,20 @@ public class AuditTrailBean {
     private AuditTrailDao auditTrailDao;
 
     public void recordEvent(@Observes AuditTrail auditTrail) {
-        System.out.println(">>> THE INTERCOM: Received new Audit Trail Event: " + auditTrail.getActivity());
+        System.out.println(">>> THE INTERCOM: Received new Audit Trail Event: " + auditTrail.getAction());
         
         // 1. Save to our local database
         auditTrailDao.save(auditTrail);
 
         // 2. Send to External Server via JMS (The "Producer")
-        jmsContext.createProducer().send(auditQueue, auditTrail.getActivity());
+        jmsContext.createProducer().send(auditQueue, auditTrail.getAction());
     }
 
     public List<AuditTrail> findAll() {
         return auditTrailDao.findAll();
+    }
+
+    public void delete(Long id) {
+        auditTrailDao.delete(id);
     }
 }

@@ -11,7 +11,7 @@ public @interface Cohort12Table {
 
     String label() default "";
 
-    String tableUrl();
+    String addLink() default "";
 
-    String registerUrl();
+    String deleteLink() default "";
 }

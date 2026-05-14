@@ -39,4 +39,8 @@ public class HospitalEquipmentEJB {
     public List<HospitalEquipment> findAll() throws Exception {
         return equipmentDao.findAll();
     }
+
+    public void delete(Long id) throws Exception {
+        equipmentDao.delete(id);
+    }
 }

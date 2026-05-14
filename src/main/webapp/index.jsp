@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VitalTrack | Medical Logistics</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body class="app-layout">
 
@@ -22,7 +22,7 @@
 
         <section class="container">
 
-            <div class="card" onclick="location.href='equipment'">
+            <div class="card" onclick="location.href='${pageContext.request.contextPath}/vital/equipment/list'">
                 <div class="card-icon">EQ</div>
                 <h3>Medical Equipment</h3>
                 <p>Track calibration status and maintenance cycles for all medical devices.</p>
@@ -30,14 +30,14 @@
             </div>
 
             <c:if test="${role == 'ADMIN'}">
-                <div class="card" onclick="location.href='medicalsupply'">
+                <div class="card" onclick="location.href='${pageContext.request.contextPath}/vital/medicalsupply/list'">
                     <div class="card-icon">SP</div>
                     <h3>Medical Supplies</h3>
                     <p>Monitor inventory levels and expiration dates for consumable stocks.</p>
                     <span class="badge badge-success">Stock OK</span>
                 </div>
 
-                <div class="card" onclick="location.href='technician'">
+                <div class="card" onclick="location.href='${pageContext.request.contextPath}/vital/technician/list'">
                     <div class="card-icon">TC</div>
                     <h3>Technicians</h3>
                     <p>View availability and specialization of service personnel.</p>
@@ -45,7 +45,7 @@
                 </div>
             </c:if>
 
-            <div class="card" onclick="location.href='maintenancelog?view=list'">
+            <div class="card" onclick="location.href='${pageContext.request.contextPath}/vital/maintenancelog/list'">
                 <div class="card-icon">ML</div>
                 <h3>${role == 'TECHNICIAN' ? 'Maintenance Command' : 'Maintenance Logs'}</h3>
                 <p>${role == 'TECHNICIAN' ? 'Access your superpower: View and manage every repair and calibration across the hospital.' : 'Historical records of all equipment servicing and repairs.'}</p>
@@ -53,7 +53,7 @@
             </div>
 
             <c:if test="${role == 'ADMIN'}">
-                <div class="card" onclick="location.href='audit-trail'" style="border: 1px solid var(--primary-light);">
+                <div class="card" onclick="location.href='${pageContext.request.contextPath}/vital/audit-trail/list'" style="border: 1px solid var(--primary-light);">
                     <div class="card-icon" style="background: #e0e7ff;">AU</div>
                     <h3>System Audit Trail</h3>
                     <p>Advanced security logs tracking all system activities and events.</p>

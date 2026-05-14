@@ -40,4 +40,8 @@ public class HospitalMaintenanceLogEJB {
     public List<HospitalMaintenanceLog> findAll() throws Exception {
         return logDao.findAll();
     }
+
+    public void delete(Long id) throws Exception {
+        logDao.delete(id);
+    }
 }
