@@ -60,6 +60,6 @@
             </form>
             <a href="maintenancelog?view=list" class="view-list">View Maintenance History →</a>
         </div>
-    </div>
+    </main>
 </body>
 </html>

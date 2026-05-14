@@ -12,11 +12,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.util.List;
 
-/**
- * [CONCEPT: @Stateless EJB]
- * The dedicated Database Specialist for Technicians.
- * WildFly manages transactions automatically for every method here.
- */
+
 @Stateless
 public class HospitalTechnicianEJB {
 
