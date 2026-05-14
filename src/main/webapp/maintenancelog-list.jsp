@@ -60,6 +60,6 @@
                 <a href="index.jsp" class="back-btn">← Back to Dashboard</a>
             </div>
         </div>
-    </div>
+    </main>
 </body>
 </html>
