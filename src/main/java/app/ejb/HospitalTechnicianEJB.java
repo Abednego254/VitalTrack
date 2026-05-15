@@ -73,7 +73,7 @@ public class HospitalTechnicianEJB {
         HospitalTechnician tech = technicianDao.findById(techId);
         if (tech != null) {
             tech.setPassword(password);
-            technicianDao.update(tech);
+            technicianDao.save(tech);
             auditTrailEvent.fire(new AuditTrail("Technician " + tech.getName() + " set their security password."));
         }
     }

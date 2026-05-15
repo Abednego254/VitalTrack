@@ -2,31 +2,33 @@ package app.model;
 
 import app.framework.Cohort12Table;
 import app.framework.Cohort12TableCol;
-import app.framework.DbColumn;
-import app.framework.DbTable;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@DbTable(name = "AuditTrail")
+@Entity
+@Table(name = "audit_trail")
 @Cohort12Table(label = "Security Audit Trail", deleteLink = "audit-trail/delete")
 public class AuditTrail implements Serializable {
 
-    @DbColumn(name = "id", type = "BIGINT", primaryKey = true, autoIncrement = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @DbColumn(name = "action", type = "VARCHAR(255)")
+    @Column
     @Cohort12TableCol(label = "Action")
     private String action;
 
-    @DbColumn(name = "details", type = "TEXT")
+    @Column(columnDefinition = "TEXT")
     @Cohort12TableCol(label = "Details")
     private String details;
 
-    @DbColumn(name = "performedBy", type = "VARCHAR(255)")
+    @Column(name = "performed_by")
     @Cohort12TableCol(label = "Performed By")
     private String performedBy;
 
-    @DbColumn(name = "timestamp", type = "TIMESTAMP")
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
     @Cohort12TableCol(label = "Timestamp")
     private Date timestamp;
 

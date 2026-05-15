@@ -78,10 +78,17 @@ public class ActionParamBinder {
     }
 
     private static Object convert(String v, Class<?> t) {
-        if (v == null) return null;
+        if (v == null || v.isEmpty()) return null;
         if (t == String.class) return v;
         if (t == int.class || t == Integer.class) return Integer.parseInt(v);
         if (t == long.class || t == Long.class) return Long.parseLong(v);
+        if (t == java.util.Date.class) {
+            try {
+                return new java.text.SimpleDateFormat("yyyy-MM-dd").parse(v);
+            } catch (Exception e) {
+                return null;
+            }
+        }
         return v;
     }
 }

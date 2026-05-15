@@ -4,45 +4,49 @@ import app.framework.Cohort12Form;
 import app.framework.Cohort12FormField;
 import app.framework.Cohort12Table;
 import app.framework.Cohort12TableCol;
-import app.framework.DbColumn;
-import app.framework.DbTable;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
 
-@DbTable(name = "HospitalEquipment")
+@Entity
+@Table(name = "hospital_equipment")
 @Cohort12Table(label = "Medical Equipment", addLink = "equipment/add", deleteLink = "equipment/delete")
 @Cohort12Form(label = "Medical Equipment", actionUrl = "equipment/save")
 public class HospitalEquipment implements Serializable {
     
-    @DbColumn(name = "id", type = "BIGINT", primaryKey = true, autoIncrement = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @DbColumn(name = "name", type = "VARCHAR(255)")
+    @Column(nullable = false)
     @Cohort12TableCol(label = "Name")
     @Cohort12FormField(label = "Equipment Name", placeholder = "e.g. Ventilator X-1")
     private String name;
 
-    @DbColumn(name = "serialNumber", type = "VARCHAR(255)")
+    @Column(name = "serial_number", unique = true)
     @Cohort12TableCol(label = "Serial Number")
     @Cohort12FormField(label = "Serial Number", placeholder = "SN-12345")
     private String serialNumber;
 
-    @DbColumn(name = "purchaseDate", type = "DATE")
+    @Column(name = "purchase_date")
+    @Temporal(TemporalType.DATE)
     @Cohort12TableCol(label = "Purchase Date")
-    @Cohort12FormField(label = "Purchase Date", placeholder = "YYYY-MM-DD")
+    @Cohort12FormField(label = "Purchase Date", placeholder = "YYYY-MM-DD", type = "date")
     private Date purchaseDate;
 
-    @DbColumn(name = "lastCalibrationDate", type = "DATE")
+    @Column(name = "last_calibration_date")
+    @Temporal(TemporalType.DATE)
     @Cohort12TableCol(label = "Last Cal")
-    @Cohort12FormField(label = "Last Calibration", placeholder = "YYYY-MM-DD")
+    @Cohort12FormField(label = "Last Calibration", placeholder = "YYYY-MM-DD", type = "date")
     private Date lastCalibrationDate;
 
-    @DbColumn(name = "nextCalibrationDate", type = "DATE")
+    @Column(name = "next_calibration_date")
+    @Temporal(TemporalType.DATE)
     @Cohort12TableCol(label = "Next Cal")
     private Date nextCalibrationDate;
 
-    @DbColumn(name = "status", type = "VARCHAR(255)")
+    @Column
     @Cohort12TableCol(label = "Status")
     @Cohort12FormField(label = "Current Status", placeholder = "Operational")
     private String status;
