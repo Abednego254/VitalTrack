@@ -43,7 +43,7 @@ public class HospitalMedicalSupplyEJB {
     }
 
     public void update(HospitalMedicalSupply supply) throws Exception {
-        supplyDao.update(supply);
+        supplyDao.save(supply);
     }
 
     public void delete(Long id) throws Exception {

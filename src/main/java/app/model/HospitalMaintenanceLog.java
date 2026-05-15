@@ -4,35 +4,41 @@ import app.framework.Cohort12Form;
 import app.framework.Cohort12FormField;
 import app.framework.Cohort12Table;
 import app.framework.Cohort12TableCol;
-import app.framework.DbColumn;
-import app.framework.DbTable;
-import app.framework.PageMenuItem;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
 
-@DbTable(name = "HospitalMaintenanceLog")
+@Entity
+@Table(name = "hospital_maintenance_log")
 @Cohort12Table(label = "Maintenance History", addLink = "maintenancelog/add", deleteLink = "maintenancelog/delete")
 @Cohort12Form(label = "Maintenance Log", actionUrl = "maintenancelog/save")
 public class HospitalMaintenanceLog implements Serializable {
-    @DbColumn(name = "id", type = "BIGINT", primaryKey = true, autoIncrement = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @DbColumn(name = "equipmentId", type = "BIGINT")
+
+    @Column(name = "equipment_id")
     @Cohort12TableCol(label = "Equipment ID")
     @Cohort12FormField(label = "Equipment ID", placeholder = "1")
     private Long equipmentId;
-    @DbColumn(name = "technicianId", type = "BIGINT")
+
+    @Column(name = "technician_id")
     @Cohort12TableCol(label = "Tech ID")
     private Long technicianId;
-    @DbColumn(name = "serviceDate", type = "DATE")
+
+    @Column(name = "service_date")
+    @Temporal(TemporalType.DATE)
     @Cohort12TableCol(label = "Date")
-    @Cohort12FormField(label = "Service Date", placeholder = "YYYY-MM-DD")
+    @Cohort12FormField(label = "Service Date", placeholder = "YYYY-MM-DD", type = "date")
     private Date serviceDate;
-    @DbColumn(name = "actionTaken", type = "VARCHAR(255)")
+
+    @Column(name = "action_taken")
     @Cohort12TableCol(label = "Action")
     @Cohort12FormField(label = "Action Taken", placeholder = "Repair/Calibration")
     private String actionTaken;
-    @DbColumn(name = "notes", type = "TEXT")
+
+    @Column(columnDefinition = "TEXT")
     @Cohort12FormField(label = "Detailed Notes", placeholder = "... ")
     private String notes;
 

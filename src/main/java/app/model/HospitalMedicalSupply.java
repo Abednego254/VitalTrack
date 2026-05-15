@@ -4,41 +4,48 @@ import app.framework.Cohort12Form;
 import app.framework.Cohort12FormField;
 import app.framework.Cohort12Table;
 import app.framework.Cohort12TableCol;
-import app.framework.DbColumn;
-import app.framework.DbTable;
-import app.framework.PageMenuItem;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
 
-@DbTable(name = "HospitalMedicalSupply")
+@Entity
+@Table(name = "hospital_medical_supply")
 @Cohort12Table(label = "Medical Supplies", addLink = "medicalsupply/add", deleteLink = "medicalsupply/delete")
 @Cohort12Form(label = "Medical Supply", actionUrl = "medicalsupply/save")
 public class HospitalMedicalSupply implements Serializable {
 
-    @DbColumn(name = "id", type = "BIGINT", primaryKey = true, autoIncrement = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @DbColumn(name = "name", type = "VARCHAR(255)")
+
+    @Column(nullable = false)
     @Cohort12TableCol(label = "Name")
     @Cohort12FormField(label = "Supply Name", placeholder = "e.g. Surgical Gloves")
     private String name;
-    @DbColumn(name = "category", type = "VARCHAR(255)")
+
+    @Column
     @Cohort12TableCol(label = "Category")
     @Cohort12FormField(label = "Category", placeholder = "e.g. Consumables")
     private String category;
-    @DbColumn(name = "quantity", type = "int")
+
+    @Column
     @Cohort12TableCol(label = "Stock")
     @Cohort12FormField(label = "Initial Quantity", placeholder = "100")
     private int quantity;
-    @DbColumn(name = "unitOfMeasure", type = "VARCHAR(255)")
+
+    @Column(name = "unit_of_measure")
     @Cohort12TableCol(label = "Unit")
     @Cohort12FormField(label = "Unit of Measure", placeholder = "Boxes")
     private String unitOfMeasure;
-    @DbColumn(name = "expiryDate", type = "DATE")
+
+    @Column(name = "expiry_date")
+    @Temporal(TemporalType.DATE)
     @Cohort12TableCol(label = "Expiry")
-    @Cohort12FormField(label = "Expiry Date", placeholder = "YYYY-MM-DD")
+    @Cohort12FormField(label = "Expiry Date", placeholder = "YYYY-MM-DD", type = "date")
     private Date expiryDate;
-    @DbColumn(name = "reorderLevel", type = "int")
+
+    @Column(name = "reorder_level")
     @Cohort12FormField(label = "Reorder Level", placeholder = "10")
     private int reorderLevel;
 

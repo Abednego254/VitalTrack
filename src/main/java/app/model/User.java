@@ -1,22 +1,23 @@
 package app.model;
 
-import app.framework.DbColumn;
-import app.framework.DbTable;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
-@DbTable(name = "Users")
+@Entity
+@Table(name = "users")
 public class User implements Serializable {
 
-    @DbColumn(name = "id", type = "BIGINT", primaryKey = true, autoIncrement = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @DbColumn(name = "username", type = "VARCHAR(255)")
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @DbColumn(name = "password", type = "VARCHAR(255)")
+    @Column(nullable = false)
     private String password;
 
-    @DbColumn(name = "role", type = "VARCHAR(50)")
+    @Column(nullable = false)
     private String role;
 
     public User() {}
