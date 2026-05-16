@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Cohort12TableCol {
+public @interface VitalTrackTableCol {
 
     String label();
 }

@@ -6,7 +6,7 @@ import app.framework.ActionGetMethod;
 import app.framework.ActionPathParam;
 import app.framework.ActionPostMethod;
 import app.framework.ActionResponse;
-import app.framework.Cohort12Framework;
+import app.framework.VitalTrackFramework;
 import app.model.HospitalTechnician;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
@@ -16,14 +16,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RequestScoped
-@Action(value = "technician", label = "Technician Management")
+@Action(value = "technician", label = "Technicians", role = "ADMIN")
 public class TechnicianAction {
 
     @EJB
     private HospitalTechnicianEJB technicianEJB;
 
     @Inject
-    private Cohort12Framework framework;
+    private VitalTrackFramework framework;
 
     @ActionGetMethod("list")
     public ActionResponse list() throws Exception {

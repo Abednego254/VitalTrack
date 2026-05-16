@@ -9,6 +9,7 @@ import java.util.*;
 
 public class ActionParamBinder {
 
+    // This object handles JSON conversion.
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public static Object[] bind(
@@ -17,6 +18,7 @@ public class ActionParamBinder {
             HttpServletResponse resp,
             Map<String, String> vars) throws Exception {
 
+        // Read Method Parameters
         Parameter[] params = handler.getMethod().getParameters();
         Object[] args = new Object[params.length];
 

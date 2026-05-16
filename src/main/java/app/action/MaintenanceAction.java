@@ -6,7 +6,7 @@ import app.framework.ActionGetMethod;
 import app.framework.ActionPathParam;
 import app.framework.ActionPostMethod;
 import app.framework.ActionResponse;
-import app.framework.Cohort12Framework;
+import app.framework.VitalTrackFramework;
 import app.model.HospitalMaintenanceLog;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
@@ -23,7 +23,7 @@ public class MaintenanceAction {
     private HospitalMaintenanceLogEJB maintenanceEJB;
 
     @Inject
-    private Cohort12Framework framework;
+    private VitalTrackFramework framework;
 
     @ActionGetMethod("list")
     public ActionResponse list() throws Exception {

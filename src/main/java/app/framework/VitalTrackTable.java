@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Cohort12Form {
+public @interface VitalTrackTable {
 
-    String label() default "Register";
+    String label() default "";
 
-    String method() default "POST";
+    String addLink() default "";
 
-    String actionUrl();
+    String deleteLink() default "";
 }

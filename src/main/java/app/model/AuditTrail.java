@@ -1,14 +1,14 @@
 package app.model;
 
-import app.framework.Cohort12Table;
-import app.framework.Cohort12TableCol;
+import app.framework.VitalTrackTable;
+import app.framework.VitalTrackTableCol;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "audit_trail")
-@Cohort12Table(label = "Security Audit Trail", deleteLink = "audit-trail/delete")
+@VitalTrackTable(label = "Security Audit Trail", deleteLink = "audit-trail/delete")
 public class AuditTrail implements Serializable {
 
     @Id
@@ -16,20 +16,20 @@ public class AuditTrail implements Serializable {
     private Long id;
 
     @Column
-    @Cohort12TableCol(label = "Action")
+    @VitalTrackTableCol(label = "Action")
     private String action;
 
     @Column(columnDefinition = "TEXT")
-    @Cohort12TableCol(label = "Details")
+    @VitalTrackTableCol(label = "Details")
     private String details;
 
     @Column(name = "performed_by")
-    @Cohort12TableCol(label = "Performed By")
+    @VitalTrackTableCol(label = "Performed By")
     private String performedBy;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    @Cohort12TableCol(label = "Timestamp")
+    @VitalTrackTableCol(label = "Timestamp")
     private Date timestamp;
 
     public AuditTrail() {}

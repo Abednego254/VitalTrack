@@ -6,7 +6,8 @@ import app.framework.ActionGetMethod;
 import app.framework.ActionPathParam;
 import app.framework.ActionPostMethod;
 import app.framework.ActionResponse;
-import app.framework.Cohort12Framework;
+import app.framework.ActionRequestBody;
+import app.framework.VitalTrackFramework;
 import app.model.HospitalEquipment;
 import app.utility.MaintenanceChoice;
 import app.utility.MaintenanceQualifier;
@@ -15,20 +16,16 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ejb.EJB;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-
-import static java.sql.Date.valueOf;
 
 @RequestScoped
-@Action(value = "equipment", label = "Equipment Management")
+@Action(value = "equipment", label = "Equipment")
 public class EquipmentAction {
 
     @EJB
     private HospitalEquipmentEJB equipmentEJB;
 
     @Inject
-    private Cohort12Framework framework;
+    private VitalTrackFramework framework;
 
     @Inject
     @MaintenanceQualifier(MaintenanceChoice.STANDARD)
@@ -49,21 +46,7 @@ public class EquipmentAction {
     }
 
     @ActionPostMethod("save")
-    public ActionResponse save(HttpServletRequest request) throws Exception {
-        HospitalEquipment equipment = new HospitalEquipment();
-        equipment.setName(request.getParameter("name"));
-        equipment.setSerialNumber(request.getParameter("serialNumber"));
-        equipment.setStatus(request.getParameter("status"));
-
-        String purchaseDate = request.getParameter("purchaseDate");
-        if (purchaseDate != null && !purchaseDate.isEmpty()) {
-            equipment.setPurchaseDate(valueOf(purchaseDate));
-        }
-
-        String lastCal = request.getParameter("lastCalibrationDate");
-        if (lastCal != null && !lastCal.isEmpty()) {
-            equipment.setLastCalibrationDate(valueOf(lastCal));
-        }
+    public ActionResponse save(@ActionRequestBody HospitalEquipment equipment, HttpServletRequest request) throws Exception {
 
         // SMART LOGIC: Calculate next calibration date automatically
         String category = request.getParameter("maintenanceCategory");
