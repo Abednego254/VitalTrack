@@ -1,9 +1,9 @@
 package app.model;
 
-import app.framework.Cohort12Form;
-import app.framework.Cohort12FormField;
-import app.framework.Cohort12Table;
-import app.framework.Cohort12TableCol;
+import app.framework.VitalTrackForm;
+import app.framework.VitalTrackFormField;
+import app.framework.VitalTrackTable;
+import app.framework.VitalTrackTableCol;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -11,8 +11,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "hospital_medical_supply")
-@Cohort12Table(label = "Medical Supplies", addLink = "medicalsupply/add", deleteLink = "medicalsupply/delete")
-@Cohort12Form(label = "Medical Supply", actionUrl = "medicalsupply/save")
+@VitalTrackTable(label = "Medical Supplies", addLink = "medicalsupply/add", deleteLink = "medicalsupply/delete")
+@VitalTrackForm(label = "Medical Supply", actionUrl = "medicalsupply/save")
 public class HospitalMedicalSupply implements Serializable {
 
     @Id
@@ -20,33 +20,33 @@ public class HospitalMedicalSupply implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    @Cohort12TableCol(label = "Name")
-    @Cohort12FormField(label = "Supply Name", placeholder = "e.g. Surgical Gloves")
+    @VitalTrackTableCol(label = "Name")
+    @VitalTrackFormField(label = "Supply Name", placeholder = "e.g. Surgical Gloves")
     private String name;
 
     @Column
-    @Cohort12TableCol(label = "Category")
-    @Cohort12FormField(label = "Category", placeholder = "e.g. Consumables")
+    @VitalTrackTableCol(label = "Category")
+    @VitalTrackFormField(label = "Category", placeholder = "e.g. Consumables")
     private String category;
 
     @Column
-    @Cohort12TableCol(label = "Stock")
-    @Cohort12FormField(label = "Initial Quantity", placeholder = "100")
+    @VitalTrackTableCol(label = "Stock")
+    @VitalTrackFormField(label = "Initial Quantity", placeholder = "100")
     private int quantity;
 
     @Column(name = "unit_of_measure")
-    @Cohort12TableCol(label = "Unit")
-    @Cohort12FormField(label = "Unit of Measure", placeholder = "Boxes")
+    @VitalTrackTableCol(label = "Unit")
+    @VitalTrackFormField(label = "Unit of Measure", placeholder = "Boxes")
     private String unitOfMeasure;
 
     @Column(name = "expiry_date")
     @Temporal(TemporalType.DATE)
-    @Cohort12TableCol(label = "Expiry")
-    @Cohort12FormField(label = "Expiry Date", placeholder = "YYYY-MM-DD", type = "date")
+    @VitalTrackTableCol(label = "Expiry")
+    @VitalTrackFormField(label = "Expiry Date", placeholder = "YYYY-MM-DD", type = "date")
     private Date expiryDate;
 
     @Column(name = "reorder_level")
-    @Cohort12FormField(label = "Reorder Level", placeholder = "10")
+    @VitalTrackFormField(label = "Reorder Level", placeholder = "10")
     private int reorderLevel;
 
     public HospitalMedicalSupply() {

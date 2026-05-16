@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class Cohort12Framework {
+public class VitalTrackFramework {
 
     @Inject
     private ClassScanner clazzScanner;
@@ -19,16 +19,16 @@ public class Cohort12Framework {
 
     @PostConstruct
     public void init() {
-        System.out.println("****************Cohort12Framework Contextual Instance created ********");
+        System.out.println("****************VitalTrackFramework Contextual Instance created ********");
         resetFormSelections();
     }
 
     public String htmlForm(Class<?> clazz){
 
-        if (!clazz.isAnnotationPresent(Cohort12Form.class))
+        if (!clazz.isAnnotationPresent(VitalTrackForm.class))
             return "";
 
-        Cohort12Form formAnnot = clazz.getAnnotation(Cohort12Form.class);
+        VitalTrackForm formAnnot = clazz.getAnnotation(VitalTrackForm.class);
 
         StringBuilder formBuilder = new StringBuilder();
         formBuilder.append("<header class='page-header'>");
@@ -45,10 +45,10 @@ public class Cohort12Framework {
 
         formBuilder.append("<div class='form-grid'>");
         for (Field field : clazz.getDeclaredFields()) {
-            if (!field.isAnnotationPresent(Cohort12FormField.class))
+            if (!field.isAnnotationPresent(VitalTrackFormField.class))
                 continue;
 
-            Cohort12FormField fieldInfo = field.getAnnotation(Cohort12FormField.class);
+            VitalTrackFormField fieldInfo = field.getAnnotation(VitalTrackFormField.class);
             formBuilder.append("<div class='form-group'>");
             formBuilder.append("<label>").append(fieldInfo.label()).append("</label>");
             if (!fieldInfo.select().equalsIgnoreCase("")
@@ -88,10 +88,10 @@ public class Cohort12Framework {
 
     public String htmlTable(Class<?> clazz, List<?> tableData) {
 
-        if (!clazz.isAnnotationPresent(Cohort12Table.class))
+        if (!clazz.isAnnotationPresent(VitalTrackTable.class))
             return "";
 
-        Cohort12Table cohort12Table = clazz.getAnnotation(Cohort12Table.class);
+        VitalTrackTable cohort12Table = clazz.getAnnotation(VitalTrackTable.class);
 
         StringBuilder tableBuilder = new StringBuilder();
 
@@ -128,10 +128,10 @@ public class Cohort12Framework {
 
         List<ColMetaData> colsMedaData = new ArrayList<>();
         for (Field field : clazz.getDeclaredFields()) {
-            if (!field.isAnnotationPresent(Cohort12TableCol.class))
+            if (!field.isAnnotationPresent(VitalTrackTableCol.class))
                 continue;
 
-            Cohort12TableCol tableCol = field.getAnnotation(Cohort12TableCol.class);
+            VitalTrackTableCol tableCol = field.getAnnotation(VitalTrackTableCol.class);
 
             colsMedaData.add(new ColMetaData(field.getName(), tableCol.label()));
         }

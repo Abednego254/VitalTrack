@@ -6,7 +6,7 @@ import app.framework.ActionGetMethod;
 import app.framework.ActionPathParam;
 import app.framework.ActionPostMethod;
 import app.framework.ActionResponse;
-import app.framework.Cohort12Framework;
+import app.framework.VitalTrackFramework;
 import app.model.HospitalMedicalSupply;
 import app.model.MedicalSupplyConsumedEvent;
 import jakarta.ejb.EJB;
@@ -18,14 +18,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RequestScoped
-@Action(value = "medicalsupply", label = "Medical Supplies")
+@Action(value = "medicalsupply", label = "Medical Supplies", role = "ADMIN")
 public class SupplyAction {
 
     @EJB
     private HospitalMedicalSupplyEJB supplyEJB;
 
     @Inject
-    private Cohort12Framework framework;
+    private VitalTrackFramework framework;
 
     @Inject
     private Event<MedicalSupplyConsumedEvent> consumptionEvent;

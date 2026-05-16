@@ -16,5 +16,6 @@ public @interface Action {
 
     int linkPosition() default 0;
 
+    String role() default "USER";
 
 }

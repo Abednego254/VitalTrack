@@ -5,7 +5,7 @@ import app.framework.Action;
 import app.framework.ActionGetMethod;
 import app.framework.ActionPathParam;
 import app.framework.ActionResponse;
-import app.framework.Cohort12Framework;
+import app.framework.VitalTrackFramework;
 import app.model.AuditTrail;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,14 +14,14 @@ import jakarta.enterprise.context.RequestScoped;
 import java.util.List;
 
 @RequestScoped
-@Action(value = "audit-trail", label = "System Audit Trail")
+@Action(value = "audit-trail", label = "Security Logs", role = "ADMIN")
 public class SecurityAction {
 
     @Inject
     private AuditTrailBean auditTrailBean;
 
     @Inject
-    private Cohort12Framework framework;
+    private VitalTrackFramework framework;
 
     @ActionGetMethod("list")
     public ActionResponse list(HttpServletRequest request) throws Exception {
