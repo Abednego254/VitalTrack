@@ -46,6 +46,7 @@ public class HospitalEquipment extends BaseEntity {
     @Temporal(TemporalType.DATE)
     @VitalTrackTableCol(label = "Last Cal")
     @VitalTrackFormField(label = "Last Calibration", placeholder = "YYYY-MM-DD", type = "date")
+    @Past(message = "Last calibration date must be in the past")
     private Date lastCalibrationDate;
 
     @Column(name = "next_calibration_date")

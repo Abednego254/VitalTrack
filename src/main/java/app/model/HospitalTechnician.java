@@ -33,11 +33,13 @@ public class HospitalTechnician extends BaseEntity {
     @Column(name = "contact_info")
     @VitalTrackTableCol(label = "Contact")
     @VitalTrackFormField(label = "Contact Info", placeholder = "+254...")
+    @NotBlank(message = "Contact info is required")
     private String contactInfo;
 
     @Column
     @VitalTrackTableCol(label = "Status")
     @VitalTrackFormField(label = "Status", placeholder = "Active")
+    @NotBlank(message = "Status is required")
     private String status;
 
     @Column(nullable = false, unique = true)
@@ -48,6 +50,7 @@ public class HospitalTechnician extends BaseEntity {
     private String email;
 
     @Column(nullable = false)
+    @NotBlank(message = "Password is required")
     private String password;
 
     public HospitalTechnician() {}
