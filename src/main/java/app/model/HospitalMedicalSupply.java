@@ -5,8 +5,12 @@ import app.framework.VitalTrackFormField;
 import app.framework.VitalTrackTable;
 import app.framework.VitalTrackTableCol;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -18,31 +22,39 @@ public class HospitalMedicalSupply extends BaseEntity {
     @Column(nullable = false)
     @VitalTrackTableCol(label = "Name")
     @VitalTrackFormField(label = "Supply Name", placeholder = "e.g. Surgical Gloves")
+    @NotBlank(message = "Supply name is required")
+    @Size(min = 2, max = 100, message = "Supply name must be between 2 and 100 characters")
     private String name;
 
     @Column
     @VitalTrackTableCol(label = "Category")
     @VitalTrackFormField(label = "Category", placeholder = "e.g. Consumables")
+    @NotBlank(message = "Category is required")
     private String category;
 
     @Column
     @VitalTrackTableCol(label = "Stock")
     @VitalTrackFormField(label = "Initial Quantity", placeholder = "100")
+    @Min(value = 1, message = "Quantity must be at least 1")
     private int quantity;
 
     @Column(name = "unit_of_measure")
     @VitalTrackTableCol(label = "Unit")
     @VitalTrackFormField(label = "Unit of Measure", placeholder = "Boxes")
+    @NotBlank(message = "Unit of measure is required")
     private String unitOfMeasure;
 
     @Column(name = "expiry_date")
     @Temporal(TemporalType.DATE)
     @VitalTrackTableCol(label = "Expiry")
     @VitalTrackFormField(label = "Expiry Date", placeholder = "YYYY-MM-DD", type = "date")
+    @NotNull(message = "Expiry date is required")
+    @Future(message = "Expiry date must be in the future")
     private Date expiryDate;
 
     @Column(name = "reorder_level")
     @VitalTrackFormField(label = "Reorder Level", placeholder = "10")
+    @Min(value = 0, message = "Reorder level cannot be negative")
     private int reorderLevel;
 
     public HospitalMedicalSupply() {

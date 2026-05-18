@@ -5,6 +5,9 @@ import app.framework.VitalTrackFormField;
 import app.framework.VitalTrackTable;
 import app.framework.VitalTrackTableCol;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import java.util.Date;
 
 @Entity
@@ -15,6 +18,7 @@ public class HospitalMaintenanceLog extends BaseEntity {
 
     @Column(name = "equipment_id")
     @VitalTrackFormField(label = "Equipment ID", placeholder = "1")
+    @NotNull(message = "Equipment ID is required")
     private Long equipmentId;
 
     @Column(name = "technician_id")
@@ -40,11 +44,14 @@ public class HospitalMaintenanceLog extends BaseEntity {
     @Temporal(TemporalType.DATE)
     @VitalTrackTableCol(label = "Date")
     @VitalTrackFormField(label = "Service Date", placeholder = "YYYY-MM-DD", type = "date")
+    @NotNull(message = "Service date is required")
+    @Past(message = "Service date must be in the past")
     private Date serviceDate;
 
     @Column(name = "action_taken")
     @VitalTrackTableCol(label = "Action")
     @VitalTrackFormField(label = "Action Taken", placeholder = "Repair/Calibration")
+    @NotBlank(message = "Action taken is required")
     private String actionTaken;
 
     @Column(columnDefinition = "TEXT")
