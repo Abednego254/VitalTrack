@@ -148,7 +148,7 @@ public class VitalTrackFramework {
             tableBuilder.append("<tr>");
             for (ColMetaData colMedaData : colsMedaData) {
                 try {
-                    Field field = data.getClass().getDeclaredField(colMedaData.fieldName);
+                    Field field = findField(data.getClass(), colMedaData.fieldName);
                     field.setAccessible(true);
                     Object val = field.get(data);
                     String displayVal = (val == null) ? "-" : val.toString();
@@ -170,7 +170,7 @@ public class VitalTrackFramework {
             tableBuilder.append("<td style='text-align: right;'>");
 
             try {
-                Field idField = clazz.getDeclaredField("id");
+                Field idField = findField(clazz, "id");
                 idField.setAccessible(true);
                 Object id = idField.get(data);
 
@@ -247,4 +247,15 @@ public class VitalTrackFramework {
         formSelections.put("gender", genderSelections);
     }
 
+    private Field findField(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+        Class<?> current = clazz;
+        while (current != null) {
+            try {
+                return current.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                current = current.getSuperclass();
+            }
+        }
+        throw new NoSuchFieldException(fieldName);
+    }
 }

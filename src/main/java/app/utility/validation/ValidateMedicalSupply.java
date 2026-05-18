@@ -1,30 +1,38 @@
 package app.utility.validation;
 
-import app.model.HospitalEquipment;
 import app.model.HospitalMedicalSupply;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
-
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import java.util.Set;
 
 @Named("ValidMedicalSupply")
 @ApplicationScoped
 public class ValidateMedicalSupply implements Validate<HospitalMedicalSupply> {
 
+    @Inject
+    private Validator validator;
+
     @Override
     public void printValidation() {
-        System.out.println("Bouncer 'ValidMedicalSupply' is checking the supply...");
-    }
+        System.out.println("Bouncer 'ValidMedicalSupply' is checking the supply constraints using JSR 380...");
+    }s
 
     @Override
-    public boolean process(HospitalMedicalSupply medicalSupply) {
-        if (medicalSupply == null) return false;
-        if (medicalSupply.getName() == null || medicalSupply.getName().trim().isEmpty()) return false;
-        if (medicalSupply.getCategory() == null || medicalSupply.getCategory().trim().isEmpty()) return false;
-        if (medicalSupply.getQuantity() <= 0) return false;
-        if (medicalSupply.getUnitOfMeasure() == null || medicalSupply.getUnitOfMeasure().trim().isEmpty()) return false;
-        if (medicalSupply.getReorderLevel() <= 0) return false;
+    public boolean process(HospitalMedicalSupply supply) {
+        if (supply == null) return false;
 
-        // If all checks pass, we let it through!
+        Set<ConstraintViolation<HospitalMedicalSupply>> violations = validator.validate(supply);
+        if (!violations.isEmpty()) {
+            for (ConstraintViolation<HospitalMedicalSupply> violation : violations) {
+                System.out.println(">>> Constraint violation in "
+                    + violation.getPropertyPath() + ": " + violation.getMessage());
+            }
+            return false;
+        }
+
         return true;
     }
 }

@@ -5,37 +5,53 @@ import app.framework.VitalTrackFormField;
 import app.framework.VitalTrackTable;
 import app.framework.VitalTrackTableCol;
 import jakarta.persistence.*;
-
-import java.io.Serializable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import java.util.Date;
 
 @Entity
 @Table(name = "hospital_maintenance_log")
 @VitalTrackTable(label = "Maintenance History", addLink = "maintenancelog/add", deleteLink = "maintenancelog/delete")
 @VitalTrackForm(label = "Maintenance Log", actionUrl = "maintenancelog/save")
-public class HospitalMaintenanceLog implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class HospitalMaintenanceLog extends BaseEntity {
 
     @Column(name = "equipment_id")
-    @VitalTrackTableCol(label = "Equipment ID")
     @VitalTrackFormField(label = "Equipment ID", placeholder = "1")
+    @NotNull(message = "Equipment ID is required")
     private Long equipmentId;
 
     @Column(name = "technician_id")
-    @VitalTrackTableCol(label = "Tech ID")
     private Long technicianId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "equipment_id", insertable = false, updatable = false)
+    private HospitalEquipment equipment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "technician_id", insertable = false, updatable = false)
+    private HospitalTechnician technician;
+
+    @Transient
+    @VitalTrackTableCol(label = "Equipment")
+    private String equipmentName;
+
+    @Transient
+    @VitalTrackTableCol(label = "Technician")
+    private String technicianName;
 
     @Column(name = "service_date")
     @Temporal(TemporalType.DATE)
     @VitalTrackTableCol(label = "Date")
     @VitalTrackFormField(label = "Service Date", placeholder = "YYYY-MM-DD", type = "date")
+    @NotNull(message = "Service date is required")
+    @Past(message = "Service date must be in the past")
     private Date serviceDate;
 
     @Column(name = "action_taken")
     @VitalTrackTableCol(label = "Action")
     @VitalTrackFormField(label = "Action Taken", placeholder = "Repair/Calibration")
+    @NotBlank(message = "Action taken is required")
     private String actionTaken;
 
     @Column(columnDefinition = "TEXT")
@@ -43,14 +59,6 @@ public class HospitalMaintenanceLog implements Serializable {
     private String notes;
 
     public HospitalMaintenanceLog(){}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getEquipmentId() {
         return equipmentId;
@@ -66,6 +74,38 @@ public class HospitalMaintenanceLog implements Serializable {
 
     public void setTechnicianId(Long technicianId) {
         this.technicianId = technicianId;
+    }
+
+    public HospitalEquipment getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(HospitalEquipment equipment) {
+        this.equipment = equipment;
+    }
+
+    public HospitalTechnician getTechnician() {
+        return technician;
+    }
+
+    public void setTechnician(HospitalTechnician technician) {
+        this.technician = technician;
+    }
+
+    public String getEquipmentName() {
+        return equipmentName;
+    }
+
+    public void setEquipmentName(String equipmentName) {
+        this.equipmentName = equipmentName;
+    }
+
+    public String getTechnicianName() {
+        return technicianName;
+    }
+
+    public void setTechnicianName(String technicianName) {
+        this.technicianName = technicianName;
     }
 
     public Date getServiceDate() {

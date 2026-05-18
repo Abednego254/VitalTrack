@@ -8,23 +8,26 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 @Entity
 @Table(name = "hospital_technician")
 @VitalTrackTable(label = "Technicians", addLink = "technician/add", deleteLink = "technician/delete")
 @VitalTrackForm(label = "Technician", actionUrl = "technician/save")
-public class HospitalTechnician implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class HospitalTechnician extends BaseEntity {
     @Column(nullable = false)
     @VitalTrackTableCol(label = "Name")
     @VitalTrackFormField(label = "Technician Name", placeholder = "e.g. John Doe")
+    @NotBlank(message = "Technician name is required")
+    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
     private String name;
 
     @Column
     @VitalTrackTableCol(label = "Specialization")
     @VitalTrackFormField(label = "Specialization", placeholder = "e.g. Biomedical")
+    @NotBlank(message = "Specialization is required")
     private String specialization;
 
     @Column(name = "contact_info")
@@ -40,20 +43,14 @@ public class HospitalTechnician implements Serializable {
     @Column(nullable = false, unique = true)
     @VitalTrackTableCol(label = "Email")
     @VitalTrackFormField(label = "Email Address", placeholder = "john@hospital.com")
+    @NotBlank(message = "Email is required")
+    @Email(message = "Please provide a valid email address")
     private String email;
 
     @Column(nullable = false)
     private String password;
 
     public HospitalTechnician() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
