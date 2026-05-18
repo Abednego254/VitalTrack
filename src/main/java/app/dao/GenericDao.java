@@ -10,8 +10,8 @@ public class GenericDao<T, ID> {
     @PersistenceContext
     private EntityManager em;
 
-    public void save(T entity) {
-        em.merge(entity);
+    public T save(T entity) {
+        return em.merge(entity);
     }
 
     public T findById(ID id) {

@@ -38,7 +38,20 @@ public class HospitalMaintenanceLogEJB {
     }
 
     public List<HospitalMaintenanceLog> findAll() throws Exception {
-        return logDao.findAll();
+        List<HospitalMaintenanceLog> logs = logDao.findAll();
+        for (HospitalMaintenanceLog log : logs) {
+            if (log.getEquipment() != null) {
+                log.setEquipmentName(log.getEquipment().getName());
+            } else {
+                log.setEquipmentName("Unknown Equipment (" + log.getEquipmentId() + ")");
+            }
+            if (log.getTechnician() != null) {
+                log.setTechnicianName(log.getTechnician().getName());
+            } else {
+                log.setTechnicianName("System / Unknown");
+            }
+        }
+        return logs;
     }
 
     public void delete(Long id) throws Exception {

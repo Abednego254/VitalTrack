@@ -13,11 +13,7 @@ import java.util.Date;
 @Table(name = "hospital_medical_supply")
 @VitalTrackTable(label = "Medical Supplies", addLink = "medicalsupply/add", deleteLink = "medicalsupply/delete")
 @VitalTrackForm(label = "Medical Supply", actionUrl = "medicalsupply/save")
-public class HospitalMedicalSupply implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class HospitalMedicalSupply extends BaseEntity {
 
     @Column(nullable = false)
     @VitalTrackTableCol(label = "Name")
@@ -50,14 +46,6 @@ public class HospitalMedicalSupply implements Serializable {
     private int reorderLevel;
 
     public HospitalMedicalSupply() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

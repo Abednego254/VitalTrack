@@ -12,11 +12,7 @@ import java.io.Serializable;
 @Table(name = "hospital_technician")
 @VitalTrackTable(label = "Technicians", addLink = "technician/add", deleteLink = "technician/delete")
 @VitalTrackForm(label = "Technician", actionUrl = "technician/save")
-public class HospitalTechnician implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class HospitalTechnician extends BaseEntity {
     @Column(nullable = false)
     @VitalTrackTableCol(label = "Name")
     @VitalTrackFormField(label = "Technician Name", placeholder = "e.g. John Doe")
@@ -46,14 +42,6 @@ public class HospitalTechnician implements Serializable {
     private String password;
 
     public HospitalTechnician() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

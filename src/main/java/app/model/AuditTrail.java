@@ -9,11 +9,7 @@ import java.util.Date;
 @Entity
 @Table(name = "audit_trail")
 @VitalTrackTable(label = "Security Audit Trail", deleteLink = "audit-trail/delete")
-public class AuditTrail implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class AuditTrail extends BaseEntity {
 
     @Column
     @VitalTrackTableCol(label = "Action")
@@ -46,14 +42,6 @@ public class AuditTrail implements Serializable {
         this.details = details;
         this.performedBy = performedBy;
         this.timestamp = new Date();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getAction() {
