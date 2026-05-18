@@ -30,12 +30,12 @@ public class HospitalTechnicianEJB {
     private Event<TechnicianAddedEvent> technicianAddedEvent;
 
     public void save(HospitalTechnician technician) throws Exception {
+        // Generate temporary password BEFORE validation so @NotBlank on password passes
+        String dummyPassword = "VT-TEMP-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
+        technician.setPassword(dummyPassword);
+
         validator.printValidation();
         if (validator.process(technician)) {
-            // Generate a temporary dummy password
-            String dummyPassword = "VT-TEMP-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
-            technician.setPassword(dummyPassword);
-
             auditTrailEvent.fire(new AuditTrail("Created new Technician: " + technician.getName()));
             technicianDao.save(technician);
             
