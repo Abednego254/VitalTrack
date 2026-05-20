@@ -26,9 +26,46 @@ public class HospitalMaintenanceLogEJB {
     @Inject
     private HospitalMaintenanceLogDao logDao;
 
+    @Inject
+    private app.dao.HospitalEquipmentDao equipmentDao;
+
+    @Inject
+    @app.utility.MaintenanceQualifier(app.utility.MaintenanceChoice.STANDARD)
+    private app.utility.MaintenanceService standardMaintenance;
+
+    @Inject
+    @app.utility.MaintenanceQualifier(app.utility.MaintenanceChoice.URGENT)
+    private app.utility.MaintenanceService urgentMaintenance;
+
     public void save(HospitalMaintenanceLog log) throws Exception {
         validator.printValidation();
         if (validator.process(log)) {
+            // Retrieve equipment and update calibration dates
+            app.model.HospitalEquipment equipment = equipmentDao.findById(log.getEquipmentId());
+            if (equipment != null) {
+                java.util.Date serviceDate = log.getServiceDate();
+                
+                // Determine whether standard or urgent based on prior calibration gap
+                boolean isUrgent = false;
+                if (equipment.getNextCalibrationDate() != null && equipment.getLastCalibrationDate() != null) {
+                    long diff = equipment.getNextCalibrationDate().getTime() - equipment.getLastCalibrationDate().getTime();
+                    long days = diff / (1000L * 60 * 60 * 24);
+                    if (days > 0 && days <= 95) {
+                        isUrgent = true;
+                    }
+                }
+
+                equipment.setLastCalibrationDate(serviceDate);
+                java.util.Date nextCal;
+                if (isUrgent) {
+                    nextCal = urgentMaintenance.calculateNextMaintenanceDate(serviceDate);
+                } else {
+                    nextCal = standardMaintenance.calculateNextMaintenanceDate(serviceDate);
+                }
+                equipment.setNextCalibrationDate(nextCal);
+                equipmentDao.save(equipment);
+            }
+
             auditTrailEvent.fire(new app.model.AuditTrail("Created new Maintenance Log for Equipment ID: " + log.getEquipmentId()));
             logDao.save(log);
         } else {

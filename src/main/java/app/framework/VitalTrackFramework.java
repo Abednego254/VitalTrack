@@ -15,6 +15,9 @@ public class VitalTrackFramework {
     @Inject
     private ClassScanner clazzScanner;
 
+    @Inject
+    private app.dao.HospitalEquipmentDao equipmentDao;
+
     private Map<String, List<SelectBox>> formSelections = new HashMap<>();
 
     @PostConstruct
@@ -282,6 +285,21 @@ public class VitalTrackFramework {
                 .name("Inactive")
                 .build());
         formSelections.put("technicianStatus", techStatusSelections);
+
+        List<SelectBox> eqListSelections = new ArrayList<>();
+        try {
+            if (equipmentDao != null) {
+                equipmentDao.findAll().forEach(eq -> {
+                    eqListSelections.add(SelectBox.builder()
+                            .value(String.valueOf(eq.getId()))
+                            .name(eq.getName() + " (S/N: " + eq.getSerialNumber() + ")")
+                            .build());
+                });
+            }
+        } catch (Exception e) {
+            System.err.println("Error fetching equipment options for form selections: " + e.getMessage());
+        }
+        formSelections.put("equipmentId", eqListSelections);
     }
 
     private Field findField(Class<?> clazz, String fieldName) throws NoSuchFieldException {

@@ -18,8 +18,8 @@ import java.util.Date;
 public class HospitalMaintenanceLog extends BaseEntity {
 
     @Column(name = "equipment_id")
-    @VitalTrackFormField(label = "Equipment ID", placeholder = "1")
-    @NotNull(message = "Equipment ID is required")
+    @VitalTrackFormField(label = "Equipment", select = "equipmentId")
+    @NotNull(message = "Equipment is required")
     private Long equipmentId;
 
     @Column(name = "technician_id")
