@@ -259,8 +259,8 @@ public class VitalTrackFramework {
 
         List<SelectBox> eqStatusSelections = new ArrayList<>();
         eqStatusSelections.add(SelectBox.builder()
-                .value("OPERATIONAL")
-                .name("Operational")
+                .value("ACTIVE")
+                .name("Active")
                 .build());
         eqStatusSelections.add(SelectBox.builder()
                 .value("FAULTY")

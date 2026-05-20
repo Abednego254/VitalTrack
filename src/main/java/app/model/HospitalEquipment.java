@@ -55,7 +55,7 @@ public class HospitalEquipment extends BaseEntity {
     private Date nextCalibrationDate;
 
     @Column
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = EquipmentStatusConverter.class)
     @VitalTrackTableCol(label = "Status")
     @VitalTrackFormField(label = "Current Status", select = "equipmentStatus")
     @NotNull(message = "Status must not be null")

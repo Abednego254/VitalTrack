@@ -38,7 +38,7 @@ public class HospitalTechnician extends BaseEntity {
     private String contactInfo;
 
     @Column
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = TechnicianStatusConverter.class)
     @VitalTrackTableCol(label = "Status")
     @VitalTrackFormField(label = "Status", select = "technicianStatus")
     @NotNull(message = "Status is required")
