@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -37,10 +38,11 @@ public class HospitalTechnician extends BaseEntity {
     private String contactInfo;
 
     @Column
+    @Enumerated(EnumType.STRING)
     @VitalTrackTableCol(label = "Status")
-    @VitalTrackFormField(label = "Status", placeholder = "Active")
-    @NotBlank(message = "Status is required")
-    private String status;
+    @VitalTrackFormField(label = "Status", select = "technicianStatus")
+    @NotNull(message = "Status is required")
+    private TechnicianStatus status;
 
     @Column(nullable = false, unique = true)
     @VitalTrackTableCol(label = "Email")
@@ -79,11 +81,11 @@ public class HospitalTechnician extends BaseEntity {
         this.contactInfo = contactInfo;
     }
 
-    public String getStatus() {
+    public TechnicianStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TechnicianStatus status) {
         this.status = status;
     }
 

@@ -11,6 +11,7 @@ import app.model.HospitalTechnician;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import app.framework.ActionRequestBody;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -36,20 +37,15 @@ public class TechnicianAction {
     }
 
     @ActionPostMethod("save")
-    public ActionResponse save(HttpServletRequest request) throws Exception {
-        // SECURITY: Only ADMIN can add new technicians
-        String userRole = (String) request.getSession().getAttribute("role");
-        if (!"ADMIN".equals(userRole)) {
-            return new ActionResponse("<div class='error-message'>Only Hospital Admins can register new Technicians.</div>");
+    public ActionResponse save(@ActionRequestBody HospitalTechnician technician, HttpServletRequest request) throws Exception {
+        // Automatically set createdBy on new technician registration
+        jakarta.servlet.http.HttpSession session = request.getSession(false);
+        if (session != null) {
+            Object loggedIn = session.getAttribute("loggedInUser");
+            if (loggedIn instanceof app.model.User) {
+                technician.setCreateBy((app.model.User) loggedIn);
+            }
         }
-
-        HospitalTechnician technician = new HospitalTechnician();
-        technician.setName(request.getParameter("name"));
-        technician.setSpecialization(request.getParameter("specialization"));
-        technician.setContactInfo(request.getParameter("contactInfo"));
-        technician.setEmail(request.getParameter("email"));
-        technician.setStatus(request.getParameter("status"));
-
         technicianEJB.save(technician);
         return list();
     }

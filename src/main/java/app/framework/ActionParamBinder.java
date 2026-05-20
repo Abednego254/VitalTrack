@@ -81,6 +81,13 @@ public class ActionParamBinder {
 
     private static Object convert(String v, Class<?> t) {
         if (v == null || v.isEmpty()) return null;
+        if (t.isEnum()) {
+            try {
+                return Enum.valueOf((Class<Enum>) t, v);
+            } catch (Exception e) {
+                return null;
+            }
+        }
         if (t == String.class) return v;
         if (t == int.class || t == Integer.class) return Integer.parseInt(v);
         if (t == long.class || t == Long.class) return Long.parseLong(v);
