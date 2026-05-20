@@ -1,7 +1,7 @@
 package app.model;
 
 public enum EquipmentStatus {
-    OPERATIONAL("Operational"),
+    ACTIVE("Active"),
     FAULTY("Faulty"),
     UNDER_MAINTENANCE("Under Maintenance");
 
