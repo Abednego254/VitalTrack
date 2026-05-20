@@ -245,6 +245,43 @@ public class VitalTrackFramework {
                 .build());
 
         formSelections.put("gender", genderSelections);
+
+        List<SelectBox> maintenanceSelections = new ArrayList<>();
+        maintenanceSelections.add(SelectBox.builder()
+                .value("STANDARD")
+                .name("Standard Maintenance (6 Months)")
+                .build());
+        maintenanceSelections.add(SelectBox.builder()
+                .value("URGENT")
+                .name("Urgent Maintenance (2 Months)")
+                .build());
+        formSelections.put("maintenanceCategory", maintenanceSelections);
+
+        List<SelectBox> eqStatusSelections = new ArrayList<>();
+        eqStatusSelections.add(SelectBox.builder()
+                .value("OPERATIONAL")
+                .name("Operational")
+                .build());
+        eqStatusSelections.add(SelectBox.builder()
+                .value("FAULTY")
+                .name("Faulty")
+                .build());
+        eqStatusSelections.add(SelectBox.builder()
+                .value("UNDER_MAINTENANCE")
+                .name("Under Maintenance")
+                .build());
+        formSelections.put("equipmentStatus", eqStatusSelections);
+
+        List<SelectBox> techStatusSelections = new ArrayList<>();
+        techStatusSelections.add(SelectBox.builder()
+                .value("ACTIVE")
+                .name("Active")
+                .build());
+        techStatusSelections.add(SelectBox.builder()
+                .value("INACTIVE")
+                .name("Inactive")
+                .build());
+        formSelections.put("technicianStatus", techStatusSelections);
     }
 
     private Field findField(Class<?> clazz, String fieldName) throws NoSuchFieldException {

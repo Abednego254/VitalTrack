@@ -46,6 +46,7 @@ public class HospitalEquipment extends BaseEntity {
     @Temporal(TemporalType.DATE)
     @VitalTrackTableCol(label = "Last Cal")
     @VitalTrackFormField(label = "Last Calibration", placeholder = "YYYY-MM-DD", type = "date")
+    @Past(message = "Last calibration date must be in the past")
     private Date lastCalibrationDate;
 
     @Column(name = "next_calibration_date")
@@ -54,10 +55,15 @@ public class HospitalEquipment extends BaseEntity {
     private Date nextCalibrationDate;
 
     @Column
+    @Enumerated(EnumType.STRING)
     @VitalTrackTableCol(label = "Status")
-    @VitalTrackFormField(label = "Current Status", placeholder = "Operational")
-    @NotBlank(message = "Status must not be blank")
-    private String status;
+    @VitalTrackFormField(label = "Current Status", select = "equipmentStatus")
+    @NotNull(message = "Status must not be null")
+    private EquipmentStatus status;
+
+    @Transient
+    @VitalTrackFormField(label = "Maintenance Mode", select = "maintenanceCategory")
+    private String maintenanceCategory;
 
     public HospitalEquipment() {
     }
@@ -102,12 +108,19 @@ public class HospitalEquipment extends BaseEntity {
         this.nextCalibrationDate = nextCalibrationDate;
     }
 
-    public String getStatus() {
+    public EquipmentStatus getStatus() {
         return status;
     }
  
-    public void setStatus(String status) {
+    public void setStatus(EquipmentStatus status) {
         this.status = status;
     }
 
+    public String getMaintenanceCategory() {
+        return maintenanceCategory;
+    }
+
+    public void setMaintenanceCategory(String maintenanceCategory) {
+        this.maintenanceCategory = maintenanceCategory;
+    }
 }

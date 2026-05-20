@@ -49,12 +49,21 @@ public class EquipmentAction {
     public ActionResponse save(@ActionRequestBody HospitalEquipment equipment, HttpServletRequest request) throws Exception {
 
         // SMART LOGIC: Calculate next calibration date automatically
-        String category = request.getParameter("maintenanceCategory");
+        String category = equipment.getMaintenanceCategory();
         if (equipment.getLastCalibrationDate() != null) {
             if ("URGENT".equals(category)) {
                 equipment.setNextCalibrationDate(urgentMaintenance.calculateNextMaintenanceDate(equipment.getLastCalibrationDate()));
             } else {
                 equipment.setNextCalibrationDate(standardMaintenance.calculateNextMaintenanceDate(equipment.getLastCalibrationDate()));
+            }
+        }
+
+        // AUDIT TRAIL: Set the user who added this equipment
+        jakarta.servlet.http.HttpSession session = request.getSession(false);
+        if (session != null) {
+            Object loggedIn = session.getAttribute("loggedInUser");
+            if (loggedIn instanceof app.model.User) {
+                equipment.setCreateBy((app.model.User) loggedIn);
             }
         }
 

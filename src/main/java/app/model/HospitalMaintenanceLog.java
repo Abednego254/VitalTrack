@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -56,6 +57,7 @@ public class HospitalMaintenanceLog extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     @VitalTrackFormField(label = "Detailed Notes", placeholder = "... ")
+    @Size(max = 2000, message = "Notes must not exceed 2000 characters")
     private String notes;
 
     public HospitalMaintenanceLog(){}

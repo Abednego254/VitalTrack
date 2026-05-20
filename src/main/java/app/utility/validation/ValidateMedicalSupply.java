@@ -18,7 +18,7 @@ public class ValidateMedicalSupply implements Validate<HospitalMedicalSupply> {
     @Override
     public void printValidation() {
         System.out.println("Bouncer 'ValidMedicalSupply' is checking the supply constraints using JSR 380...");
-    }s
+    }
 
     @Override
     public boolean process(HospitalMedicalSupply supply) {

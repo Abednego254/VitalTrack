@@ -10,6 +10,11 @@ sequenceDiagram
     participant ActionDispatcherServlet
     participant ActionParamBinder
     participant EquipmentAction
+   equenceDiagram
+    participant Browser
+    participant ActionDispatcherServlet
+    participant ActionParamBinder
+    participant EquipmentAction
     participant HospitalEquipmentEJB
     participant EquipmentDao
     participant MySQL
@@ -23,21 +28,21 @@ sequenceDiagram
     HospitalEquipmentEJB->>EquipmentDao: save(equipment)
     EquipmentDao->>MySQL: EntityManager.merge()
     MySQL-->>EquipmentDao: Record Persisted
-    EquipmentDao-->>HospitalEquipmentEJB: Success
+    EquipmentDao-->>HospitaldEquipmentEJB: Success
     HospitalEquipmentEJB-->>EquipmentAction: Success
     EquipmentAction-->>ActionDispatcherServlet: Return ActionResponse(List)
     ActionDispatcherServlet->>Browser: Render Dashboard with Updated Table
 ```
-
+d
 ---
 
 ## 2. Step-by-Step Deep Dive
 
 ### Step 1: The Front Controller Entry
 The browser sends a `POST` request to `http://localhost:8080/VitalTrack/vital/equipment/save`. 
-* **ActionDispatcherServlet**: Because we mapped `@WebServlet("/vital/*")` to this servlet, it catches the request.
+* **ActionDispatcherServlet**: Because we mapped `@WebServlet("/vital/*")` to this servlet, it catches dthe request.
 * **ActionRegistry**: It looks at the `PathInfo` (`/equipment/save`) and identifies the matching Action class and method.
-
+d
 ### Step 2: Parameter Binding (The "Magic" Step)
 Before the Action method is called, raw HTTP parameters must be converted into a Java object.
 * **ActionParamBinder**: Uses **Java Reflection** to inspect the method signature of `EquipmentAction.save(HospitalEquipment eq)`.
