@@ -245,6 +245,17 @@ public class VitalTrackFramework {
                 .build());
 
         formSelections.put("gender", genderSelections);
+
+        List<SelectBox> maintenanceSelections = new ArrayList<>();
+        maintenanceSelections.add(SelectBox.builder()
+                .value("STANDARD")
+                .name("Standard Maintenance (6 Months)")
+                .build());
+        maintenanceSelections.add(SelectBox.builder()
+                .value("URGENT")
+                .name("Urgent Maintenance (2 Months)")
+                .build());
+        formSelections.put("maintenanceCategory", maintenanceSelections);
     }
 
     private Field findField(Class<?> clazz, String fieldName) throws NoSuchFieldException {

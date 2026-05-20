@@ -60,6 +60,10 @@ public class HospitalEquipment extends BaseEntity {
     @NotBlank(message = "Status must not be blank")
     private String status;
 
+    @Transient
+    @VitalTrackFormField(label = "Maintenance Mode", select = "maintenanceCategory")
+    private String maintenanceCategory;
+
     public HospitalEquipment() {
     }
 
@@ -111,4 +115,11 @@ public class HospitalEquipment extends BaseEntity {
         this.status = status;
     }
 
+    public String getMaintenanceCategory() {
+        return maintenanceCategory;
+    }
+
+    public void setMaintenanceCategory(String maintenanceCategory) {
+        this.maintenanceCategory = maintenanceCategory;
+    }
 }
