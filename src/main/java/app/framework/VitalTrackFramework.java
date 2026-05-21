@@ -192,6 +192,27 @@ public class VitalTrackFramework {
                 tableBuilder.append("<i class='fa-solid fa-trash'></i>");
                 tableBuilder.append("</a>");
 
+                /* CONSUME ACTION FOR MEDICAL SUPPLIES */
+                if (clazz.getSimpleName().equals("HospitalMedicalSupply")) {
+                    Field nameField = findField(clazz, "name");
+                    nameField.setAccessible(true);
+                    String name = (String) nameField.get(data);
+
+                    Field qtyField = findField(clazz, "quantity");
+                    qtyField.setAccessible(true);
+                    int qty = (int) qtyField.get(data);
+
+                    tableBuilder.append("<form method='POST' action='")
+                        .append(ActionMap.APP_PATH)
+                        .append("medicalsupply/save' style='display:inline-flex; align-items:center; margin-left: 0.8rem;'>")
+                        .append("<input type='hidden' name='mode' value='consume' />")
+                        .append("<input type='hidden' name='id' value='").append(id).append("' />")
+                        .append("<input type='hidden' name='name' value='").append(name.replace("'", "\\'")).append("' />")
+                        .append("<input type='number' name='consumeQty' min='1' max='").append(qty).append("' placeholder='Qty' required style='width: 70px; padding: 6px; border: 1px solid rgba(0,0,0,0.15); border-radius: 0.5rem; margin-right: 0.4rem; background: rgba(255,255,255,0.9); font-size: 0.9rem;' />")
+                        .append("<button type='submit' class='btn btn-primary' style='padding: 6px 12px; font-size: 0.85rem; height: auto; line-height: 1; width: auto; box-shadow: none;'>Consume</button>")
+                        .append("</form>");
+                }
+
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
@@ -285,6 +306,17 @@ public class VitalTrackFramework {
                 .name("Inactive")
                 .build());
         formSelections.put("technicianStatus", techStatusSelections);
+
+        List<SelectBox> nurseStatusSelections = new ArrayList<>();
+        nurseStatusSelections.add(SelectBox.builder()
+                .value("ACTIVE")
+                .name("Active")
+                .build());
+        nurseStatusSelections.add(SelectBox.builder()
+                .value("INACTIVE")
+                .name("Inactive")
+                .build());
+        formSelections.put("nurseStatus", nurseStatusSelections);
 
         List<SelectBox> eqListSelections = new ArrayList<>();
         try {

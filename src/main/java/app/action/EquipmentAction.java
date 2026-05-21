@@ -18,7 +18,7 @@ import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RequestScoped
-@Action(value = "equipment", label = "Equipment")
+@Action(value = "equipment", label = "Equipment", role = "ADMIN,TECHNICIAN")
 public class EquipmentAction {
 
     @EJB

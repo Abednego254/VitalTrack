@@ -24,40 +24,59 @@ public class HomeAction {
 
         html.append("<section class='container'>");
 
-        // Equipment Card
-        html.append("<div class='card' onclick=\"location.href='").append(context).append("/vital/equipment/list'\">")
-            .append("<div class='card-icon'>EQ</div>")
-            .append("<h3>Medical Equipment</h3>")
-            .append("<p>Track calibration and maintenance cycles.</p>")
-            .append("<span class='badge badge-success'>Online</span></div>");
+        // Equipment Card - Visible to Admin and Technician
+        if ("ADMIN".equals(role) || "TECHNICIAN".equals(role)) {
+            html.append("<div class='card' onclick=\"location.href='").append(context).append("/vital/equipment/list'\">")
+                .append("<div class='card-icon'>EQ</div>")
+                .append("<h3>Medical Equipment</h3>")
+                .append("<p>Track calibration and maintenance cycles.</p>")
+                .append("<span class='badge badge-success'>Online</span></div>");
+        }
 
-        // Admin Only Cards
-        if ("ADMIN".equals(role)) {
+        // Medical Supplies Card - Visible to Admin and Nurse
+        if ("ADMIN".equals(role) || "NURSE".equals(role)) {
             html.append("<div class='card' onclick=\"location.href='").append(context).append("/vital/medicalsupply/list'\">")
                 .append("<div class='card-icon'>SP</div>")
                 .append("<h3>Medical Supplies</h3>")
                 .append("<p>Monitor inventory levels and expiration.</p>")
                 .append("<span class='badge badge-success'>Stock OK</span></div>");
+        }
 
+        // Technicians Card - Admin Only
+        if ("ADMIN".equals(role)) {
             html.append("<div class='card' onclick=\"location.href='").append(context).append("/vital/technician/list'\">")
                 .append("<div class='card-icon'>TC</div>")
                 .append("<h3>Technicians</h3>")
                 .append("<p>Manage engineering personnel.</p>")
                 .append("<span class='badge badge-warning'>Active</span></div>");
-                
+        }
+
+        // Nurses Card - Admin Only
+        if ("ADMIN".equals(role)) {
+            html.append("<div class='card' onclick=\"location.href='").append(context).append("/vital/nurse/list'\">")
+                .append("<div class='card-icon'>NS</div>")
+                .append("<h3>Nurses</h3>")
+                .append("<p>Manage nursing staff.</p>")
+                .append("<span class='badge badge-info'>Active</span></div>");
+        }
+
+        // Maintenance Card - Visible to Admin and Technician
+        if ("ADMIN".equals(role) || "TECHNICIAN".equals(role)) {
+            html.append("<div class='card' onclick=\"location.href='").append(context).append("/vital/maintenancelog/list'\">")
+                .append("<div class='card-icon'>ML</div>")
+                .append("<h3>Maintenance Records</h3>")
+                .append("<p>View history of all repairs.</p>")
+                .append("<span class='badge badge-success'>Updated</span></div>");
+        }
+
+        // Audit logs - Admin Only
+        if ("ADMIN".equals(role)) {
              html.append("<div class='card' onclick=\"location.href='").append(context).append("/vital/audit-trail/list'\">")
                 .append("<div class='card-icon'>AU</div>")
                 .append("<h3>Audit Logs</h3>")
                 .append("<p>Advanced security tracking.</p>")
                 .append("<span class='badge badge-info'>Secure</span></div>");
         }
-
-        // Maintenance Card (Shared)
-        html.append("<div class='card' onclick=\"location.href='").append(context).append("/vital/maintenancelog/list'\">")
-            .append("<div class='card-icon'>ML</div>")
-            .append("<h3>Maintenance Records</h3>")
-            .append("<p>View history of all repairs.</p>")
-            .append("<span class='badge badge-success'>Updated</span></div>");
 
         html.append("</section>");
 

@@ -1,7 +1,9 @@
 package app.action;
 
+import app.ejb.HospitalNurseEJB;
 import app.ejb.HospitalTechnicianEJB;
 import app.ejb.UserEJB;
+import app.model.HospitalNurse;
 import app.model.HospitalTechnician;
 import app.model.User;
 import jakarta.ejb.EJB;
@@ -22,6 +24,9 @@ public class LoginAction extends HttpServlet {
 
     @EJB
     private HospitalTechnicianEJB technicianEJB;
+
+    @EJB
+    private HospitalNurseEJB nurseEJB;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -76,9 +81,26 @@ public class LoginAction extends HttpServlet {
                         resp.sendRedirect(req.getContextPath() + "/index.jsp");
                     }
                 } else {
-                    // Fail! Send them back to the login page with an error
-                    req.setAttribute("error", "Invalid email/username or password!");
-                    req.getRequestDispatcher("/login.jsp").forward(req, resp);
+                    // Try to authenticate as a Nurse
+                    HospitalNurse nurse = nurseEJB.authenticate(username, password);
+                    if (nurse != null) {
+                        HttpSession session = req.getSession(true);
+                        session.setAttribute("loggedInUser", nurse);
+                        session.setAttribute("username", nurse.getName());
+                        session.setAttribute("role", "NURSE");
+                        session.setAttribute("nurseId", nurse.getId());
+
+                        // CHECK FOR FIRST LOGIN
+                        if (nurse.getPassword() == null || nurse.getPassword().startsWith("VT-TEMP-")) {
+                            resp.sendRedirect(req.getContextPath() + "/set-password.jsp");
+                        } else {
+                            resp.sendRedirect(req.getContextPath() + "/index.jsp");
+                        }
+                    } else {
+                        // Fail! Send them back to the login page with an error
+                        req.setAttribute("error", "Invalid email/username or password!");
+                        req.getRequestDispatcher("/login.jsp").forward(req, resp);
+                    }
                 }
             }
         }

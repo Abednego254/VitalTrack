@@ -1,5 +1,6 @@
 package app.action;
 
+import app.ejb.HospitalNurseEJB;
 import app.ejb.HospitalTechnicianEJB;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
@@ -16,22 +17,34 @@ public class SetPasswordAction extends HttpServlet {
     @EJB
     private HospitalTechnicianEJB technicianEJB;
 
+    @EJB
+    private HospitalNurseEJB nurseEJB;
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
-        if (session == null || session.getAttribute("techId") == null) {
+        String role = (session != null) ? (String) session.getAttribute("role") : null;
+
+        if (session == null || role == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
         String password = req.getParameter("password");
         String confirm = req.getParameter("confirm");
-        Long techId = (Long) session.getAttribute("techId");
 
         if (password != null && password.equals(confirm)) {
             try {
-                technicianEJB.setPassword(techId, password);
-                resp.sendRedirect(req.getContextPath() + "/index.jsp");
+                if ("NURSE".equals(role)) {
+                    Long nurseId = (Long) session.getAttribute("nurseId");
+                    nurseEJB.setPassword(nurseId, password);
+                } else {
+                    Long techId = (Long) session.getAttribute("techId");
+                    technicianEJB.setPassword(techId, password);
+                }
+                // Update session so they don't get redirected to set-password again
+                session.removeAttribute("role"); // force re-auth after password set
+                resp.sendRedirect(req.getContextPath() + "/login");
             } catch (Exception e) {
                 throw new ServletException("Failed to set password: " + e.getMessage(), e);
             }
