@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RequestScoped
-@Action(value = "medicalsupply", label = "Medical Supplies", role = "ADMIN")
+@Action(value = "medicalsupply", label = "Medical Supplies", role = "ADMIN,NURSE")
 public class SupplyAction {
 
     @EJB

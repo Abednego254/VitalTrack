@@ -40,12 +40,21 @@ public class ActionDispatcherServlet extends HttpServlet {
         Class<?> actionClass = actionMapMatch.getActionMap().getAction();
         Action actionAnnotation = actionClass.getAnnotation(Action.class);
 
-        if (actionAnnotation != null && "ADMIN".equals(actionAnnotation.role())) {
+        if (actionAnnotation != null && !"ALL".equalsIgnoreCase(actionAnnotation.role()) && !"USER".equalsIgnoreCase(actionAnnotation.role())) {
             HttpSession session = req.getSession(false);
             String userRole = (session != null) ? (String) session.getAttribute("role") : null;
-
-            if (!"ADMIN".equals(userRole)) {
-                resp.sendError(403, "Access Denied: Admin Rights Required");
+            String requiredRoles = actionAnnotation.role();
+            boolean hasPermission = false;
+            if (userRole != null) {
+                for (String role : requiredRoles.split(",")) {
+                    if (role.trim().equalsIgnoreCase(userRole)) {
+                        hasPermission = true;
+                        break;
+                    }
+                }
+            }
+            if (!hasPermission) {
+                resp.sendError(403, "Access Denied: Required Role(s): " + requiredRoles);
                 return;
             }
         }

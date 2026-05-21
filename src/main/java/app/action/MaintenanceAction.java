@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RequestScoped
-@Action(value = "maintenancelog", label = "Maintenance History")
+@Action(value = "maintenancelog", label = "Maintenance History", role = "ADMIN,TECHNICIAN")
 public class MaintenanceAction {
 
     @EJB

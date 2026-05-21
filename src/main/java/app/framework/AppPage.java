@@ -63,8 +63,20 @@ public class AppPage implements Serializable {
             Action action = clazz.getAnnotation(Action.class);
             if (action != null && action.showLink()) {
                 // Role Check
-                if ("ADMIN".equals(action.role()) && !"ADMIN".equals(role)) {
-                    continue; // Skip admin links for non-admins
+                String requiredRoles = action.role();
+                if (requiredRoles != null && !"ALL".equalsIgnoreCase(requiredRoles) && !"USER".equalsIgnoreCase(requiredRoles)) {
+                    boolean hasPermission = false;
+                    if (role != null) {
+                        for (String r : requiredRoles.split(",")) {
+                            if (r.trim().equalsIgnoreCase(role)) {
+                                hasPermission = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!hasPermission) {
+                        continue;
+                    }
                 }
 
                 String link = contextPath + "/vital/" + action.value() + "/" + action.pageLink();

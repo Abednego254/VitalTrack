@@ -17,7 +17,7 @@ public class TechnicianEmailNotifierBean {
     private Session mailSession;
 
     public void onTechnicianAdded(@Observes TechnicianAddedEvent event) {
-        System.out.println(">>> ROBOT: New technician added! Preparing welcome email for " + event.getTechnician().getEmail());
+        System.out.println(">>> ROBOT: New technician added! Preparing welcome email for " + event.getTechnician().getEmail() + " with temporary password: " + event.getDummyPassword());
 
         try {
             Message message = new MimeMessage(mailSession);
