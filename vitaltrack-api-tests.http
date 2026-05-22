@@ -35,6 +35,21 @@ Accept: application/json
 
 ###
 
+### [PUT] Update Equipment by ID
+PUT http://localhost:8080/VitalTrack/api/equipment/update/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "MRI Scanner Pro (Upgraded v2)",
+  "serialNumber": "SN-MRI-2026-V2",
+  "purchaseDate": 1704067200000,
+  "lastCalibrationDate": 1746057600000,
+  "status": "ACTIVE"
+}
+
+###
+
 ### [DELETE] Delete Equipment by ID  (change id as needed)
 DELETE http://localhost:8080/VitalTrack/api/equipment/delete/5
 Accept: application/json
@@ -70,6 +85,22 @@ Accept: application/json
   "unitOfMeasure": "Boxes",
   "expiryDate": 1830297600000,
   "reorderLevel": 50
+}
+
+###
+
+### [PUT] Update Medical Supply by ID
+PUT http://localhost:8080/VitalTrack/api/supply/update/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Surgical Gloves Premium",
+  "category": "Consumables & Protective",
+  "quantity": 450,
+  "unitOfMeasure": "Boxes",
+  "expiryDate": 1830297600000,
+  "reorderLevel": 60
 }
 
 ###
@@ -114,6 +145,21 @@ Accept: application/json
 
 ###
 
+### [PUT] Update Maintenance Log by ID
+PUT http://localhost:8080/VitalTrack/api/maintenance/update/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "equipmentId": 1,
+  "technicianId": 1,
+  "serviceDate": 1746057600000,
+  "actionTaken": "Full calibration, sensor replacement, and cleaning",
+  "notes": "Upgraded pressure sensor and cleaned internal filters. Full testing pass."
+}
+
+###
+
 ### [DELETE] Delete Maintenance Log by ID  (change id as needed)
 DELETE http://localhost:8080/VitalTrack/api/maintenance/delete/5
 Accept: application/json
@@ -153,6 +199,21 @@ Accept: application/json
 
 ###
 
+### [PUT] Update Nurse Details by ID
+PUT http://localhost:8080/VitalTrack/api/nurse/update/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Jane Mwangi-Kamau",
+  "specialization": "Emergency ICU",
+  "contactInfo": "+254712345679",
+  "status": "ACTIVE",
+  "email": "jane.mwangi@hospital.com"
+}
+
+###
+
 ### [DELETE] Delete Nurse by ID  (change id as needed)
 DELETE http://localhost:8080/VitalTrack/api/nurse/delete/5
 Accept: application/json
@@ -186,6 +247,21 @@ Accept: application/json
   "name": "John Kamau",
   "specialization": "Biomedical Engineering",
   "contactInfo": "+254700111222",
+  "status": "ACTIVE",
+  "email": "john.kamau@hospital.com"
+}
+
+###
+
+### [PUT] Update Technician Details by ID
+PUT http://localhost:8080/VitalTrack/api/technician/update/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "John Kamau Kariuki",
+  "specialization": "Lead Biomedical Engineering",
+  "contactInfo": "+254700111333",
   "status": "ACTIVE",
   "email": "john.kamau@hospital.com"
 }
