@@ -94,4 +94,8 @@ public class HospitalMaintenanceLogEJB {
     public void delete(Long id) throws Exception {
         logDao.delete(id);
     }
+
+    public HospitalMaintenanceLog findById(Long id) throws Exception {
+        return logDao.findById(id);
+    }
 }
