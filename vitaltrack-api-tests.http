@@ -1,0 +1,197 @@
+### ================================================================
+### VitalTrack REST API - Complete Test Suite
+### Base URL: http://localhost:8080/VitalTrack/api
+### ================================================================
+
+
+### ================================================================
+###  EQUIPMENT ENDPOINTS
+### ================================================================
+
+### [GET] List All Equipment
+GET http://localhost:8080/VitalTrack/api/equipment/list
+Accept: application/json
+
+###
+
+### [GET] Find Equipment by ID
+GET http://localhost:8080/VitalTrack/api/equipment/find/1
+Accept: application/json
+
+###
+
+### [POST] Save New Equipment
+POST http://localhost:8080/VitalTrack/api/equipment/save
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "MRI Scanner Pro",
+  "serialNumber": "SN-MRI-2026",
+  "purchaseDate": 1704067200000,
+  "lastCalibrationDate": 1746057600000,
+  "status": "ACTIVE"
+}
+
+###
+
+### [DELETE] Delete Equipment by ID  (change id as needed)
+DELETE http://localhost:8080/VitalTrack/api/equipment/delete/5
+Accept: application/json
+
+
+### ================================================================
+###  MEDICAL SUPPLY ENDPOINTS
+### ================================================================
+
+###
+
+### [GET] List All Medical Supplies
+GET http://localhost:8080/VitalTrack/api/supply/list
+Accept: application/json
+
+###
+
+### [GET] Find Medical Supply by ID
+GET http://localhost:8080/VitalTrack/api/supply/find/1
+Accept: application/json
+
+###
+
+### [POST] Save New Medical Supply
+POST http://localhost:8080/VitalTrack/api/supply/save
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Surgical Gloves",
+  "category": "Consumables",
+  "quantity": 500,
+  "unitOfMeasure": "Boxes",
+  "expiryDate": 1830297600000,
+  "reorderLevel": 50
+}
+
+###
+
+### [DELETE] Delete Medical Supply by ID  (change id as needed)
+DELETE http://localhost:8080/VitalTrack/api/supply/delete/5
+Accept: application/json
+
+
+### ================================================================
+###  MAINTENANCE LOG ENDPOINTS
+### ================================================================
+
+###
+
+### [GET] List All Maintenance Logs
+GET http://localhost:8080/VitalTrack/api/maintenance/list
+Accept: application/json
+
+###
+
+### [GET] Find Maintenance Log by ID
+GET http://localhost:8080/VitalTrack/api/maintenance/find/1
+Accept: application/json
+
+###
+
+### [POST] Save New Maintenance Log
+### NOTE: equipmentId must match a real equipment record
+### NOTE: technicianId must match a real technician record
+POST http://localhost:8080/VitalTrack/api/maintenance/save
+Content-Type: application/json
+Accept: application/json
+
+{
+  "equipmentId": 1,
+  "technicianId": 1,
+  "serviceDate": 1746057600000,
+  "actionTaken": "Full calibration and sensor replacement",
+  "notes": "Replaced faulty pressure sensor. Equipment now fully operational."
+}
+
+###
+
+### [DELETE] Delete Maintenance Log by ID  (change id as needed)
+DELETE http://localhost:8080/VitalTrack/api/maintenance/delete/5
+Accept: application/json
+
+
+### ================================================================
+###  NURSE ENDPOINTS
+### ================================================================
+
+###
+
+### [GET] List All Nurses
+GET http://localhost:8080/VitalTrack/api/nurse/list
+Accept: application/json
+
+###
+
+### [GET] Find Nurse by ID
+GET http://localhost:8080/VitalTrack/api/nurse/find/1
+Accept: application/json
+
+###
+
+### [POST] Register New Nurse
+### NOTE: A temp password will be auto-generated and emailed to the nurse
+POST http://localhost:8080/VitalTrack/api/nurse/save
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Jane Mwangi",
+  "specialization": "ICU",
+  "contactInfo": "+254712345678",
+  "status": "ACTIVE",
+  "email": "jane.mwangi@hospital.com"
+}
+
+###
+
+### [DELETE] Delete Nurse by ID  (change id as needed)
+DELETE http://localhost:8080/VitalTrack/api/nurse/delete/5
+Accept: application/json
+
+
+### ================================================================
+###  TECHNICIAN ENDPOINTS
+### ================================================================
+
+###
+
+### [GET] List All Technicians
+GET http://localhost:8080/VitalTrack/api/technician/list
+Accept: application/json
+
+###
+
+### [GET] Find Technician by ID
+GET http://localhost:8080/VitalTrack/api/technician/find/1
+Accept: application/json
+
+###
+
+### [POST] Register New Technician
+### NOTE: A temp password will be auto-generated and emailed to the technician
+POST http://localhost:8080/VitalTrack/api/technician/save
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "John Kamau",
+  "specialization": "Biomedical Engineering",
+  "contactInfo": "+254700111222",
+  "status": "ACTIVE",
+  "email": "john.kamau@hospital.com"
+}
+
+###
+
+### [DELETE] Delete Technician by ID  (change id as needed)
+DELETE http://localhost:8080/VitalTrack/api/technician/delete/5
+Accept: application/json

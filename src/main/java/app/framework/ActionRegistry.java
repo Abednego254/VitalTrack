@@ -18,6 +18,7 @@ public class ActionRegistry {
                 continue;
 
             try {
+                // For every class that DOES have a @Action sticker, create one copy of it and call register() on it
                 Object action = clazz.getDeclaredConstructor().newInstance();
                 register(action);
             } catch (Exception e) {
@@ -29,13 +30,16 @@ public class ActionRegistry {
     private static void register(Object action) {
 
         Class<?> clazz = action.getClass();
+        // What street does this class live on?" e.g. "equipment"
         String actionPath = clazz.getAnnotation(Action.class).value();
 
+        // Now check every room inside this house.
         for (Method method : clazz.getDeclaredMethods()) {
 
             String httpMethod = null;
             String methodPath = null;
 
+            // if a room has a @ActionGetMethod or @ActionPostMethod sign on the door, write it down
             if (method.isAnnotationPresent(ActionGetMethod.class)) {
                 httpMethod = "GET";
                 methodPath = method.getAnnotation(ActionGetMethod.class).value();
@@ -49,6 +53,7 @@ public class ActionRegistry {
             if (httpMethod == null)
                 continue;
 
+            // Write the full address (/equipment/list [GET]) into the address book.
             String actionMethodPath = ("/" + actionPath + "/" + methodPath).replaceAll("//+", "/");
 
             ActionMap actionMap = new ActionMap(clazz, method, httpMethod, actionMethodPath);

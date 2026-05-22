@@ -51,6 +51,10 @@ public class HospitalTechnicianEJB {
         return technicianDao.findAll();
     }
 
+    public HospitalTechnician findById(Long id) throws Exception {
+        return technicianDao.findById(id);
+    }
+
     public HospitalTechnician authenticate(String email, String password) {
         List<HospitalTechnician> techs = technicianDao.findAll();
         for (HospitalTechnician t : techs) {

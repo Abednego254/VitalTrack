@@ -1,5 +1,6 @@
 package app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -58,6 +59,7 @@ public abstract class BaseEntity implements Serializable {
         this.deletedAt = deletedAt;
     }
 
+    @JsonIgnore
     public User getCreateBy() {
         return createBy;
     }

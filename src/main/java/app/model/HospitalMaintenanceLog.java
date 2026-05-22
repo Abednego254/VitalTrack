@@ -4,6 +4,7 @@ import app.framework.VitalTrackForm;
 import app.framework.VitalTrackFormField;
 import app.framework.VitalTrackTable;
 import app.framework.VitalTrackTableCol;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -78,6 +79,7 @@ public class HospitalMaintenanceLog extends BaseEntity {
         this.technicianId = technicianId;
     }
 
+    @JsonIgnore
     public HospitalEquipment getEquipment() {
         return equipment;
     }
@@ -86,6 +88,7 @@ public class HospitalMaintenanceLog extends BaseEntity {
         this.equipment = equipment;
     }
 
+    @JsonIgnore
     public HospitalTechnician getTechnician() {
         return technician;
     }

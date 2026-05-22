@@ -21,8 +21,9 @@ public class HospitalAuthenticationFilter implements Filter {
         boolean isLoginRequest = path.equals("/login") || path.equals("/login.jsp");
         boolean isLogoutRequest = path.equals("/logout");
         boolean isStaticResource = path.endsWith(".css") || path.endsWith(".js") || path.endsWith(".png");
+        boolean isApiRequest = path.startsWith("/api") || req.getRequestURI().contains("/api/");
 
-        if (isLoginRequest || isLogoutRequest || isStaticResource) {
+        if (isLoginRequest || isLogoutRequest || isStaticResource || isApiRequest) {
             filterChain.doFilter(request, response);
             return;
         }

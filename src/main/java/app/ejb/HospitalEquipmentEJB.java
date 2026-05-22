@@ -40,6 +40,10 @@ public class HospitalEquipmentEJB {
         return equipmentDao.findAll();
     }
 
+    public HospitalEquipment findById(Long id) throws Exception {
+        return equipmentDao.findById(id);
+    }
+
     public void delete(Long id) throws Exception {
         equipmentDao.delete(id);
     }

@@ -94,12 +94,12 @@ public class VitalTrackFramework {
         if (!clazz.isAnnotationPresent(VitalTrackTable.class))
             return "";
 
-        VitalTrackTable cohort12Table = clazz.getAnnotation(VitalTrackTable.class);
+        VitalTrackTable vitalTrackTable = clazz.getAnnotation(VitalTrackTable.class);
 
         StringBuilder tableBuilder = new StringBuilder();
 
         tableBuilder.append("<header class='page-header'>");
-        tableBuilder.append("<h1>").append(cohort12Table.label()).append(" Registry</h1>");
+        tableBuilder.append("<h1>").append(vitalTrackTable.label()).append(" Registry</h1>");
         tableBuilder.append("<p>Securely manage and track all system records.</p>");
         tableBuilder.append("</header>");
 
@@ -108,10 +108,10 @@ public class VitalTrackFramework {
         
         tableBuilder.append("<div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;'>");
         tableBuilder.append("<h2 style='margin:0;'>Registered List</h2>");
-        if (!cohort12Table.addLink().equalsIgnoreCase(""))
+        if (!vitalTrackTable.addLink().equalsIgnoreCase(""))
             tableBuilder.append("<a href=\"")
                 .append(ActionMap.APP_PATH)
-                .append(cohort12Table.addLink())
+                .append(vitalTrackTable.addLink())
                 .append("\" class='btn btn-primary'>&#43; Add New Record</a>");
         tableBuilder.append("</div>");
 
@@ -185,7 +185,7 @@ public class VitalTrackFramework {
                 /* DELETE BUTTON */
                 tableBuilder.append("<a href='")
                     .append(ActionMap.APP_PATH)
-                    .append(cohort12Table.deleteLink())
+                    .append(vitalTrackTable.deleteLink())
                     .append("/")
                     .append(id)
                     .append("' class='icon-btn' title='Delete' style='background: #ef4444; color: white; margin-left: 0.5rem;' onclick='return confirm(\"Confirm permanent deletion of this record?\")'>");

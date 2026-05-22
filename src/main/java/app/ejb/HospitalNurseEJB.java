@@ -50,6 +50,10 @@ public class HospitalNurseEJB {
         return nurseDao.findAll();
     }
 
+    public HospitalNurse findById(Long id) throws Exception {
+        return nurseDao.findById(id);
+    }
+
     public HospitalNurse authenticate(String email, String password) {
         List<HospitalNurse> nurses = nurseDao.findAll();
         for (HospitalNurse n : nurses) {
