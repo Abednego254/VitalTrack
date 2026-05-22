@@ -5,6 +5,7 @@ import app.framework.VitalTrackFormField;
 import app.framework.VitalTrackTable;
 import app.framework.VitalTrackTableCol;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Formula;
 
 import java.io.Serializable;
 
@@ -55,6 +56,10 @@ public class HospitalTechnician extends BaseEntity {
     @NotBlank(message = "Password is required")
     private String password;
 
+    @VitalTrackTableCol(label = "Completed Jobs")
+    @Formula("(select count(*) from hospital_maintenance_log m where m.technician_id = id)")
+    private Integer completedJobsCount;
+
     public HospitalTechnician() {}
 
     public String getName() {
@@ -103,5 +108,13 @@ public class HospitalTechnician extends BaseEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getCompletedJobsCount() {
+        return completedJobsCount;
+    }
+
+    public void setCompletedJobsCount(Integer completedJobsCount) {
+        this.completedJobsCount = completedJobsCount;
     }
 }
