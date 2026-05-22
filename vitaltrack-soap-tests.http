@@ -1,8 +1,9 @@
 ### ================================================================
 ### VitalTrack SOAP API - Complete Test Suite
-### Base URL (WSDL Location): http://localhost:8080/VitalTrack/<ServiceName>?wsdl
-### Endpoint URL: http://localhost:8080/VitalTrack/<ServiceName>
+### Base URL (WSDL Location): http://localhost:8080/VitalTrack/<ServiceName>/<ClassName>?wsdl
+### Endpoint URL: http://localhost:8080/VitalTrack/<ServiceName>/<ClassName>
 ### ================================================================
+
 
 
 ### ================================================================
@@ -10,7 +11,7 @@
 ### ================================================================
 
 ### [SOAP] List All Equipment
-POST http://localhost:8080/VitalTrack/EquipmentSoapApi
+POST http://localhost:8080/VitalTrack/EquipmentSoapService/EquipmentSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -24,7 +25,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Find Equipment by ID
-POST http://localhost:8080/VitalTrack/EquipmentSoapApi
+POST http://localhost:8080/VitalTrack/EquipmentSoapService/EquipmentSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -40,7 +41,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Save/Register New Equipment
-POST http://localhost:8080/VitalTrack/EquipmentSoapApi
+POST http://localhost:8080/VitalTrack/EquipmentSoapService/EquipmentSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -60,7 +61,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Delete Equipment by ID (change id as needed)
-POST http://localhost:8080/VitalTrack/EquipmentSoapApi
+POST http://localhost:8080/VitalTrack/EquipmentSoapService/EquipmentSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -81,7 +82,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] List All Supplies
-POST http://localhost:8080/VitalTrack/MedicalSupplySoapApi
+POST http://localhost:8080/VitalTrack/MedicalSupplySoapService/MedicalSupplySoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -95,7 +96,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Find Medical Supply by ID
-POST http://localhost:8080/VitalTrack/MedicalSupplySoapApi
+POST http://localhost:8080/VitalTrack/MedicalSupplySoapService/MedicalSupplySoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -111,7 +112,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Save/Register New Supply
-POST http://localhost:8080/VitalTrack/MedicalSupplySoapApi
+POST http://localhost:8080/VitalTrack/MedicalSupplySoapService/MedicalSupplySoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -133,7 +134,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Delete Supply by ID (change id as needed)
-POST http://localhost:8080/VitalTrack/MedicalSupplySoapApi
+POST http://localhost:8080/VitalTrack/MedicalSupplySoapService/MedicalSupplySoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -154,7 +155,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] List All Nurses
-POST http://localhost:8080/VitalTrack/NurseSoapApi
+POST http://localhost:8080/VitalTrack/NurseSoapService/NurseSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -168,7 +169,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Find Nurse by ID
-POST http://localhost:8080/VitalTrack/NurseSoapApi
+POST http://localhost:8080/VitalTrack/NurseSoapService/NurseSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -184,7 +185,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Register New Nurse
-POST http://localhost:8080/VitalTrack/NurseSoapApi
+POST http://localhost:8080/VitalTrack/NurseSoapService/NurseSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -206,7 +207,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Delete Nurse by ID (change id as needed)
-POST http://localhost:8080/VitalTrack/NurseSoapApi
+POST http://localhost:8080/VitalTrack/NurseSoapService/NurseSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -227,7 +228,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] List All Maintenance Logs
-POST http://localhost:8080/VitalTrack/MaintenanceLogSoapApi
+POST http://localhost:8080/VitalTrack/MaintenanceLogSoapService/MaintenanceLogSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -241,7 +242,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Find Maintenance Log by ID
-POST http://localhost:8080/VitalTrack/MaintenanceLogSoapApi
+POST http://localhost:8080/VitalTrack/MaintenanceLogSoapService/MaintenanceLogSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -258,7 +259,7 @@ Accept: text/xml
 
 ### [SOAP] Save New Maintenance Log
 ### NOTE: equipmentId and technicianId must match real records
-POST http://localhost:8080/VitalTrack/MaintenanceLogSoapApi
+POST http://localhost:8080/VitalTrack/MaintenanceLogSoapService/MaintenanceLogSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -279,7 +280,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Delete Maintenance Log by ID (change id as needed)
-POST http://localhost:8080/VitalTrack/MaintenanceLogSoapApi
+POST http://localhost:8080/VitalTrack/MaintenanceLogSoapService/MaintenanceLogSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -300,7 +301,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] List All Technicians
-POST http://localhost:8080/VitalTrack/TechnicianSoapApi
+POST http://localhost:8080/VitalTrack/TechnicianSoapService/TechnicianSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -314,7 +315,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Find Technician by ID
-POST http://localhost:8080/VitalTrack/TechnicianSoapApi
+POST http://localhost:8080/VitalTrack/TechnicianSoapService/TechnicianSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -330,7 +331,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Register New Technician
-POST http://localhost:8080/VitalTrack/TechnicianSoapApi
+POST http://localhost:8080/VitalTrack/TechnicianSoapService/TechnicianSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
@@ -352,7 +353,7 @@ Accept: text/xml
 ###
 
 ### [SOAP] Delete Technician by ID (change id as needed)
-POST http://localhost:8080/VitalTrack/TechnicianSoapApi
+POST http://localhost:8080/VitalTrack/TechnicianSoapService/TechnicianSoapApi
 Content-Type: text/xml
 Accept: text/xml
 
