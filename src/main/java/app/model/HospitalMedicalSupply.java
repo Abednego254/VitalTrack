@@ -10,6 +10,9 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.util.Date;
 
@@ -17,6 +20,8 @@ import java.util.Date;
 @Table(name = "hospital_medical_supply")
 @VitalTrackTable(label = "Medical Supplies", addLink = "medicalsupply/add", deleteLink = "medicalsupply/delete")
 @VitalTrackForm(label = "Medical Supply", actionUrl = "medicalsupply/save")
+@XmlRootElement(name = "medicalsupply")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class HospitalMedicalSupply extends BaseEntity {
 
     @Column(nullable = false)

@@ -1,0 +1,366 @@
+### ================================================================
+### VitalTrack SOAP API - Complete Test Suite
+### Base URL (WSDL Location): http://localhost:8080/VitalTrack/<ServiceName>?wsdl
+### Endpoint URL: http://localhost:8080/VitalTrack/<ServiceName>
+### ================================================================
+
+
+### ================================================================
+###  EQUIPMENT SOAP ENDPOINTS
+### ================================================================
+
+### [SOAP] List All Equipment
+POST http://localhost:8080/VitalTrack/EquipmentSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:list/>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Find Equipment by ID
+POST http://localhost:8080/VitalTrack/EquipmentSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:find>
+         <id>1</id>
+      </soap:find>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Save/Register New Equipment
+POST http://localhost:8080/VitalTrack/EquipmentSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:save>
+         <equipment>
+            <name>Defibrillator SOAP Edition</name>
+            <serialNumber>SN-DEFIB-SOAP-01</serialNumber>
+            <status>ACTIVE</status>
+         </equipment>
+      </soap:save>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Delete Equipment by ID (change id as needed)
+POST http://localhost:8080/VitalTrack/EquipmentSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:delete>
+         <id>5</id>
+      </soap:delete>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+
+### ================================================================
+###  MEDICAL SUPPLY SOAP ENDPOINTS
+### ================================================================
+
+###
+
+### [SOAP] List All Supplies
+POST http://localhost:8080/VitalTrack/MedicalSupplySoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:list/>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Find Medical Supply by ID
+POST http://localhost:8080/VitalTrack/MedicalSupplySoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:find>
+         <id>1</id>
+      </soap:find>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Save/Register New Supply
+POST http://localhost:8080/VitalTrack/MedicalSupplySoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:save>
+         <supply>
+            <name>SOAP Syringes</name>
+            <category>Consumables</category>
+            <quantity>250</quantity>
+            <unitOfMeasure>Boxes</unitOfMeasure>
+            <reorderLevel>25</reorderLevel>
+         </supply>
+      </soap:save>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Delete Supply by ID (change id as needed)
+POST http://localhost:8080/VitalTrack/MedicalSupplySoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:delete>
+         <id>5</id>
+      </soap:delete>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+
+### ================================================================
+###  NURSE SOAP ENDPOINTS
+### ================================================================
+
+###
+
+### [SOAP] List All Nurses
+POST http://localhost:8080/VitalTrack/NurseSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:list/>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Find Nurse by ID
+POST http://localhost:8080/VitalTrack/NurseSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:find>
+         <id>1</id>
+      </soap:find>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Register New Nurse
+POST http://localhost:8080/VitalTrack/NurseSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:save>
+         <nurse>
+            <name>Mercy Wanjiku</name>
+            <specialization>Pediatric</specialization>
+            <contactInfo>+254711223344</contactInfo>
+            <status>ACTIVE</status>
+            <email>mercy.wanjiku@hospital.com</email>
+         </nurse>
+      </soap:save>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Delete Nurse by ID (change id as needed)
+POST http://localhost:8080/VitalTrack/NurseSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:delete>
+         <id>5</id>
+      </soap:delete>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+
+### ================================================================
+###  MAINTENANCE LOG SOAP ENDPOINTS
+### ================================================================
+
+###
+
+### [SOAP] List All Maintenance Logs
+POST http://localhost:8080/VitalTrack/MaintenanceLogSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:list/>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Find Maintenance Log by ID
+POST http://localhost:8080/VitalTrack/MaintenanceLogSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:find>
+         <id>1</id>
+      </soap:find>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Save New Maintenance Log
+### NOTE: equipmentId and technicianId must match real records
+POST http://localhost:8080/VitalTrack/MaintenanceLogSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:save>
+         <log>
+            <equipmentId>1</equipmentId>
+            <technicianId>1</technicianId>
+            <actionTaken>SOAP-based full system diagnostic</actionTaken>
+            <notes>Ran full diagnostic via SOAP service. All sensors within normal range.</notes>
+         </log>
+      </soap:save>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Delete Maintenance Log by ID (change id as needed)
+POST http://localhost:8080/VitalTrack/MaintenanceLogSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:delete>
+         <id>5</id>
+      </soap:delete>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+
+### ================================================================
+###  TECHNICIAN SOAP ENDPOINTS
+### ================================================================
+
+###
+
+### [SOAP] List All Technicians
+POST http://localhost:8080/VitalTrack/TechnicianSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:list/>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Find Technician by ID
+POST http://localhost:8080/VitalTrack/TechnicianSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:find>
+         <id>1</id>
+      </soap:find>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Register New Technician
+POST http://localhost:8080/VitalTrack/TechnicianSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:save>
+         <technician>
+            <name>Samuel Otieno</name>
+            <specialization>Radiological Equipment</specialization>
+            <contactInfo>+254799887766</contactInfo>
+            <status>ACTIVE</status>
+            <email>samuel.otieno@hospital.com</email>
+         </technician>
+      </soap:save>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+### [SOAP] Delete Technician by ID (change id as needed)
+POST http://localhost:8080/VitalTrack/TechnicianSoapApi
+Content-Type: text/xml
+Accept: text/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:delete>
+         <id>5</id>
+      </soap:delete>
+   </soapenv:Body>
+</soapenv:Envelope>

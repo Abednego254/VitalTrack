@@ -69,6 +69,13 @@
       <version>6.6.15.Final</version>
       <scope>provided</scope>
     </dependency>
+    <!-- SOAP Web Services API -->
+    <dependency>
+      <groupId>jakarta.xml.ws</groupId>
+      <artifactId>jakarta.xml.ws-api</artifactId>
+      <version>4.0.3</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   <build>
     <finalName>VitalTrack</finalName>

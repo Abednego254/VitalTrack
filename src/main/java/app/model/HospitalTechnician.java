@@ -13,11 +13,16 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "hospital_technician")
 @VitalTrackTable(label = "Technicians", addLink = "technician/add", deleteLink = "technician/delete")
 @VitalTrackForm(label = "Technician", actionUrl = "technician/save")
+@XmlRootElement(name = "technician")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class HospitalTechnician extends BaseEntity {
     @Column(nullable = false)
     @VitalTrackTableCol(label = "Name")
