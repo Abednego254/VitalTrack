@@ -13,11 +13,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "hospital_equipment")
-@VitalTrackTable(label = "Medical Equipment", addLink = "equipment/add", deleteLink = "equipment/delete")
-@VitalTrackForm(label = "Medical Equipment", actionUrl = "equipment/save")
+@VitalTrackTable(label = "Equipment", addLink = "equipment/add", deleteLink = "equipment/delete")
+@VitalTrackForm(label = "Equipment", actionUrl = "equipment/save")
+@XmlRootElement(name = "equipment")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class HospitalEquipment extends BaseEntity {
     
     @Column(nullable = false)

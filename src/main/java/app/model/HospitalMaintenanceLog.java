@@ -10,12 +10,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.Date;
 
 @Entity
 @Table(name = "hospital_maintenance_log")
 @VitalTrackTable(label = "Maintenance History", addLink = "maintenancelog/add", deleteLink = "maintenancelog/delete")
 @VitalTrackForm(label = "Maintenance Log", actionUrl = "maintenancelog/save")
+@XmlRootElement(name = "maintenancelog")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class HospitalMaintenanceLog extends BaseEntity {
 
     @Column(name = "equipment_id")
@@ -26,10 +32,12 @@ public class HospitalMaintenanceLog extends BaseEntity {
     @Column(name = "technician_id")
     private Long technicianId;
 
+    @XmlTransient
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "equipment_id", insertable = false, updatable = false)
     private HospitalEquipment equipment;
 
+    @XmlTransient
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "technician_id", insertable = false, updatable = false)
     private HospitalTechnician technician;

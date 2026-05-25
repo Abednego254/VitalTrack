@@ -1,5 +1,6 @@
 package app.framework;
 
+import app.dao.HospitalEquipmentDao;
 import app.utility.helper.ClassScanner;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,7 +17,7 @@ public class VitalTrackFramework {
     private ClassScanner clazzScanner;
 
     @Inject
-    private app.dao.HospitalEquipmentDao equipmentDao;
+    private HospitalEquipmentDao equipmentDao;
 
     private Map<String, List<SelectBox>> formSelections = new HashMap<>();
 
