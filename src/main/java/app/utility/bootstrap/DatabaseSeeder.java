@@ -3,8 +3,7 @@ package app.utility.bootstrap;
 import app.ejb.UserEJB;
 import app.model.User;
 import jakarta.annotation.PostConstruct;
-import jakarta.ejb.Singleton;
-import jakarta.ejb.Startup;
+import jakarta.ejb.*;
 import jakarta.inject.Inject;
 import java.util.List;
 

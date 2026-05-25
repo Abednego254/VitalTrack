@@ -1,18 +1,11 @@
 package app.action;
 
-import app.ejb.HospitalNurseEJB;
-import app.ejb.HospitalTechnicianEJB;
-import app.ejb.UserEJB;
-import app.model.HospitalNurse;
-import app.model.HospitalTechnician;
-import app.model.User;
+import app.ejb.*;
+import app.model.*;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.annotation.*;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
 

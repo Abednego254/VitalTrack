@@ -2,13 +2,10 @@ package app.soap;
 
 import app.ejb.HospitalMedicalSupplyEJB;
 import app.model.HospitalMedicalSupply;
-import app.rest.ResponseStatus;
-import app.rest.SuccessError;
+import app.rest.*;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import jakarta.jws.WebMethod;
-import jakarta.jws.WebParam;
-import jakarta.jws.WebService;
+import jakarta.jws.*;
 
 @Stateless
 @WebService(serviceName = "MedicalSupplySoapService")

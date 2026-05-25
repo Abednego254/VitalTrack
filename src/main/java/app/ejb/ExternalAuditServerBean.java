@@ -1,5 +1,7 @@
 package app.ejb;
 
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import jakarta.ejb.ActivationConfigProperty;
 import jakarta.ejb.MessageDriven;
@@ -33,11 +35,11 @@ public class ExternalAuditServerBean implements MessageListener {
 
             java.nio.file.Path backupPath = java.nio.file.Paths.get("/tmp", "vitaltrack_external_backup.log");
             
-            java.nio.file.Files.write(
+            Files.write(
                 backupPath, 
                 logEntry.getBytes(), 
-                java.nio.file.StandardOpenOption.CREATE, 
-                java.nio.file.StandardOpenOption.APPEND
+                StandardOpenOption.CREATE,
+                StandardOpenOption.APPEND
             );
 
             System.out.println("==================================================");

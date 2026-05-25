@@ -1,9 +1,7 @@
 package app.soap;
 
 import app.model.HospitalEquipment;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.List;

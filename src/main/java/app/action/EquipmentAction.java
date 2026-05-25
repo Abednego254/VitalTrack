@@ -9,6 +9,7 @@ import app.framework.ActionResponse;
 import app.framework.ActionRequestBody;
 import app.framework.VitalTrackFramework;
 import app.model.HospitalEquipment;
+import app.model.User;
 import app.utility.MaintenanceChoice;
 import app.utility.MaintenanceQualifier;
 import app.utility.MaintenanceService;
@@ -16,6 +17,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ejb.EJB;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @RequestScoped
 @Action(value = "equipment", label = "Equipment", role = "ADMIN,TECHNICIAN")
@@ -59,11 +61,11 @@ public class EquipmentAction {
         }
 
         // AUDIT TRAIL: Set the user who added this equipment
-        jakarta.servlet.http.HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
         if (session != null) {
             Object loggedIn = session.getAttribute("loggedInUser");
-            if (loggedIn instanceof app.model.User) {
-                equipment.setCreateBy((app.model.User) loggedIn);
+            if (loggedIn instanceof User) {
+                equipment.setCreateBy((User) loggedIn);
             }
         }
 

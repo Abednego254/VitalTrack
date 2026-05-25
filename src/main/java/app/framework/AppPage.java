@@ -1,14 +1,12 @@
 package app.framework;
 
+import app.utility.helper.ClassScanner;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Serializable;
+import java.io.*;
+import java.util.Set;
 
 @ApplicationScoped
 public class AppPage implements Serializable {
@@ -56,7 +54,7 @@ public class AppPage implements Serializable {
         sb.append("<nav class='sidebar-nav'>");
 
         // Scan for all @Action classes
-        java.util.Set<Class<?>> actionClasses = app.utility.helper.ClassScanner.scanForAction("app.action");
+        Set<Class<?>> actionClasses = ClassScanner.scanForAction("app.action");
         
         // Sort them if needed, but for now just iterate
         for (Class<?> clazz : actionClasses) {
@@ -64,7 +62,8 @@ public class AppPage implements Serializable {
             if (action != null && action.showLink()) {
                 // Role Check
                 String requiredRoles = action.role();
-                if (requiredRoles != null && !"ALL".equalsIgnoreCase(requiredRoles) && !"USER".equalsIgnoreCase(requiredRoles)) {
+                if (requiredRoles != null && !"ALL".equalsIgnoreCase(requiredRoles) &&
+                        !"USER".equalsIgnoreCase(requiredRoles)) {
                     boolean hasPermission = false;
                     if (role != null) {
                         for (String r : requiredRoles.split(",")) {

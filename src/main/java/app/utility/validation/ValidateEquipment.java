@@ -2,8 +2,7 @@ package app.utility.validation;
 
 import app.model.HospitalEquipment;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import jakarta.inject.*;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import java.util.Set;

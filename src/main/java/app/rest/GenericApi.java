@@ -1,8 +1,7 @@
 package app.rest;
 
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.*;
 import java.util.List;
 
 import app.model.BaseEntity;
@@ -21,10 +20,11 @@ public abstract class GenericApi<T> {
     public Response save(T entity) {
         try {
             saveEntity(entity);
-            return Response.ok(new ResponseStatus(SuccessError.SUCCESS, "Record saved successfully")).build();
+            return Response.ok(
+                new ResponseStatus(SuccessError.SUCCESS, "Record saved successfully")).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ResponseStatus(SuccessError.ERROR, e.getMessage())).build();
+                .entity(new ResponseStatus(SuccessError.ERROR, e.getMessage())).build();
         }
     }
 
@@ -36,7 +36,7 @@ public abstract class GenericApi<T> {
             T entity = findEntity(id);
             if (entity == null) {
                 return Response.status(Response.Status.NOT_FOUND)
-                        .entity(new ResponseStatus(SuccessError.ERROR, "Record not found")).build();
+                    .entity(new ResponseStatus(SuccessError.ERROR, "Record not found")).build();
             }
             return Response.ok(entity).build();
         } catch (Exception e) {

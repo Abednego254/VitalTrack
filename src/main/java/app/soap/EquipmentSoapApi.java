@@ -2,15 +2,9 @@ package app.soap;
 
 import app.ejb.HospitalEquipmentEJB;
 import app.model.HospitalEquipment;
-import app.rest.ResponseStatus;
-import app.rest.SuccessError;
-import jakarta.ejb.EJB;
-import jakarta.ejb.Stateless;
-import jakarta.jws.WebMethod;
-import jakarta.jws.WebParam;
-import jakarta.jws.WebService;
-
-import java.util.List;
+import app.rest.*;
+import jakarta.ejb.*;
+import jakarta.jws.*;
 
 @Stateless
 @WebService(serviceName = "EquipmentSoapService")
