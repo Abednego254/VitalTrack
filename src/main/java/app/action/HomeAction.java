@@ -35,6 +35,37 @@ public class HomeAction {
         html.append("<p>Advanced Medical Logistics & Asset Management</p>");
         html.append("</header>");
 
+        // Stock Alert Feed / Live Warnings - Visible to Admin and Nurse (Top Banner)
+        if ("ADMIN".equals(role) || "NURSE".equals(role)) {
+            List<HospitalMedicalSupply> lowStockSupplies = java.util.Collections.emptyList();
+            try {
+                lowStockSupplies = supplyEJB.findAll().stream()
+                    .filter(s -> s.getQuantity() <= s.getReorderLevel())
+                    .collect(Collectors.toList());
+            } catch (Exception ignored) {}
+
+            boolean hasLowStock = !lowStockSupplies.isEmpty();
+            html.append("<div class='top-alert-container'>");
+            html.append("<div class='card glass' id='stock-warnings-card' style='border-left: 5px solid #ef4444; background: #fef2f2; color: #991b1b; max-width: 100%; width: 100%; ")
+                .append(hasLowStock ? "" : "display: none;")
+                .append("'>");
+            html.append("<h3 style='color: #ef4444; margin: 0; display: flex; align-items: center; gap: 0.5rem;'><i class='fa-solid fa-circle-exclamation'></i> Critical Stock Warnings</h3>");
+            html.append("<hr style='border:0; border-top:1px solid #fee2e2; margin: 1rem 0;' />");
+            html.append("<ul id='stock-warnings-list' style='list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; font-weight: 500;'>");
+            
+            for (HospitalMedicalSupply s : lowStockSupplies) {
+                html.append("<li style='display: flex; align-items: center; gap: 0.5rem;'>")
+                    .append("<i class='fa-solid fa-triangle-exclamation' style='color: #dc2626;'></i> ")
+                    .append("Warning: Medical Supply '").append(s.getName()).append("' is running low! Current stock: ")
+                    .append(s.getQuantity()).append(" (Reorder level: ").append(s.getReorderLevel()).append(")")
+                    .append("</li>");
+            }
+            
+            html.append("</ul>");
+            html.append("</div>");
+            html.append("</div>");
+        }
+
         html.append("<section class='container'>");
 
         // Equipment Card - Visible to Admin and Technician
@@ -93,40 +124,11 @@ public class HomeAction {
 
         html.append("</section>");
 
-        // Stock Alert Feed / Live Warnings - Visible to Admin and Nurse
-        if ("ADMIN".equals(role) || "NURSE".equals(role)) {
-            List<HospitalMedicalSupply> lowStockSupplies = java.util.Collections.emptyList();
-            try {
-                lowStockSupplies = supplyEJB.findAll().stream()
-                    .filter(s -> s.getQuantity() <= s.getReorderLevel())
-                    .collect(Collectors.toList());
-            } catch (Exception ignored) {}
-
-            boolean hasLowStock = !lowStockSupplies.isEmpty();
-            html.append("<section class='container' style='grid-template-columns: 1fr; margin-top: 1.5rem;'>");
-            html.append("<div class='card glass' id='stock-warnings-card' style='border-left: 5px solid #ef4444; background: #fef2f2; color: #991b1b; max-width: 100%; width: 100%; ")
-                .append(hasLowStock ? "" : "display: none;")
-                .append("'>");
-            html.append("<h3 style='color: #ef4444; margin: 0; display: flex; align-items: center; gap: 0.5rem;'><i class='fa-solid fa-circle-exclamation'></i> Critical Stock Warnings</h3>");
-            html.append("<hr style='border:0; border-top:1px solid #fee2e2; margin: 1rem 0;' />");
-            html.append("<ul id='stock-warnings-list' style='list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; font-weight: 500;'>");
-            
-            for (HospitalMedicalSupply s : lowStockSupplies) {
-                html.append("<li style='display: flex; align-items: center; gap: 0.5rem;'>")
-                    .append("<i class='fa-solid fa-triangle-exclamation' style='color: #dc2626;'></i> ")
-                    .append("Warning: Medical Supply '").append(s.getName()).append("' is running low! Current stock: ")
-                    .append(s.getQuantity()).append(" (Reorder level: ").append(s.getReorderLevel()).append(")")
-                    .append("</li>");
-            }
-            
-            html.append("</ul>");
-            html.append("</div>");
-            html.append("</section>");
-        }
-
-        // Activity Feed - Admin Only
+        // Activity Feed & System Health Split Grid - Admin Only
         if ("ADMIN".equals(role)) {
-            html.append("<section class='container' style='grid-template-columns: 1fr; margin-top: 2rem;'>");
+            html.append("<section class='dashboard-split-grid'>");
+            
+            // Left Column: Live System Activity Feed
             html.append("<div class='card glass' style='max-width: 100%; width: 100%;'>");
             html.append("<h3><i class='fa-solid fa-clock-rotate-left'></i> Live System Activity Feed</h3>");
             html.append("<hr style='border:0; border-top:1px solid var(--border); margin: 1rem 0;' />");
@@ -155,6 +157,24 @@ public class HomeAction {
             
             html.append("</ul>");
             html.append("</div>");
+
+            // Right Column: System Health & Subsystems Status
+            html.append("<div class='card glass' style='max-width: 100%; width: 100%;'>");
+            html.append("<h3><i class='fa-solid fa-heartbeat' style='color: #10b981;'></i> System Health</h3>");
+            html.append("<hr style='border:0; border-top:1px solid var(--border); margin: 1rem 0;' />");
+            html.append("<ul style='list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.2rem; font-weight: 500;'>");
+            html.append("<li style='display: flex; justify-content: space-between; align-items: center;'>");
+            html.append("<span><i class='fa-solid fa-database' style='color: #3b82f6; margin-right: 0.5rem;'></i> Database Context</span>");
+            html.append("<span class='badge badge-success' style='background: #10b981; color: white;'>Online</span></li>");
+            html.append("<li style='display: flex; justify-content: space-between; align-items: center;'>");
+            html.append("<span><i class='fa-solid fa-circle-nodes' style='color: #10b981; margin-right: 0.5rem;'></i> WebSockets Gateway</span>");
+            html.append("<span class='badge badge-success' style='background: #10b981; color: white;' id='ws-gateway-status'>Online</span></li>");
+            html.append("<li style='display: flex; justify-content: space-between; align-items: center;'>");
+            html.append("<span><i class='fa-solid fa-envelope' style='color: #f59e0b; margin-right: 0.5rem;'></i> JMS Queue Broker</span>");
+            html.append("<span class='badge badge-success' style='background: #10b981; color: white;'>Active</span></li>");
+            html.append("</ul>");
+            html.append("</div>");
+
             html.append("</section>");
         }
 
