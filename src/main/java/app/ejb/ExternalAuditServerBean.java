@@ -2,6 +2,7 @@ package app.ejb;
 
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import jakarta.ejb.ActivationConfigProperty;
 import jakarta.ejb.MessageDriven;

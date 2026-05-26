@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @ServerEndpoint("/stock_alerts")
 public class StockAlertWs {
 
+    // Thread-safe set of all connected dashboards (Admins & Nurses)
     private static final Set<Session> alertSessions =
         new CopyOnWriteArraySet<>();
 
@@ -30,6 +31,7 @@ public class StockAlertWs {
         for (Session alertSession : alertSessions){
             if (alertSession.isOpen()){
                 try {
+                    // Instantly push the text to the browser client
                     alertSession.getBasicRemote().sendText(alertMessage);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
