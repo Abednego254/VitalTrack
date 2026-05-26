@@ -689,3 +689,25 @@ tr:hover td {
 .new-activity {
     animation: highlightActivity 2s ease-out;
 }
+
+/* Dashboard Split Layout */
+.dashboard-split-grid {
+    max-width: 1200px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.top-alert-container {
+    max-width: 1200px;
+    margin: 1.5rem auto -0.5rem;
+    padding: 0 2rem;
+}
+
+@media (max-width: 768px) {
+    .dashboard-split-grid {
+        grid-template-columns: 1fr;
+    }
+}
