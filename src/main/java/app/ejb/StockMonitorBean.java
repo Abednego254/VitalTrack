@@ -1,10 +1,13 @@
 package app.ejb;
 
+import app.model.AuditTrail;
 import app.model.HospitalMedicalSupply;
 import app.model.MedicalSupplyConsumedEvent;
+import app.websocket.StockAlertWs;
 import jakarta.annotation.Resource;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Singleton;
+import jakarta.enterprise.event.Event;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import jakarta.jms.JMSContext;
@@ -22,6 +25,9 @@ public class StockMonitorBean {
     @Resource(lookup = "java:/jms/queue/VitalTrackAppQueue")
     private Queue alertQueue;
 
+    @Inject
+    private Event<AuditTrail> auditTrailEvent;
+
     public void onSupplyConsumed(@Observes MedicalSupplyConsumedEvent event) {
         System.out.println(">>> STOCK MONITOR: Processing consumption for " + event.getSupplyName());
 
@@ -34,6 +40,9 @@ public class StockMonitorBean {
 
                 System.out.println(">>> STOCK MONITOR: New quantity for " + supply.getName() + " is " + supply.getQuantity());
 
+                // Fire Audit Trail event for supply consumption
+                auditTrailEvent.fire(new AuditTrail("Consumed " + event.getQuantityConsumed() + " units of " + supply.getName() + " (Remaining: " + supply.getQuantity() + ")"));
+
                 // ALERT CHECK: If quantity drops below reorder level, notify via JMS
                 if (supply.getQuantity() <= supply.getReorderLevel()) {
                     String alertMessage = "STOCK ALERT: " + supply.getName() + " is running low! Current stock: " + supply.getQuantity();
@@ -41,6 +50,12 @@ public class StockMonitorBean {
                     
                     // Sending to JMS Queue for the MDB to handle the notification/backup
                     jmsContext.createProducer().send(alertQueue, alertMessage);
+
+                    // Real-Time WebSocket broadcast to Admins and Nurses
+                    StockAlertWs.broadcast("Warning: Medical Supply '" + supply.getName() + "' is running low! Current stock: " + supply.getQuantity());
+
+                    // Fire Audit Trail event for low stock warning
+                    auditTrailEvent.fire(new app.model.AuditTrail("CRITICAL STOCK WARNING: " + supply.getName() + " is running low (Stock: " + supply.getQuantity() + ")"));
                 }
             }
         } catch (Exception e) {

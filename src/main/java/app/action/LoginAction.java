@@ -1,31 +1,29 @@
 package app.action;
 
-import app.ejb.*;
-import app.model.*;
-import jakarta.ejb.EJB;
+import app.model.AuditTrail;
+import jakarta.inject.Inject;
+import jakarta.enterprise.event.Event;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-
 import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/login", "/logout"})
 public class LoginAction extends HttpServlet {
 
-    @EJB
-    private UserEJB userEJB;
-
-    @EJB
-    private HospitalTechnicianEJB technicianEJB;
-
-    @EJB
-    private HospitalNurseEJB nurseEJB;
+    @Inject
+    private Event<AuditTrail> auditTrailEvent;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getServletPath();
 
         if ("/logout".equals(path)) {
+            String username = req.getRemoteUser();
+            if (username != null) {
+                auditTrailEvent.fire(new AuditTrail("User '" + username + "' logged out."));
+            }
+            req.logout();
             HttpSession session = req.getSession(false);
             if (session != null) {
                 session.invalidate();
@@ -34,68 +32,13 @@ public class LoginAction extends HttpServlet {
             return;
         }
 
-        // Just show the login page
         req.getRequestDispatcher("/login.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path = req.getServletPath();
-
-        if ("/login".equals(path)) {
-            String username = req.getParameter("username");
-            String password = req.getParameter("password");
-
-            User user = userEJB.authenticate(username, password);
-
-            if (user != null) {
-                // Success! Give them a VIP pass (Session)
-                HttpSession session = req.getSession(true);
-                session.setAttribute("loggedInUser", user);
-                session.setAttribute("username", user.getUsername());
-                session.setAttribute("role", user.getRole());
-                
-                // Redirect to the main dashboard/index
-                resp.sendRedirect(req.getContextPath() + "/index.jsp");
-            } else {
-                // Try to authenticate as a Technician
-                HospitalTechnician tech = technicianEJB.authenticate(username, password);
-                if (tech != null) {
-                    HttpSession session = req.getSession(true);
-                    session.setAttribute("loggedInUser", tech);
-                    session.setAttribute("username", tech.getName());
-                    session.setAttribute("role", "TECHNICIAN");
-                    session.setAttribute("techId", tech.getId());
-
-                    // CHECK FOR FIRST LOGIN
-                    if (tech.getPassword() == null || tech.getPassword().startsWith("VT-TEMP-")) {
-                        resp.sendRedirect(req.getContextPath() + "/set-password.jsp");
-                    } else {
-                        resp.sendRedirect(req.getContextPath() + "/index.jsp");
-                    }
-                } else {
-                    // Try to authenticate as a Nurse
-                    HospitalNurse nurse = nurseEJB.authenticate(username, password);
-                    if (nurse != null) {
-                        HttpSession session = req.getSession(true);
-                        session.setAttribute("loggedInUser", nurse);
-                        session.setAttribute("username", nurse.getName());
-                        session.setAttribute("role", "NURSE");
-                        session.setAttribute("nurseId", nurse.getId());
-
-                        // CHECK FOR FIRST LOGIN
-                        if (nurse.getPassword() == null || nurse.getPassword().startsWith("VT-TEMP-")) {
-                            resp.sendRedirect(req.getContextPath() + "/set-password.jsp");
-                        } else {
-                            resp.sendRedirect(req.getContextPath() + "/index.jsp");
-                        }
-                    } else {
-                        // Fail! Send them back to the login page with an error
-                        req.setAttribute("error", "Invalid email/username or password!");
-                        req.getRequestDispatcher("/login.jsp").forward(req, resp);
-                    }
-                }
-            }
-        }
+        // If the POST request reaches here, it means authentication failed
+        req.setAttribute("error", "Invalid email/username or password!");
+        req.getRequestDispatcher("/login.jsp").forward(req, resp);
     }
 }
