@@ -79,11 +79,13 @@ public class ActionParamBinder {
         return obj;
     }
 
+    @SuppressWarnings("unchecked")
     private static Object convert(String v, Class<?> t) {
         if (v == null || v.isEmpty()) return null;
         if (t.isEnum()) {
             try {
-                return Enum.valueOf((Class<Enum>) t, v);
+                Class<Enum> enumType = (Class<Enum>) t;
+                return Enum.valueOf(enumType, v);
             } catch (Exception e) {
                 return null;
             }

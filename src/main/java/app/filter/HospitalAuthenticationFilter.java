@@ -27,12 +27,16 @@ public class HospitalAuthenticationFilter implements Filter {
         boolean isSoapApiRequest = path.contains("SoapApi") || path.contains("SoapService")
                 || req.getRequestURI().contains("SoapApi") || req.getRequestURI().contains("SoapService");
 
-        if (isLoginRequest || isLogoutRequest || isStaticResource || isApiRequest || isSoapApiRequest) {
+        boolean isWebSocketRequest = path.startsWith("/ws") || req.getRequestURI().contains("/ws/")
+                || path.equals("/audit_feeds") || path.equals("/stock_alerts") || path.equals("/chat")
+                || req.getRequestURI().contains("/audit_feeds") || req.getRequestURI().contains("/stock_alerts") || req.getRequestURI().contains("/chat");
+
+        if (isLoginRequest || isLogoutRequest || isStaticResource || isApiRequest || isSoapApiRequest || isWebSocketRequest) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        boolean isLoggedIn = (session != null && session.getAttribute("loggedInUser") != null);
+        boolean isLoggedIn = req.getUserPrincipal() != null || (session != null && session.getAttribute("loggedInUser") != null);
         
         if (isLoggedIn) {
             filterChain.doFilter(request, response);

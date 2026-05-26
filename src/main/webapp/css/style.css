@@ -392,3 +392,300 @@ tr:hover td {
     background: #d1fae5;
     color: #065f46;
 }
+
+/* Real-Time WebSocket Chat UI */
+#chat-widget-wrapper {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#chat-widget-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 1.2rem;
+    background: var(--primary);
+    color: white;
+    border-radius: 9999px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+#chat-widget-toggle:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+#chat-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ef4444; /* offline red by default, toggled by js */
+    display: inline-block;
+}
+
+.chat-online-badge {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+#chat-widget-window {
+    width: 350px;
+    height: 450px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 1;
+    transform: scale(1);
+    transform-origin: bottom right;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Toggle visibility modes */
+#chat-widget-wrapper.minimized #chat-widget-window {
+    display: none;
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+}
+
+#chat-widget-wrapper.minimized #chat-widget-toggle {
+    display: flex;
+}
+
+#chat-widget-wrapper:not(.minimized) #chat-widget-toggle {
+    display: none;
+}
+
+/* Chat window headers & footers */
+#chat-widget-header {
+    background: var(--primary-dark);
+    color: white;
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+#chat-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+#chat-close-btn:hover {
+    opacity: 1;
+}
+
+#chat-widget-body {
+    flex: 1;
+    padding: 1.25rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    background: rgba(243, 244, 246, 0.6);
+}
+
+#chat-widget-footer {
+    padding: 0.8rem 1.25rem;
+    display: flex;
+    gap: 0.6rem;
+    border-top: 1px solid var(--border);
+    background: white;
+}
+
+#chat-input-field {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    outline: none;
+    font-size: 0.9rem;
+    background: #f9fafb;
+    transition: border-color 0.2s;
+}
+
+#chat-input-field:focus {
+    border-color: var(--primary);
+}
+
+#chat-send-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+#chat-send-btn:hover {
+    background: var(--primary-dark);
+}
+
+/* Chat Messages */
+.chat-message {
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.chat-me {
+    align-self: flex-end;
+}
+
+.chat-other {
+    align-self: flex-start;
+}
+
+.chat-sender {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    padding: 0 4px;
+}
+
+.chat-text {
+    padding: 0.6rem 0.9rem;
+    border-radius: 1.2rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.chat-me .chat-text {
+    background: var(--primary);
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+
+.chat-other .chat-text {
+    background: white;
+    color: var(--text);
+    border-bottom-left-radius: 2px;
+    border: 1px solid var(--border);
+}
+
+/* Pulse animation for new messages while minimized */
+@keyframes chatPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); box-shadow: 0 10px 25px rgba(20, 184, 166, 0.4); }
+    100% { transform: scale(1); }
+}
+
+.chat-pulse {
+    animation: chatPulse 1.5s infinite ease-in-out;
+    background: #10b981 !important; /* light up green for alerts */
+}
+
+/* Toast Notifications Container */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 1.25rem;
+    border-radius: 1rem;
+    background: white;
+    color: var(--text);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #10b981;
+    transform: translateX(120%);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast.visible {
+    transform: translateX(0);
+}
+
+.toast-warning {
+    border-left-color: #f59e0b;
+    background: #fffbeb;
+    color: #92400e;
+}
+
+.toast-warning i {
+    color: #d97706;
+    font-size: 1.25rem;
+}
+
+.toast-error {
+    border-left-color: #ef4444;
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.toast-error i {
+    color: #dc2626;
+    font-size: 1.25rem;
+}
+
+.toast-text {
+    flex: 1;
+    font-size: 0.92rem;
+    font-weight: 500;
+}
+
+.toast button {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.6;
+    line-height: 1;
+}
+
+.toast button:hover {
+    opacity: 1;
+}
+
+/* Live Activity Feed Styling */
+.activity-item {
+    transition: background-color 0.5s ease;
+}
+
+@keyframes highlightActivity {
+    from { background-color: rgba(20, 184, 166, 0.15); }
+    to { background-color: transparent; }
+}
+
+.new-activity {
+    animation: highlightActivity 2s ease-out;
+}

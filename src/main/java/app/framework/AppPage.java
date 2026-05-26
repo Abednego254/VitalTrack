@@ -40,6 +40,35 @@ public class AppPage implements Serializable {
         out.println(pageContent);
         out.println("</main>");
 
+        /* FLOATING CHAT WIDGET UI */
+        out.println("<div id='chat-widget-wrapper' class='minimized'>");
+        out.println("  <div id='chat-widget-toggle'>");
+        out.println("    <span id='chat-status-dot'></span>");
+        out.println("    <i class='fa-solid fa-comments'></i>");
+        out.println("    <span class='chat-toggle-label'>Team Live Chat</span>");
+        out.println("    <span id='chat-online-count' class='chat-online-badge'>0 Online</span>");
+        out.println("  </div>");
+        out.println("  <div id='chat-widget-window'>");
+        out.println("    <div id='chat-widget-header'>");
+        out.println("      <span class='chat-header-title'><i class='fa-solid fa-comments'></i> Operations Chat</span>");
+        out.println("      <button id='chat-close-btn'>&times;</button>");
+        out.println("    </div>");
+        out.println("    <div id='chat-widget-body'></div>");
+        out.println("    <div id='chat-widget-footer'>");
+        out.println("      <input type='text' id='chat-input-field' placeholder='Type a message...' autocomplete='off' />");
+        out.println("      <button id='chat-send-btn'><i class='fa-solid fa-paper-plane'></i></button>");
+        out.println("    </div>");
+        out.println("  </div>");
+        out.println("</div>");
+
+        /* WEBSOCKET INITIALIZER SCRIPT */
+        out.println("<script>");
+        out.println("  const wsUsername = '" + request.getSession().getAttribute("username") + "';");
+        out.println("  const wsRole = '" + request.getSession().getAttribute("role") + "';");
+        out.println("  const contextPath = '" + request.getContextPath() + "';");
+        out.println("</script>");
+        out.println("<script src='" + request.getContextPath() + "/js/websocket.js'></script>");
+
         out.println("</body>");
         out.println("</html>");
     }

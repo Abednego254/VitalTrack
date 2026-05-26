@@ -5,7 +5,6 @@ import app.framework.VitalTrackFormField;
 import app.framework.VitalTrackTable;
 import app.framework.VitalTrackTableCol;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -54,7 +53,6 @@ public class HospitalMedicalSupply extends BaseEntity {
     @VitalTrackTableCol(label = "Expiry")
     @VitalTrackFormField(label = "Expiry Date", placeholder = "YYYY-MM-DD", type = "date")
     @NotNull(message = "Expiry date is required")
-    @Future(message = "Expiry date must be in the future")
     private Date expiryDate;
 
     @Column(name = "reorder_level")
