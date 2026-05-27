@@ -1,5 +1,6 @@
 package app.websocket;
 
+import jakarta.websocket.CloseReason;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
@@ -19,7 +20,7 @@ public class AuditTrailWs {
     public void onOpen(Session session) throws IOException {
         if (session.getUserPrincipal() == null) {
             System.out.println(">>> WebSocket Audit Trail: Unauthorized attempt to connect: " + session.getId());
-            session.close(new jakarta.websocket.CloseReason(jakarta.websocket.CloseReason.CloseCodes.VIOLATED_POLICY, "Unauthorized"));
+            session.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Unauthorized"));
             return;
         }
         auditSessions.add(session);
