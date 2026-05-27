@@ -27,7 +27,6 @@ public class HospitalNurseEJB {
 
     @Inject
     private Event<NurseAddedEvent> nurseAddedEvent;
-
     public void save(HospitalNurse nurse) throws Exception {
         // Generate temporary password BEFORE validation so @NotBlank on password passes
         String dummyPassword = "VT-TEMP-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
@@ -45,15 +44,12 @@ public class HospitalNurseEJB {
             throw new IllegalArgumentException("Nurse data is invalid!");
         }
     }
-
     public List<HospitalNurse> findAll() throws Exception {
         return nurseDao.findAll();
     }
-
     public HospitalNurse findById(Long id) throws Exception {
         return nurseDao.findById(id);
     }
-
     public HospitalNurse authenticate(String email, String password) {
         List<HospitalNurse> nurses = nurseDao.findAll();
         for (HospitalNurse n : nurses) {
@@ -69,7 +65,6 @@ public class HospitalNurseEJB {
         }
         return null;
     }
-
     public void setPassword(Long nurseId, String password) throws Exception {
         HospitalNurse nurse = nurseDao.findById(nurseId);
         if (nurse != null) {
@@ -78,7 +73,6 @@ public class HospitalNurseEJB {
             auditTrailEvent.fire(new AuditTrail("Nurse " + nurse.getName() + " set their security password."));
         }
     }
-
     public void delete(Long id) throws Exception {
         nurseDao.delete(id);
     }

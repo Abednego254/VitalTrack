@@ -16,7 +16,12 @@ public class AuditTrailWs {
         new CopyOnWriteArraySet<>();
 
     @OnOpen
-    public void onOpen(Session session){
+    public void onOpen(Session session) throws IOException {
+        if (session.getUserPrincipal() == null) {
+            System.out.println(">>> WebSocket Audit Trail: Unauthorized attempt to connect: " + session.getId());
+            session.close(new jakarta.websocket.CloseReason(jakarta.websocket.CloseReason.CloseCodes.VIOLATED_POLICY, "Unauthorized"));
+            return;
+        }
         auditSessions.add(session);
         System.out.println("Ws: session opened: " + session.getId());
     }

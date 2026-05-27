@@ -12,11 +12,17 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @ServerEndpoint("/stock_alerts")
 public class StockAlertWs {
 
+    // Thread-safe set of all connected dashboards (Admins & Nurses)
     private static final Set<Session> alertSessions =
         new CopyOnWriteArraySet<>();
 
     @OnOpen
-    public void onOpen(Session session){
+    public void onOpen(Session session) throws IOException {
+        if (session.getUserPrincipal() == null) {
+            System.out.println(">>> WebSocket Stock Alert: Unauthorized attempt to connect: " + session.getId());
+            session.close(new jakarta.websocket.CloseReason(jakarta.websocket.CloseReason.CloseCodes.VIOLATED_POLICY, "Unauthorized"));
+            return;
+        }
         alertSessions.add(session);
         System.out.println("Ws stock alert: session opened: " + session.getId());
     }
@@ -30,6 +36,7 @@ public class StockAlertWs {
         for (Session alertSession : alertSessions){
             if (alertSession.isOpen()){
                 try {
+                    // Instantly push the text to the browser client
                     alertSession.getBasicRemote().sendText(alertMessage);
                 } catch (IOException e) {
                     throw new RuntimeException(e);

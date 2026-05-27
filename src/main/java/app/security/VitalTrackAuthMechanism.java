@@ -1,8 +1,7 @@
 package app.security;
 
 import app.ejb.UserEJB;
-import app.ejb.HospitalTechnicianEJB;
-import app.ejb.HospitalNurseEJB;
+import app.model.User;
 import app.model.HospitalTechnician;
 import app.model.HospitalNurse;
 import app.model.AuditTrail;
@@ -31,12 +30,6 @@ public class VitalTrackAuthMechanism implements HttpAuthenticationMechanism {
 
     @Inject
     private UserEJB userEJB;
-
-    @Inject
-    private HospitalTechnicianEJB technicianEJB;
-
-    @Inject
-    private HospitalNurseEJB nurseEJB;
 
     @Inject
     private Event<AuditTrail> auditTrailEvent;
@@ -70,27 +63,20 @@ public class VitalTrackAuthMechanism implements HttpAuthenticationMechanism {
                     session.setAttribute("username", principalName);
                     session.setAttribute("role", role);
 
-                    Object entity = null;
-                    boolean mustSetPassword = false;
+                    // Fetch the unified User object (can be User/Admin, HospitalTechnician, or HospitalNurse)
+                    User user = userEJB.authenticate(username, password);
+                    session.setAttribute("loggedInUser", user);
 
-                    if ("ADMIN".equals(role)) {
-                        entity = userEJB.authenticate(username, password);
-                    } else if ("TECHNICIAN".equals(role)) {
-                        HospitalTechnician tech = technicianEJB.authenticate(username, password);
-                        entity = tech;
-                        session.setAttribute("techId", tech.getId());
-                        if (tech.getPassword() == null || tech.getPassword().startsWith("VT-TEMP-")) {
-                            mustSetPassword = true;
-                        }
-                    } else if ("NURSE".equals(role)) {
-                        HospitalNurse nurse = nurseEJB.authenticate(username, password);
-                        entity = nurse;
-                        session.setAttribute("nurseId", nurse.getId());
-                        if (nurse.getPassword() == null || nurse.getPassword().startsWith("VT-TEMP-")) {
-                            mustSetPassword = true;
-                        }
+                    if (user instanceof HospitalTechnician) {
+                        session.setAttribute("techId", user.getId());
+                    } else if (user instanceof HospitalNurse) {
+                        session.setAttribute("nurseId", user.getId());
                     }
-                    session.setAttribute("loggedInUser", entity);
+
+                    boolean mustSetPassword = false;
+                    if (user != null && (user.getPassword() == null || user.getPassword().startsWith("VT-TEMP-"))) {
+                        mustSetPassword = true;
+                    }
 
                     auditTrailEvent.fire(new AuditTrail("User '" + principalName + "' (" + role + ") logged in successfully via Jakarta Security."));
 

@@ -6,7 +6,6 @@ import app.utility.validation.Validate;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-
 import java.util.List;
 
 

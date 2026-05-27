@@ -55,7 +55,7 @@ public class StockMonitorBean {
                     StockAlertWs.broadcast("Warning: Medical Supply '" + supply.getName() + "' is running low! Current stock: " + supply.getQuantity());
 
                     // Fire Audit Trail event for low stock warning
-                    auditTrailEvent.fire(new app.model.AuditTrail("CRITICAL STOCK WARNING: " + supply.getName() + " is running low (Stock: " + supply.getQuantity() + ")"));
+                    auditTrailEvent.fire(new AuditTrail("CRITICAL STOCK WARNING: " + supply.getName() + " is running low (Stock: " + supply.getQuantity() + ")"));
                 }
             }
         } catch (Exception e) {

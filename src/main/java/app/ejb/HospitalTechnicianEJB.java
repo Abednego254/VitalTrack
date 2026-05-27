@@ -28,7 +28,6 @@ public class HospitalTechnicianEJB {
 
     @Inject
     private Event<TechnicianAddedEvent> technicianAddedEvent;
-
     public void save(HospitalTechnician technician) throws Exception {
         // Generate temporary password BEFORE validation so @NotBlank on password passes
         String dummyPassword = "VT-TEMP-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
@@ -46,15 +45,12 @@ public class HospitalTechnicianEJB {
             throw new IllegalArgumentException("Technician data is invalid!");
         }
     }
-
     public List<HospitalTechnician> findAll() throws Exception {
         return technicianDao.findAll();
     }
-
     public HospitalTechnician findById(Long id) throws Exception {
         return technicianDao.findById(id);
     }
-
     public HospitalTechnician authenticate(String email, String password) {
         List<HospitalTechnician> techs = technicianDao.findAll();
         for (HospitalTechnician t : techs) {
@@ -72,7 +68,6 @@ public class HospitalTechnicianEJB {
         }
         return null;
     }
-
     public void setPassword(Long techId, String password) throws Exception {
         HospitalTechnician tech = technicianDao.findById(techId);
         if (tech != null) {
@@ -81,7 +76,6 @@ public class HospitalTechnicianEJB {
             auditTrailEvent.fire(new AuditTrail("Technician " + tech.getName() + " set their security password."));
         }
     }
-
     public void delete(Long id) throws Exception {
         technicianDao.delete(id);
     }
