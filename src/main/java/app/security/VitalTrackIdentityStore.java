@@ -1,12 +1,7 @@
 package app.security;
 
 import app.ejb.UserEJB;
-import app.ejb.HospitalTechnicianEJB;
-import app.ejb.HospitalNurseEJB;
 import app.model.User;
-import app.model.HospitalTechnician;
-import app.model.HospitalNurse;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.credential.UsernamePasswordCredential;

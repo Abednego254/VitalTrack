@@ -3,6 +3,7 @@ package app.filter;
 import app.ejb.UserEJB;
 import app.model.User;
 import app.utility.JwtUtility;
+import app.utility.JwtUtility.Claims;
 import jakarta.inject.Inject;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -53,7 +54,7 @@ public class ApiAuthenticationFilter implements Filter {
             if (authHeader.toLowerCase().startsWith("bearer ")) {
                 // Validate JWT Bearer token
                 String token = authHeader.substring("bearer ".length()).trim();
-                JwtUtility.Claims claims = JwtUtility.validateToken(token);
+                Claims claims = JwtUtility.validateToken(token);
                 if (claims == null) {
                     sendUnauthorized(resp, "Unauthorized: Invalid or expired JWT token.");
                     return;

@@ -11,9 +11,11 @@ public class UserEJB {
 
     @Inject
     private UserDao userDao;
+
     public void save(User user) {
         userDao.save(user);
     }
+
     public User authenticate(String usernameOrEmail, String password) {
         // A simple authentication method. 
         // We fetch all users and find the match.
@@ -27,5 +29,18 @@ public class UserEJB {
             }
         }
         return null; // No match
+    }
+
+    public User findByEmail(String email) {
+        if (email == null) {
+            return null;
+        }
+        List<User> users = userDao.findAll();
+        for (User user : users) {
+            if (user.getEmail() != null && user.getEmail().equalsIgnoreCase(email)) {
+                return user;
+            }
+        }
+        return null;
     }
 }

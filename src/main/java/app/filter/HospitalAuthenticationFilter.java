@@ -22,8 +22,6 @@ public class HospitalAuthenticationFilter implements Filter {
         boolean isLogoutRequest = path.equals("/logout");
         boolean isStaticResource = path.endsWith(".css") || path.endsWith(".js") || path.endsWith(".png");
         boolean isApiRequest = path.startsWith("/api") || req.getRequestURI().contains("/api/");
-        // WildFly publishes @WebService endpoints directly under the context root
-        // using ServiceName/ClassName structure (e.g. /EquipmentSoapService/EquipmentSoapApi)
         boolean isSoapApiRequest = path.contains("SoapApi") || path.contains("SoapService")
                 || req.getRequestURI().contains("SoapApi") || req.getRequestURI().contains("SoapService");
 
