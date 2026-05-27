@@ -155,6 +155,15 @@ Prepare to show how different enterprise APIs talk to each other inside the appl
 
 To achieve 100% security coverage, VitalTrack implements a custom, highly unified stateless security layer for all external integration APIs (REST and SOAP) and real-time streams (WebSockets).
 
+### Architectural Pattern: The Adapter Pattern at System Boundaries
+*   **The Design Goal**: Our application communicates over multiple distinct protocols (Stateful Browser HTTP Session, Stateless API Integration Headers, and Persistent WebSocket Connections). Trying to use one single security interceptor for all three results in bad protocol behavior (e.g. redirecting a REST machine-client to an HTML login page, or trying to send a `401` header down a WebSocket).
+*   **The Solution**: We decouple the **Core Validation Engine** from the **Boundary Protocols**:
+    *   **Unified Validation Engine**: The polymorphic `UserEJB` querying the single `users` table is our unified security core.
+    *   **Boundary Adapters**: We use protocol-specific adaptors to extract credentials and handle errors:
+        *   *Web Portal (Servlets)*: Uses `HttpAuthenticationMechanism` (programmatic session auth) and redirects to `/login`.
+        *   *APIs (REST/SOAP)*: Uses `ApiAuthenticationFilter` (stateless Basic Auth) and returns standard HTTP `401 Unauthorized`.
+        *   *WebSockets*: Uses `@OnOpen` checks and terminates the TCP socket channel directly via `session.close()`.
+
 ### 1. Unified JAX-RS & JAX-WS API Security (`ApiAuthenticationFilter.java`)
 *   **Role**: Servlet `Filter` mapped to intercept all REST API routes (`/api/*`) and standard SOAP services (`*SoapService`).
 *   **HTTP Basic Authentication**: Enforces the standard `Authorization: Basic <credentials>` header for stateless service consumers.
@@ -211,11 +220,12 @@ Follow this structured script during your demo to keep the panel engaged and sho
     Point out how logs are arriving in real-time.
 
 ### Step 5: JAX-RS (REST) & JAX-WS (SOAP) APIs
-1.  **Show Secured JAX-RS REST Endpoints**:
+1.  **Introduce the Boundary Adapter Pattern**: Explain to the panel how you decoupled the core polymorphic `UserEJB` validation from the boundary protocols (Browser redirects vs API `401` codes vs WebSocket socket closures) using the **Adapter Pattern**.
+2.  **Show Secured JAX-RS REST Endpoints**:
     *   Point to `/api/equipment/list` without authentication. Show that it returns a **`401 Unauthorized`** error.
     *   Provide credentials (e.g., `admin@hospital.com` / `admin123`) using curl or Postman. Show the JSON response loading successfully.
     *   Explain: "Our REST APIs extend `GenericApi<T>` to provide uniform CRUD methods with zero repetitive code, secured via custom HTTP Basic Authentication."
-2.  **Show Secured JAX-WS SOAP WSDL**:
+3.  **Show Secured JAX-WS SOAP WSDL**:
     *   Navigate to the WildFly SOAP service address (e.g. `http://localhost:8080/VitalTrack/EquipmentSoapService?wsdl`).
     *   Show that raw, unauthorized invocations are rejected with a matching **`401 Unauthorized`** status code, ensuring unified API security bounds.
 
@@ -233,3 +243,5 @@ Be prepared for these standard questions from examiners:
     *   *A*: "This complies with the JEE Multi-Tier Architecture pattern. Action classes belong to the Web/Presentation tier. EJBs belong to the Business/Service tier and manage transactions, pooling, and concurrency. DAOs belong to the Integration tier (Persistence). If we bypass EJBs and put queries directly in Action classes, we violate MVC principles and lose transaction management."
 4.  **Q: What is the benefit of JMS over calling a logging database directly?**
     *   *A*: "JMS is asynchronous and provides loose coupling. If the backup server goes offline or has slow disk writes, it will not block the main application thread or affect the response time of the user. The message will simply wait safely in the queue until the message-driven bean processes it."
+5.  **Q: Why do you have separate security layers for REST, SOAP, and web servlets? Can't you use a single unified layer?**
+    *   *A*: "We actually do have a single unified validation engine at the core: the polymorphic `UserEJB` querying our single `users` table. However, we follow the **Adapter Pattern** at our system boundaries to handle different communication protocols. Web browsers (servlets) are stateful and need HTML-based redirects; REST and SOAP APIs are stateless and require HTTP `401 Unauthorized` responses; and WebSockets are persistent TCP connections that must be closed directly at the socket level. Each boundary component acts as a protocol adapter, extracting credentials and formatting error responses appropriate for its client."
