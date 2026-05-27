@@ -7,29 +7,19 @@ import app.framework.VitalTrackTableCol;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Formula;
 
-import java.io.Serializable;
-
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 @Entity
-@Table(name = "hospital_technician")
+@DiscriminatorValue("TECHNICIAN")
 @VitalTrackTable(label = "Technicians", addLink = "technician/add", deleteLink = "technician/delete")
 @VitalTrackForm(label = "Technician", actionUrl = "technician/save")
 @XmlRootElement(name = "technician")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class HospitalTechnician extends BaseEntity {
-    @Column(nullable = false)
-    @VitalTrackTableCol(label = "Name")
-    @VitalTrackFormField(label = "Technician Name", placeholder = "e.g. John Doe")
-    @NotBlank(message = "Technician name is required")
-    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
-    private String name;
+public class HospitalTechnician extends User {
 
     @Column
     @VitalTrackTableCol(label = "Specialization")
@@ -50,30 +40,11 @@ public class HospitalTechnician extends BaseEntity {
     @NotNull(message = "Status is required")
     private TechnicianStatus status;
 
-    @Column(nullable = false, unique = true)
-    @VitalTrackTableCol(label = "Email")
-    @VitalTrackFormField(label = "Email Address", placeholder = "john@hospital.com")
-    @NotBlank(message = "Email is required")
-    @Email(message = "Please provide a valid email address")
-    private String email;
-
-    @Column(nullable = false)
-    @NotBlank(message = "Password is required")
-    private String password;
-
     @VitalTrackTableCol(label = "Completed Jobs")
     @Formula("(select count(*) from hospital_maintenance_log m where m.technician_id = id)")
     private Integer completedJobsCount;
 
     public HospitalTechnician() {}
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getSpecialization() {
         return specialization;
@@ -99,27 +70,17 @@ public class HospitalTechnician extends BaseEntity {
         this.status = status;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Integer getCompletedJobsCount() {
         return completedJobsCount;
     }
 
     public void setCompletedJobsCount(Integer completedJobsCount) {
         this.completedJobsCount = completedJobsCount;
+    }
+
+    @Override
+    @Transient
+    public String getRole() {
+        return "TECHNICIAN";
     }
 }

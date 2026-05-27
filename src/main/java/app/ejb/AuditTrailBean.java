@@ -22,7 +22,6 @@ public class AuditTrailBean {
 
     @Inject
     private AuditTrailDao auditTrailDao;
-
     public void recordEvent(@Observes AuditTrail auditTrail) {
         System.out.println(">>> THE INTERCOM: Received new Audit Trail Event: " + auditTrail.getAction());
         
@@ -35,11 +34,9 @@ public class AuditTrailBean {
         // 3. Broadcast real-time live system activity to Admins via WebSocket
         AuditTrailWs.broadcast(auditTrail.getAction());
     }
-
     public List<AuditTrail> findAll() {
         return auditTrailDao.findAll();
     }
-
     public void delete(Long id) {
         auditTrailDao.delete(id);
     }

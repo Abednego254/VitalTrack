@@ -48,7 +48,7 @@ public class VitalTrackFramework {
             .append(formAnnot.actionUrl()).append("'>");
 
         formBuilder.append("<div class='form-grid'>");
-        for (Field field : clazz.getDeclaredFields()) {
+        for (Field field : getAllFields(clazz)) {
             if (!field.isAnnotationPresent(VitalTrackFormField.class))
                 continue;
 
@@ -131,7 +131,7 @@ public class VitalTrackFramework {
         }
 
         List<ColMetaData> colsMedaData = new ArrayList<>();
-        for (Field field : clazz.getDeclaredFields()) {
+        for (Field field : getAllFields(clazz)) {
             if (!field.isAnnotationPresent(VitalTrackTableCol.class))
                 continue;
 
@@ -345,5 +345,15 @@ public class VitalTrackFramework {
             }
         }
         throw new NoSuchFieldException(fieldName);
+    }
+
+    private List<Field> getAllFields(Class<?> clazz) {
+        List<Field> fields = new ArrayList<>();
+        Class<?> current = clazz;
+        while (current != null && current != Object.class) {
+            fields.addAll(Arrays.asList(current.getDeclaredFields()));
+            current = current.getSuperclass();
+        }
+        return fields;
     }
 }

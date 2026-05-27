@@ -21,32 +21,14 @@ public class VitalTrackIdentityStore implements IdentityStore {
     @Inject
     private UserEJB userEJB;
 
-    @Inject
-    private HospitalTechnicianEJB technicianEJB;
-
-    @Inject
-    private HospitalNurseEJB nurseEJB;
-
     public CredentialValidationResult validate(UsernamePasswordCredential credential) {
         String username = credential.getCaller();
         String password = credential.getPasswordAsString();
 
-        // 1. Authenticate Admin User
+        // Single EJB call handles all user types (Admin, Technician, Nurse)!
         User user = userEJB.authenticate(username, password);
         if (user != null) {
-            return new CredentialValidationResult(user.getUsername(), new HashSet<>(Collections.singletonList(user.getRole())));
-        }
-
-        // 2. Authenticate Technician
-        HospitalTechnician tech = technicianEJB.authenticate(username, password);
-        if (tech != null) {
-            return new CredentialValidationResult(tech.getName(), new HashSet<>(Collections.singletonList("TECHNICIAN")));
-        }
-
-        // 3. Authenticate Nurse
-        HospitalNurse nurse = nurseEJB.authenticate(username, password);
-        if (nurse != null) {
-            return new CredentialValidationResult(nurse.getName(), new HashSet<>(Collections.singletonList("NURSE")));
+            return new CredentialValidationResult(user.getEmail(), new HashSet<>(Collections.singletonList(user.getRole())));
         }
 
         return CredentialValidationResult.INVALID_RESULT;

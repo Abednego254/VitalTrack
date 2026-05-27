@@ -8,7 +8,6 @@ import jakarta.ejb.Stateless;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-
 import java.util.List;
 
 @Stateless

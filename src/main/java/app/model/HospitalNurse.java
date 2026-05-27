@@ -5,28 +5,19 @@ import app.framework.VitalTrackFormField;
 import app.framework.VitalTrackTable;
 import app.framework.VitalTrackTableCol;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 @Entity
-@Table(name = "hospital_nurse")
+@DiscriminatorValue("NURSE")
 @VitalTrackTable(label = "Nurses", addLink = "nurse/add", deleteLink = "nurse/delete")
 @VitalTrackForm(label = "Nurse", actionUrl = "nurse/save")
 @XmlRootElement(name = "nurse")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class HospitalNurse extends BaseEntity {
-
-    @Column(nullable = false)
-    @VitalTrackTableCol(label = "Name")
-    @VitalTrackFormField(label = "Nurse Name", placeholder = "e.g. Jane Doe")
-    @NotBlank(message = "Nurse name is required")
-    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
-    private String name;
+public class HospitalNurse extends User {
 
     @Column
     @VitalTrackTableCol(label = "Specialization")
@@ -47,26 +38,7 @@ public class HospitalNurse extends BaseEntity {
     @NotNull(message = "Status is required")
     private NurseStatus status;
 
-    @Column(nullable = false, unique = true)
-    @VitalTrackTableCol(label = "Email")
-    @VitalTrackFormField(label = "Email Address", placeholder = "jane@hospital.com")
-    @NotBlank(message = "Email is required")
-    @Email(message = "Please provide a valid email address")
-    private String email;
-
-    @Column(nullable = false)
-    @NotBlank(message = "Password is required")
-    private String password;
-
     public HospitalNurse() {}
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getSpecialization() {
         return specialization;
@@ -92,19 +64,9 @@ public class HospitalNurse extends BaseEntity {
         this.status = status;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    @Transient
+    public String getRole() {
+        return "NURSE";
     }
 }
