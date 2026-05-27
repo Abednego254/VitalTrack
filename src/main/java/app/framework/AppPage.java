@@ -2,7 +2,6 @@ package app.framework;
 
 import app.utility.helper.ClassScanner;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.servlet.http.*;
 
 import java.io.*;
@@ -10,9 +9,6 @@ import java.util.Set;
 
 @ApplicationScoped
 public class AppPage implements Serializable {
-
-    @Inject
-    private VitalTrackFramework framework;
 
     protected void display(HttpServletRequest request, HttpServletResponse response, String pageContent)
         throws IOException {

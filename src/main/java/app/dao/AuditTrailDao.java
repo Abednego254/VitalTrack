@@ -1,8 +1,8 @@
 package app.dao;
 
 import app.model.AuditTrail;
-import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.context.ApplicationScoped;
 
-@Dependent
+@ApplicationScoped
 public class AuditTrailDao extends GenericDao<AuditTrail, Long> {
 }

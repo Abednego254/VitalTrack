@@ -9,7 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class JwtUtility {
     private static final String SECRET_KEY = "VitalTrackSuperSecretEncryptionKeyForJWTAuthToken";
-    private static final long EXPIRATION_TIME_MS = 3600000; // 1 hour
+    private static final long EXPIRATION_TIME_MS = 3600000;
 
     public static String generateToken(String email, String name, String role) {
         try {

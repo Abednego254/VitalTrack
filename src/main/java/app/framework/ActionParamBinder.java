@@ -70,13 +70,25 @@ public class ActionParamBinder {
         for (Map.Entry<String, String[]> e : req.getParameterMap().entrySet()) {
 
             try {
-                Field f = clazz.getDeclaredField(e.getKey());
+                Field f = findField(clazz, e.getKey());
                 f.setAccessible(true);
                 f.set(obj, convert(e.getValue()[0], f.getType()));
             } catch (NoSuchFieldException ignored) {}
         }
 
         return obj;
+    }
+
+    private static Field findField(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+        Class<?> current = clazz;
+        while (current != null) {
+            try {
+                return current.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                current = current.getSuperclass();
+            }
+        }
+        throw new NoSuchFieldException(fieldName);
     }
 
     @SuppressWarnings("unchecked")

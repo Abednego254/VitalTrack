@@ -58,7 +58,6 @@ public class VitalTrackAuthMechanism implements HttpAuthenticationMechanism {
                     String principalName = result.getCallerPrincipal().getName();
                     String role = result.getCallerGroups().iterator().next();
 
-                    // Establish session attributes for backward compatibility with JSP/Actions
                     HttpSession session = request.getSession(true);
                     session.setAttribute("username", principalName);
                     session.setAttribute("role", role);

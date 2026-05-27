@@ -29,7 +29,7 @@ public class HospitalTechnicianEJB {
     @Inject
     private Event<TechnicianAddedEvent> technicianAddedEvent;
     public void save(HospitalTechnician technician) throws Exception {
-        // Generate temporary password BEFORE validation so @NotBlank on password passes
+
         String dummyPassword = "VT-TEMP-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
         technician.setPassword(dummyPassword);
 

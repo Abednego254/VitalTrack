@@ -37,7 +37,7 @@ public class LoginAction extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // If the POST request reaches here, it means authentication failed
+        
         req.setAttribute("error", "Invalid email/username or password!");
         req.getRequestDispatcher("/login.jsp").forward(req, resp);
     }
