@@ -148,9 +148,31 @@ Prepare to show how different enterprise APIs talk to each other inside the appl
 *   **Live Audit Feed (`AuditTrailWs.java`)**: Admin dashboard connects to `/audit_feeds`. The `AuditTrailBean` observer calls `AuditTrailWs.broadcast(activity)` when security events are generated, updating the admin dashboard in real-time without refreshing.
 *   **Live Stock Alert (`StockAlertWs.java`)**: Broadcasts alerts when medical supplies drop below critical thresholds.
 
+
 ---
 
-## 5. Step-by-Step Presentation & Demo Script
+## 5. API and WebSocket Security Suite (REST, SOAP, WebSockets)
+
+To achieve 100% security coverage, VitalTrack implements a custom, highly unified stateless security layer for all external integration APIs (REST and SOAP) and real-time streams (WebSockets).
+
+### 1. Unified JAX-RS & JAX-WS API Security (`ApiAuthenticationFilter.java`)
+*   **Role**: Servlet `Filter` mapped to intercept all REST API routes (`/api/*`) and standard SOAP services (`*SoapService`).
+*   **HTTP Basic Authentication**: Enforces the standard `Authorization: Basic <credentials>` header for stateless service consumers.
+*   **Database Integration**: Decodes the base64 payload and calls the polymorphic `UserEJB.authenticate()` method to validate credentials.
+*   **Dynamic Role-Based Access Control (RBAC)**:
+    *   **`ADMIN`**: Full API access.
+    *   **`NURSE`**: Restricted solely to Medical Supply APIs.
+    *   **`TECHNICIAN`**: Restricted solely to Equipment and Maintenance Log APIs.
+*   **Clean Status Codes**: Returns a standard `401 Unauthorized` with `WWW-Authenticate: Basic realm="..."` on missing or failed credentials, and `403 Forbidden` on role violations.
+
+### 2. State-Aware WebSocket Handshake Protection
+*   **Role**: Secures all real-time streams (`/audit_feeds`, `/stock_alerts`, `/chat`).
+*   **Handshake Authentication**: Since WebSocket handshakes are standard HTTP requests, WildFly automatically binds the active browser HTTP Session and matches the `UserPrincipal`.
+*   **Enforcement inside `@OnOpen`**: Any incoming WebSocket session instantly checks `session.getUserPrincipal()`. If the user is unauthenticated (null), the handshake is immediately closed with a `CloseReason.CloseCodes.VIOLATED_POLICY` callback, preventing anonymous data leaks.
+
+---
+
+## 6. Step-by-Step Presentation & Demo Script
 
 Follow this structured script during your demo to keep the panel engaged and showcase your technical depth:
 
@@ -189,16 +211,17 @@ Follow this structured script during your demo to keep the panel engaged and sho
     Point out how logs are arriving in real-time.
 
 ### Step 5: JAX-RS (REST) & JAX-WS (SOAP) APIs
-1.  **Show JAX-RS REST Endpoints**:
-    *   Point to `/api/equipment/list`. Show that the JSON array of equipment is loaded.
-    *   Explain: "Our REST APIs extend `GenericApi<T>` to provide uniform CRUD methods with zero repetitive code."
-2.  **Show JAX-WS SOAP WSDL**:
+1.  **Show Secured JAX-RS REST Endpoints**:
+    *   Point to `/api/equipment/list` without authentication. Show that it returns a **`401 Unauthorized`** error.
+    *   Provide credentials (e.g., `admin@hospital.com` / `admin123`) using curl or Postman. Show the JSON response loading successfully.
+    *   Explain: "Our REST APIs extend `GenericApi<T>` to provide uniform CRUD methods with zero repetitive code, secured via custom HTTP Basic Authentication."
+2.  **Show Secured JAX-WS SOAP WSDL**:
     *   Navigate to the WildFly SOAP service address (e.g. `http://localhost:8080/VitalTrack/EquipmentSoapService?wsdl`).
-    *   Explain: "We expose the same business capabilities via SOAP for legacy hospital integrations using `@WebService` annotations on stateless beans."
+    *   Show that raw, unauthorized invocations are rejected with a matching **`401 Unauthorized`** status code, ensuring unified API security bounds.
 
 ---
 
-## 6. Likely Q&A Questions and Answers
+## 7. Likely Q&A Questions and Answers
 
 Be prepared for these standard questions from examiners:
 
