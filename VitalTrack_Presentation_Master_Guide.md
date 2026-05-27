@@ -161,18 +161,18 @@ To achieve 100% security coverage, VitalTrack implements a custom, highly unifie
     *   **Unified Validation Engine**: The polymorphic `UserEJB` querying the single `users` table is our unified security core.
     *   **Boundary Adapters**: We use protocol-specific adaptors to extract credentials and handle errors:
         *   *Web Portal (Servlets)*: Uses `HttpAuthenticationMechanism` (programmatic session auth) and redirects to `/login`.
-        *   *APIs (REST/SOAP)*: Uses `ApiAuthenticationFilter` (stateless Basic Auth) and returns standard HTTP `401 Unauthorized`.
+        *   *APIs (REST/SOAP)*: Uses `ApiAuthenticationFilter` (stateless Token/Basic auth) and returns standard HTTP `401 Unauthorized`.
         *   *WebSockets*: Uses `@OnOpen` checks and terminates the TCP socket channel directly via `session.close()`.
 
 ### 1. Unified JAX-RS & JAX-WS API Security (`ApiAuthenticationFilter.java`)
 *   **Role**: Servlet `Filter` mapped to intercept all REST API routes (`/api/*`) and standard SOAP services (`*SoapService`).
-*   **HTTP Basic Authentication**: Enforces the standard `Authorization: Basic <credentials>` header for stateless service consumers.
-*   **Database Integration**: Decodes the base64 payload and calls the polymorphic `UserEJB.authenticate()` method to validate credentials.
-*   **Dynamic Role-Based Access Control (RBAC)**:
+*   **Stateless JWT Bearer Authentication**: Clients authenticate once via POST to `/api/auth/login` to receive a signed JWT token containing custom claims (role, subject, expiry). Subsequent requests carry the token in the `Authorization: Bearer <token>` header, which the filter validates cryptographically (stateless validation with 0 database hits!).
+*   **HTTP Basic Authentication Fallback**: Retains full support for standard `Authorization: Basic <credentials>` headers for SOAP clients and legacy integrations.
+*   **Dynamic Role-Based Access Control (RBAC)**: Enforced inside the filter after validating either the JWT claims or EJB authentication:
     *   **`ADMIN`**: Full API access.
     *   **`NURSE`**: Restricted solely to Medical Supply APIs.
     *   **`TECHNICIAN`**: Restricted solely to Equipment and Maintenance Log APIs.
-*   **Clean Status Codes**: Returns a standard `401 Unauthorized` with `WWW-Authenticate: Basic realm="..."` on missing or failed credentials, and `403 Forbidden` on role violations.
+*   **Clean Status Codes**: Returns standard HTTP `401 Unauthorized` with `WWW-Authenticate: Basic ..., Bearer ...` headers, and `403 Forbidden` on role access violations.
 
 ### 2. State-Aware WebSocket Handshake Protection
 *   **Role**: Secures all real-time streams (`/audit_feeds`, `/stock_alerts`, `/chat`).
@@ -221,13 +221,21 @@ Follow this structured script during your demo to keep the panel engaged and sho
 
 ### Step 5: JAX-RS (REST) & JAX-WS (SOAP) APIs
 1.  **Introduce the Boundary Adapter Pattern**: Explain to the panel how you decoupled the core polymorphic `UserEJB` validation from the boundary protocols (Browser redirects vs API `401` codes vs WebSocket socket closures) using the **Adapter Pattern**.
-2.  **Show Secured JAX-RS REST Endpoints**:
-    *   Point to `/api/equipment/list` without authentication. Show that it returns a **`401 Unauthorized`** error.
-    *   Provide credentials (e.g., `admin@hospital.com` / `admin123`) using curl or Postman. Show the JSON response loading successfully.
-    *   Explain: "Our REST APIs extend `GenericApi<T>` to provide uniform CRUD methods with zero repetitive code, secured via custom HTTP Basic Authentication."
-3.  **Show Secured JAX-WS SOAP WSDL**:
-    *   Navigate to the WildFly SOAP service address (e.g. `http://localhost:8080/VitalTrack/EquipmentSoapService?wsdl`).
-    *   Show that raw, unauthorized invocations are rejected with a matching **`401 Unauthorized`** status code, ensuring unified API security bounds.
+2.  **Demonstrate the stateless JWT Login Flow**:
+    *   Send a POST request to `/api/auth/login` with admin credentials:
+        ```bash
+        curl -X POST -H "Content-Type: application/json" -d '{"email":"admin@hospital.com","password":"admin123"}' http://localhost:8080/VitalTrack/api/auth/login
+        ```
+    *   Show the returned JWT token. Explain: "We cryptographically sign the header and claims payload on the server using HMAC-SHA256, avoiding stateful server sessions entirely."
+3.  **Show Secured JAX-RS REST Access (JWT vs Unauthorized)**:
+    *   Request list without auth (returns `401 Unauthorized` with WWW-Authenticate header).
+    *   Request list with the signed JWT token:
+        ```bash
+        curl -H "Authorization: Bearer <TOKEN>" http://localhost:8080/VitalTrack/api/equipment/list
+        ```
+    *   Show that it returns `200 OK` (empty array `[]`). Highlight that the filter authorized this request 100% statelessly without any SQL/DB queries!
+4.  **Show Basic Auth Fallback & SOAP Security**:
+    *   Show that Basic Auth still works seamlessly as a fallback (using `curl -u admin@hospital.com:admin123 ...`), which is highly convenient for SOAP web service consumers and legacy clients.
 
 ---
 

@@ -2,6 +2,7 @@ package app.filter;
 
 import app.ejb.UserEJB;
 import app.model.User;
+import app.utility.JwtUtility;
 import jakarta.inject.Inject;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -30,41 +31,62 @@ public class ApiAuthenticationFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
+        String path = req.getServletPath();
+        String uri = req.getRequestURI();
+
+        // Bypass authentication for the login endpoint
+        if (path.contains("/auth/login") || uri.contains("/auth/login")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         String authHeader = req.getHeader("Authorization");
 
-        if (authHeader == null || !authHeader.toLowerCase().startsWith("basic ")) {
+        if (authHeader == null) {
             sendUnauthorized(resp);
             return;
         }
 
+        String userRole = null;
+
         try {
-            // Decode Base64 credentials
-            String base64Credentials = authHeader.substring("basic ".length()).trim();
-            byte[] decodedBytes = Base64.getDecoder().decode(base64Credentials);
-            String credentials = new String(decodedBytes, StandardCharsets.UTF_8);
+            if (authHeader.toLowerCase().startsWith("bearer ")) {
+                // Validate JWT Bearer token
+                String token = authHeader.substring("bearer ".length()).trim();
+                JwtUtility.Claims claims = JwtUtility.validateToken(token);
+                if (claims == null) {
+                    sendUnauthorized(resp, "Unauthorized: Invalid or expired JWT token.");
+                    return;
+                }
+                userRole = claims.getRole();
+            } else if (authHeader.toLowerCase().startsWith("basic ")) {
+                // Decode Base64 Basic credentials
+                String base64Credentials = authHeader.substring("basic ".length()).trim();
+                byte[] decodedBytes = Base64.getDecoder().decode(base64Credentials);
+                String credentials = new String(decodedBytes, StandardCharsets.UTF_8);
 
-            // credentials is in format "username:password"
-            String[] values = credentials.split(":", 2);
-            if (values.length != 2) {
-                sendUnauthorized(resp);
-                return;
-            }
+                String[] values = credentials.split(":", 2);
+                if (values.length != 2) {
+                    sendUnauthorized(resp);
+                    return;
+                }
 
-            String username = values[0];
-            String password = values[1];
+                String username = values[0];
+                String password = values[1];
 
-            // Validate against the database
-            User user = userEJB.authenticate(username, password);
-            if (user == null) {
+                // Validate against the database
+                User user = userEJB.authenticate(username, password);
+                if (user == null) {
+                    sendUnauthorized(resp);
+                    return;
+                }
+                userRole = user.getRole();
+            } else {
                 sendUnauthorized(resp);
                 return;
             }
 
             // Perform Role-Based Access Control (RBAC)
-            String path = req.getServletPath();
-            String uri = req.getRequestURI();
-            String userRole = user.getRole();
-
             boolean isAuthorized = checkAuthorization(userRole, path, uri);
             if (!isAuthorized) {
                 resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied: You do not have the required role for this API.");
@@ -103,7 +125,11 @@ public class ApiAuthenticationFilter implements Filter {
     }
 
     private void sendUnauthorized(HttpServletResponse resp) throws IOException {
-        resp.setHeader("WWW-Authenticate", "Basic realm=\"VitalTrack API\"");
-        resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: API access requires valid Basic Authentication.");
+        sendUnauthorized(resp, "Unauthorized: API access requires valid Basic Authentication or JWT Bearer Token.");
+    }
+
+    private void sendUnauthorized(HttpServletResponse resp, String message) throws IOException {
+        resp.setHeader("WWW-Authenticate", "Basic realm=\"VitalTrack API\", Bearer realm=\"VitalTrack Token\"");
+        resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
     }
 }
