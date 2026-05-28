@@ -1,6 +1,6 @@
 package app.soap;
 
-import app.model.HospitalMaintenanceLog;
+import app.model.MaintenanceLog;
 import jakarta.xml.bind.annotation.*;
 
 import java.io.Serializable;
@@ -10,19 +10,19 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MaintenanceLogWrapper implements Serializable {
 
-    private List<HospitalMaintenanceLog> log;
+    private List<MaintenanceLog> log;
 
     public MaintenanceLogWrapper() {}
 
-    public MaintenanceLogWrapper(List<HospitalMaintenanceLog> log) {
+    public MaintenanceLogWrapper(List<MaintenanceLog> log) {
         this.log = log;
     }
 
-    public List<HospitalMaintenanceLog> getLog() {
+    public List<MaintenanceLog> getLog() {
         return log;
     }
 
-    public void setLog(List<HospitalMaintenanceLog> log) {
+    public void setLog(List<MaintenanceLog> log) {
         this.log = log;
     }
 }

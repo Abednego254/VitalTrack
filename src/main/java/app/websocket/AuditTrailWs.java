@@ -17,7 +17,7 @@ public class AuditTrailWs {
 
     @OnOpen
     public void onOpen(Session session) {
-        // Auth is enforced at HTTP layer by HospitalAuthenticationFilter.
+        // Auth is enforced at HTTP layer by AuthenticationFilter.
         auditSessions.add(session);
         System.out.println("Ws audit trail: session opened: " + session.getId());
     }

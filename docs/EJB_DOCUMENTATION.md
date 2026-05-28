@@ -194,7 +194,7 @@ When WildFly deploys an EJB, it registers it in **JNDI** (Java Naming and Direct
 
 Every EJB gets a unique JNDI address, for example:
 ```
-java:global/VitalTrack/HospitalEquipmentEJB!app.ejb.HospitalEquipmentEJB
+java:global/VitalTrack/HospitalEquipmentEJB!app.ejb.EquipmentEJB
 ```
 
 This address can be used by **any Java program on any machine** to look up and call the EJB remotely — even from a completely different JVM. This is the foundation for **Remote EJBs** (future concept).

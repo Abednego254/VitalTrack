@@ -35,8 +35,8 @@ public class VitalTrackAuthMechanism implements HttpAuthenticationMechanism {
     private Event<AuditTrail> auditTrailEvent;
 
     @Override
-    public AuthenticationStatus validateRequest(HttpServletRequest request, 
-                                                HttpServletResponse response, 
+    public AuthenticationStatus validateRequest(HttpServletRequest request,
+                                                HttpServletResponse response,
                                                 HttpMessageContext httpMessageContext) {
 
         // 1. If request is already authenticated, accept it and do nothing.
@@ -51,7 +51,7 @@ public class VitalTrackAuthMechanism implements HttpAuthenticationMechanism {
 
             if (username != null && password != null) {
                 CredentialValidationResult result = identityStoreHandler.validate(
-                    new UsernamePasswordCredential(username, password)
+                        new UsernamePasswordCredential(username, password)
                 );
 
                 if (result.getStatus() == CredentialValidationResult.Status.VALID) {

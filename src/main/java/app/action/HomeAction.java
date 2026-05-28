@@ -1,11 +1,11 @@
 package app.action;
 
+import app.ejb.MedicalSupplyEJB;
 import app.framework.Action;
 import app.framework.ActionGetMethod;
 import app.framework.ActionResponse;
 import app.ejb.AuditTrailBean;
 import app.model.AuditTrail;
-import app.ejb.HospitalMedicalSupplyEJB;
 import app.model.HospitalMedicalSupply;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -22,7 +22,7 @@ public class HomeAction {
     private AuditTrailBean auditTrailBean;
 
     @Inject
-    private HospitalMedicalSupplyEJB supplyEJB;
+    private MedicalSupplyEJB supplyEJB;
 
     @ActionGetMethod("index")
     public ActionResponse index(HttpServletRequest request) throws Exception {

@@ -1,7 +1,9 @@
 package app.ejb;
 
-import app.dao.HospitalMaintenanceLogDao;
-import app.model.HospitalMaintenanceLog;
+import app.dao.EquipmentDao;
+import app.dao.MaintenanceLogDao;
+import app.model.Equipment;
+import app.model.MaintenanceLog;
 import app.utility.validation.Validate;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
@@ -9,20 +11,20 @@ import jakarta.inject.Named;
 import java.util.List;
 
 @Stateless
-public class HospitalMaintenanceLogEJB {
+public class MaintenanceLogEJB {
 
     @Inject
     @Named("ValidMaintenanceLog")
-    private Validate<HospitalMaintenanceLog> validator;
+    private Validate<MaintenanceLog> validator;
     
     @Inject
     private jakarta.enterprise.event.Event<app.model.AuditTrail> auditTrailEvent;
 
     @Inject
-    private HospitalMaintenanceLogDao logDao;
+    private MaintenanceLogDao logDao;
 
     @Inject
-    private app.dao.HospitalEquipmentDao equipmentDao;
+    private EquipmentDao equipmentDao;
 
     @Inject
     @app.utility.MaintenanceQualifier(app.utility.MaintenanceChoice.STANDARD)
@@ -32,11 +34,11 @@ public class HospitalMaintenanceLogEJB {
     @app.utility.MaintenanceQualifier(app.utility.MaintenanceChoice.URGENT)
     private app.utility.MaintenanceService urgentMaintenance;
 
-    public void save(HospitalMaintenanceLog log) throws Exception {
+    public void save(MaintenanceLog log) throws Exception {
         validator.printValidation();
         if (validator.process(log)) {
             // Retrieve equipment and update calibration dates
-            app.model.HospitalEquipment equipment = equipmentDao.findById(log.getEquipmentId());
+            Equipment equipment = equipmentDao.findById(log.getEquipmentId());
             if (equipment != null) {
                 java.util.Date serviceDate = log.getServiceDate();
                 
@@ -69,9 +71,9 @@ public class HospitalMaintenanceLogEJB {
         }
     }
 
-    public List<HospitalMaintenanceLog> findAll() throws Exception {
-        List<HospitalMaintenanceLog> logs = logDao.findAll();
-        for (HospitalMaintenanceLog log : logs) {
+    public List<MaintenanceLog> findAll() throws Exception {
+        List<MaintenanceLog> logs = logDao.findAll();
+        for (MaintenanceLog log : logs) {
             if (log.getEquipment() != null) {
                 log.setEquipmentName(log.getEquipment().getName());
             } else {
@@ -90,7 +92,7 @@ public class HospitalMaintenanceLogEJB {
         logDao.delete(id);
     }
 
-    public HospitalMaintenanceLog findById(Long id) throws Exception {
+    public MaintenanceLog findById(Long id) throws Exception {
         return logDao.findById(id);
     }
 }

@@ -1,6 +1,6 @@
 package app.soap;
 
-import app.ejb.HospitalMedicalSupplyEJB;
+import app.ejb.MedicalSupplyEJB;
 import app.model.HospitalMedicalSupply;
 import app.rest.*;
 import jakarta.ejb.EJB;
@@ -12,7 +12,7 @@ import jakarta.jws.*;
 public class MedicalSupplySoapApi {
 
     @EJB
-    private HospitalMedicalSupplyEJB supplyEJB;
+    private MedicalSupplyEJB supplyEJB;
 
     @WebMethod
     public ResponseStatus save(@WebParam(name = "supply") HospitalMedicalSupply supply) {

@@ -1,8 +1,8 @@
 package app.dao;
 
-import app.model.HospitalEquipment;
+import app.model.Equipment;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class HospitalEquipmentDao extends GenericDao<HospitalEquipment, Long> {
+public class EquipmentDao extends GenericDao<Equipment, Long> {
 }

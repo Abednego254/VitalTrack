@@ -1,6 +1,6 @@
 package app.ejb;
 
-import app.dao.HospitalMedicalSupplyDao;
+import app.dao.MedicalSupplyDao;
 import app.model.AuditTrail;
 import app.model.HospitalMedicalSupply;
 import app.model.MedicalSupplyConsumedEvent;
@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Stateless
-public class HospitalMedicalSupplyEJB {
+public class MedicalSupplyEJB {
 
     @Inject
     @Named("ValidMedicalSupply")
@@ -26,7 +26,7 @@ public class HospitalMedicalSupplyEJB {
     private Event<MedicalSupplyConsumedEvent> consumptionEvent;
 
     @Inject
-    private HospitalMedicalSupplyDao supplyDao;
+    private MedicalSupplyDao supplyDao;
 
     public void save(HospitalMedicalSupply supply) throws Exception {
         validateMedicalSupply.printValidation();

@@ -18,7 +18,7 @@ public class StockAlertWs {
 
     @OnOpen
     public void onOpen(Session session) {
-        // Auth is enforced at HTTP layer by HospitalAuthenticationFilter.
+        // Auth is enforced at HTTP layer by AuthenticationFilter.
         // Only authenticated users can reach the dashboard page that opens this socket.
         alertSessions.add(session);
         System.out.println("Ws stock alert: session opened: " + session.getId());

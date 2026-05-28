@@ -1,8 +1,8 @@
 package app.ejb;
 
-import app.dao.HospitalEquipmentDao;
+import app.dao.EquipmentDao;
 import app.model.AuditTrail;
-import app.model.HospitalEquipment;
+import app.model.Equipment;
 import app.model.HospitalMedicalSupply;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Schedule;
@@ -30,19 +30,19 @@ public class EmailReminderBean {
     private Event<AuditTrail> auditTrailEvent;
 
     @EJB
-    private HospitalMedicalSupplyEJB supplyEJB;
+    private MedicalSupplyEJB supplyEJB;
 
     @Inject
-    private HospitalEquipmentDao equipmentDao;
+    private EquipmentDao equipmentDao;
 
     @Schedule(second = "0", minute = "*/60", hour = "*", persistent = false)
     public void sendReminders() {
         System.out.println(">>> ROBOT: Scanning database for equipment due for maintenance...");
 
-        List<HospitalEquipment> allEquipment = equipmentDao.findAll();
+        List<Equipment> allEquipment = equipmentDao.findAll();
 
         // Find equipment due today or in the past (Overdue)
-        List<HospitalEquipment> dueEquipment = allEquipment.stream()
+        List<Equipment> dueEquipment = allEquipment.stream()
                 .filter(e -> e.getNextCalibrationDate() != null
                         && e.getNextCalibrationDate().before(new Date(System.currentTimeMillis() + 86400000))) // Within
                                                                                                                // next
@@ -68,7 +68,7 @@ public class EmailReminderBean {
             body.append("Hello Maintenance Team,\n\n");
             body.append("The following hospital equipment is due for calibration/maintenance today:\n\n");
 
-            for (HospitalEquipment e : dueEquipment) {
+            for (Equipment e : dueEquipment) {
                 body.append("- ").append(e.getName())
                         .append(" (S/N: ").append(e.getSerialNumber()).append(")")
                         .append(" | Due Date: ").append(e.getNextCalibrationDate())
