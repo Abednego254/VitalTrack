@@ -1,7 +1,6 @@
 package app.ejb;
 
 import app.dao.HospitalEquipmentDao;
-import app.ejb.HospitalMedicalSupplyEJB;
 import app.model.AuditTrail;
 import app.model.HospitalEquipment;
 import app.model.HospitalMedicalSupply;

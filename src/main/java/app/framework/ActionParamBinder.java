@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.*;
 
 import java.lang.reflect.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ActionParamBinder {
@@ -105,9 +106,9 @@ public class ActionParamBinder {
         if (t == String.class) return v;
         if (t == int.class || t == Integer.class) return Integer.parseInt(v);
         if (t == long.class || t == Long.class) return Long.parseLong(v);
-        if (t == java.util.Date.class) {
+        if (t == Date.class) {
             try {
-                return new java.text.SimpleDateFormat("yyyy-MM-dd").parse(v);
+                return new SimpleDateFormat("yyyy-MM-dd").parse(v);
             } catch (Exception e) {
                 return null;
             }

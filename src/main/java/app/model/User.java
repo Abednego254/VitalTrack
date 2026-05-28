@@ -25,9 +25,9 @@ public class User extends BaseEntity {
     @jakarta.validation.constraints.Email(message = "Please provide a valid email address")
     protected String email;
 
-    @Column(nullable = false)
-    @VitalTrackFormField(label = "Password", type = "password", placeholder = "Password")
-    @jakarta.validation.constraints.NotBlank(message = "Password is required")
+    // Password is system-generated for nurses/technicians — NOT shown in the add form.
+    // Validation is skipped here; the EJB sets a temp password before saving.
+    @Column
     protected String password;
 
     public User() {}

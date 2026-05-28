@@ -1,17 +1,12 @@
 package app.filter;
 
-import app.ejb.UserEJB;
-import app.model.User;
 import app.utility.JwtUtility;
 import app.utility.JwtUtility.Claims;
-import jakarta.inject.Inject;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 @WebFilter(urlPatterns = {
     "/api/*",
@@ -23,9 +18,6 @@ import java.util.Base64;
 })
 public class ApiAuthenticationFilter implements Filter {
 
-    @Inject
-    private UserEJB userEJB;
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -35,7 +27,7 @@ public class ApiAuthenticationFilter implements Filter {
         String path = req.getServletPath();
         String uri = req.getRequestURI();
 
-        // Bypass authentication for the login endpoint
+        // /auth/login is intentionally open — you need it to GET your token
         if (path.contains("/auth/login") || uri.contains("/auth/login")) {
             chain.doFilter(request, response);
             return;
@@ -43,63 +35,36 @@ public class ApiAuthenticationFilter implements Filter {
 
         String authHeader = req.getHeader("Authorization");
 
-        if (authHeader == null) {
-            sendUnauthorized(resp);
+        // No header or not a Bearer token — reject immediately
+        if (authHeader == null || !authHeader.toLowerCase().startsWith("bearer ")) {
+            sendUnauthorized(resp, "Unauthorized: A JWT Bearer token is required. Obtain one via POST /api/auth/login.");
             return;
         }
 
-        String userRole = null;
-
         try {
-            if (authHeader.toLowerCase().startsWith("bearer ")) {
-                // Validate JWT Bearer token
-                String token = authHeader.substring("bearer ".length()).trim();
-                Claims claims = JwtUtility.validateToken(token);
-                if (claims == null) {
-                    sendUnauthorized(resp, "Unauthorized: Invalid or expired JWT token.");
-                    return;
-                }
-                userRole = claims.getRole();
-            } else if (authHeader.toLowerCase().startsWith("basic ")) {
-                // Decode Base64 Basic credentials
-                String base64Credentials = authHeader.substring("basic ".length()).trim();
-                byte[] decodedBytes = Base64.getDecoder().decode(base64Credentials);
-                String credentials = new String(decodedBytes, StandardCharsets.UTF_8);
+            String token = authHeader.substring("bearer ".length()).trim();
+            Claims claims = JwtUtility.validateToken(token);
 
-                String[] values = credentials.split(":", 2);
-                if (values.length != 2) {
-                    sendUnauthorized(resp);
-                    return;
-                }
-
-                String username = values[0];
-                String password = values[1];
-
-                // Validate against the database
-                User user = userEJB.authenticate(username, password);
-                if (user == null) {
-                    sendUnauthorized(resp);
-                    return;
-                }
-                userRole = user.getRole();
-            } else {
-                sendUnauthorized(resp);
+            if (claims == null) {
+                sendUnauthorized(resp, "Unauthorized: Invalid or expired JWT token.");
                 return;
             }
 
-            // Perform Role-Based Access Control (RBAC)
-            boolean isAuthorized = checkAuthorization(userRole, path, uri);
-            if (!isAuthorized) {
-                resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied: You do not have the required role for this API.");
+            String userRole = claims.getRole();
+
+            // Role-Based Access Control — check the role against the requested path
+            if (!checkAuthorization(userRole, path, uri)) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN,
+                    "Forbidden: Your role '" + userRole + "' does not have access to this resource.");
                 return;
             }
 
-            // Proceed if authenticated and authorized
+            // Token is valid and role is authorized — proceed
             chain.doFilter(request, response);
 
         } catch (Exception e) {
-            System.err.println("API Authentication Filter Error: " + e.getMessage());
-            sendUnauthorized(resp);
+            System.err.println(">>> API Filter Error: " + e.getMessage());
+            sendUnauthorized(resp, "Unauthorized: Token validation failed.");
         }
     }
 
@@ -109,28 +74,25 @@ public class ApiAuthenticationFilter implements Filter {
             return true;
         }
 
-        // NURSE can access supplies
+        // NURSE can access medical supplies only
         if ("NURSE".equalsIgnoreCase(role)) {
-            return path.contains("/supply") || path.contains("MedicalSupplySoapService") || uri.contains("/supply") || uri.contains("MedicalSupplySoapService");
+            return path.contains("/supply") || path.contains("MedicalSupplySoapService")
+                || uri.contains("/supply") || uri.contains("MedicalSupplySoapService");
         }
 
-        // TECHNICIAN can access equipment and maintenance logs
+        // TECHNICIAN can access equipment and maintenance logs only
         if ("TECHNICIAN".equalsIgnoreCase(role)) {
-            return path.contains("/equipment") || path.contains("/maintenance") 
+            return path.contains("/equipment") || path.contains("/maintenance")
                 || path.contains("EquipmentSoapService") || path.contains("MaintenanceLogSoapService")
-                || uri.contains("/equipment") || uri.contains("/maintenance") 
+                || uri.contains("/equipment") || uri.contains("/maintenance")
                 || uri.contains("EquipmentSoapService") || uri.contains("MaintenanceLogSoapService");
         }
 
         return false;
     }
 
-    private void sendUnauthorized(HttpServletResponse resp) throws IOException {
-        sendUnauthorized(resp, "Unauthorized: API access requires valid Basic Authentication or JWT Bearer Token.");
-    }
-
     private void sendUnauthorized(HttpServletResponse resp, String message) throws IOException {
-        resp.setHeader("WWW-Authenticate", "Basic realm=\"VitalTrack API\", Bearer realm=\"VitalTrack Token\"");
+        resp.setHeader("WWW-Authenticate", "Bearer realm=\"VitalTrack API\"");
         resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
     }
 }

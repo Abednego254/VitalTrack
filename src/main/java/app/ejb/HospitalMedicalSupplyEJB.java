@@ -1,9 +1,12 @@
 package app.ejb;
 
 import app.dao.HospitalMedicalSupplyDao;
+import app.model.AuditTrail;
 import app.model.HospitalMedicalSupply;
+import app.model.MedicalSupplyConsumedEvent;
 import app.utility.validation.Validate;
 import jakarta.ejb.Stateless;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.util.List;
@@ -17,7 +20,10 @@ public class HospitalMedicalSupplyEJB {
     private Validate<HospitalMedicalSupply> validateMedicalSupply;
 
     @Inject
-    private jakarta.enterprise.event.Event<app.model.AuditTrail> auditTrailEvent;
+    private Event<AuditTrail> auditTrailEvent;
+
+    @Inject
+    private Event<MedicalSupplyConsumedEvent> consumptionEvent;
 
     @Inject
     private HospitalMedicalSupplyDao supplyDao;
@@ -25,12 +31,16 @@ public class HospitalMedicalSupplyEJB {
     public void save(HospitalMedicalSupply supply) throws Exception {
         validateMedicalSupply.printValidation();
         if (validateMedicalSupply.process(supply)) {
-            auditTrailEvent.fire(new app.model.AuditTrail("Created new Medical Supply: " + supply.getName()));
+            auditTrailEvent.fire(new AuditTrail("Created new Medical Supply: " + supply.getName()));
             supplyDao.save(supply);
         } else {
             System.out.println("Bouncer says: 'Sorry, this supply has bad data! Cannot save.'");
             throw new IllegalArgumentException("Equipment data is invalid!");
         }
+    }
+
+    public void consume(Long id, String name, int quantity) {
+        consumptionEvent.fire(new MedicalSupplyConsumedEvent(id, name, quantity));
     }
 
     public List<HospitalMedicalSupply> findAll() throws Exception {

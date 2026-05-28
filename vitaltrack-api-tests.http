@@ -3,6 +3,30 @@
 ### Base URL: http://localhost:8080/VitalTrack/api
 ### ================================================================
 
+### ================================================================
+### STEP 1 — AUTHENTICATE (run this first, copy the token returned)
+### ================================================================
+
+### [POST] Login — Get JWT Token
+### Use admin@hospital.com or any registered user's email
+### Copy the "token" value from the response and paste it below
+### where you see: Bearer <paste-your-token-here>
+POST http://localhost:8080/VitalTrack/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "admin@hospital.com",
+  "password": "Admin@1234"
+}
+
+###
+
+### ================================================================
+### STEP 2 — USE THE TOKEN (add it to every request below)
+### Replace <paste-your-token-here> with the token from Step 1
+### ================================================================
+
 
 ### ================================================================
 ###  EQUIPMENT ENDPOINTS
@@ -11,12 +35,14 @@
 ### [GET] List All Equipment
 GET http://localhost:8080/VitalTrack/api/equipment/list
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 ###
 
 ### [GET] Find Equipment by ID
 GET http://localhost:8080/VitalTrack/api/equipment/find/1
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 ###
 
@@ -24,6 +50,7 @@ Accept: application/json
 POST http://localhost:8080/VitalTrack/api/equipment/save
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 {
   "name": "MRI Scanner Pro",
@@ -39,6 +66,7 @@ Accept: application/json
 PUT http://localhost:8080/VitalTrack/api/equipment/update/1
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 {
   "name": "MRI Scanner Pro (Upgraded v2)",
@@ -53,6 +81,7 @@ Accept: application/json
 ### [DELETE] Delete Equipment by ID  (change id as needed)
 DELETE http://localhost:8080/VitalTrack/api/equipment/delete/5
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 
 ### ================================================================
@@ -64,12 +93,14 @@ Accept: application/json
 ### [GET] List All Medical Supplies
 GET http://localhost:8080/VitalTrack/api/supply/list
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 ###
 
 ### [GET] Find Medical Supply by ID
 GET http://localhost:8080/VitalTrack/api/supply/find/1
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 ###
 
@@ -77,6 +108,7 @@ Accept: application/json
 POST http://localhost:8080/VitalTrack/api/supply/save
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 {
   "name": "Surgical Gloves",
@@ -93,6 +125,7 @@ Accept: application/json
 PUT http://localhost:8080/VitalTrack/api/supply/update/1
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 {
   "name": "Surgical Gloves Premium",
@@ -108,6 +141,7 @@ Accept: application/json
 ### [DELETE] Delete Medical Supply by ID  (change id as needed)
 DELETE http://localhost:8080/VitalTrack/api/supply/delete/5
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 
 ### ================================================================
@@ -119,12 +153,14 @@ Accept: application/json
 ### [GET] List All Maintenance Logs
 GET http://localhost:8080/VitalTrack/api/maintenance/list
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 ###
 
 ### [GET] Find Maintenance Log by ID
 GET http://localhost:8080/VitalTrack/api/maintenance/find/1
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 ###
 
@@ -134,6 +170,7 @@ Accept: application/json
 POST http://localhost:8080/VitalTrack/api/maintenance/save
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 {
   "equipmentId": 1,
@@ -149,6 +186,7 @@ Accept: application/json
 PUT http://localhost:8080/VitalTrack/api/maintenance/update/1
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 {
   "equipmentId": 1,
@@ -163,6 +201,7 @@ Accept: application/json
 ### [DELETE] Delete Maintenance Log by ID  (change id as needed)
 DELETE http://localhost:8080/VitalTrack/api/maintenance/delete/5
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 
 ### ================================================================
@@ -174,12 +213,14 @@ Accept: application/json
 ### [GET] List All Nurses
 GET http://localhost:8080/VitalTrack/api/nurse/list
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 ###
 
 ### [GET] Find Nurse by ID
 GET http://localhost:8080/VitalTrack/api/nurse/find/1
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 ###
 
@@ -188,6 +229,7 @@ Accept: application/json
 POST http://localhost:8080/VitalTrack/api/nurse/save
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 {
   "name": "Jane Mwangi",
@@ -203,6 +245,7 @@ Accept: application/json
 PUT http://localhost:8080/VitalTrack/api/nurse/update/1
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 {
   "name": "Jane Mwangi-Kamau",
@@ -217,6 +260,7 @@ Accept: application/json
 ### [DELETE] Delete Nurse by ID  (change id as needed)
 DELETE http://localhost:8080/VitalTrack/api/nurse/delete/5
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 
 ### ================================================================
@@ -228,12 +272,14 @@ Accept: application/json
 ### [GET] List All Technicians
 GET http://localhost:8080/VitalTrack/api/technician/list
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 ###
 
 ### [GET] Find Technician by ID
 GET http://localhost:8080/VitalTrack/api/technician/find/1
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 ###
 
@@ -242,6 +288,7 @@ Accept: application/json
 POST http://localhost:8080/VitalTrack/api/technician/save
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 {
   "name": "John Kamau",
@@ -257,6 +304,7 @@ Accept: application/json
 PUT http://localhost:8080/VitalTrack/api/technician/update/1
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>
 
 {
   "name": "John Kamau Kariuki",
@@ -271,3 +319,4 @@ Accept: application/json
 ### [DELETE] Delete Technician by ID  (change id as needed)
 DELETE http://localhost:8080/VitalTrack/api/technician/delete/5
 Accept: application/json
+Authorization: Bearer <paste-your-token-here>

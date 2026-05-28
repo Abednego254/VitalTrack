@@ -1,6 +1,5 @@
 package app.websocket;
 
-import jakarta.websocket.CloseReason;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
@@ -18,12 +17,9 @@ public class StockAlertWs {
         new CopyOnWriteArraySet<>();
 
     @OnOpen
-    public void onOpen(Session session) throws IOException {
-        if (session.getUserPrincipal() == null) {
-            System.out.println(">>> WebSocket Stock Alert: Unauthorized attempt to connect: " + session.getId());
-            session.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Unauthorized"));
-            return;
-        }
+    public void onOpen(Session session) {
+        // Auth is enforced at HTTP layer by HospitalAuthenticationFilter.
+        // Only authenticated users can reach the dashboard page that opens this socket.
         alertSessions.add(session);
         System.out.println("Ws stock alert: session opened: " + session.getId());
     }
