@@ -3,6 +3,33 @@
 ### Base URL (WSDL Location): http://localhost:8080/VitalTrack/<ServiceName>/<ClassName>?wsdl
 ### Endpoint URL: http://localhost:8080/VitalTrack/<ServiceName>/<ClassName>
 ### ================================================================
+###
+### IMPORTANT — AUTHENTICATION REQUIRED FOR ALL SOAP ENDPOINTS
+### SOAP endpoints are protected by ApiAuthenticationFilter.
+### You must obtain a JWT token first via the REST login endpoint,
+### then add it as: Authorization: Bearer <your-token>
+### ================================================================
+
+### ================================================================
+### STEP 1 — GET YOUR TOKEN (REST login — run this first)
+### ================================================================
+
+### [POST] Login — Get JWT Token
+POST http://localhost:8080/VitalTrack/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "admin@hospital.com",
+  "password": "Admin@1234"
+}
+
+###
+
+### ================================================================
+### STEP 2 — USE YOUR TOKEN IN EVERY REQUEST BELOW
+### Replace <paste-your-token-here> in the Authorization header
+### ================================================================
 
 
 
@@ -14,6 +41,7 @@
 POST http://localhost:8080/VitalTrack/EquipmentSoapService/EquipmentSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -28,6 +56,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/EquipmentSoapService/EquipmentSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -44,15 +73,19 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/EquipmentSoapService/EquipmentSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
    <soapenv:Body>
       <soap:save>
          <equipment>
-            <name>Defibrillator SOAP Edition</name>
-            <serialNumber>SN-DEFIB-SOAP-01</serialNumber>
+            <name>Philips IntelliVue MX450 Patient Monitor</name>
+            <serialNumber>SN-MON-PHL-2024-007</serialNumber>
             <status>ACTIVE</status>
+            <purchaseDate>2024-01-15</purchaseDate>
+            <lastCalibrationDate>2025-11-01</lastCalibrationDate>
+            <nextCalibrationDate>2026-05-01</nextCalibrationDate>
          </equipment>
       </soap:save>
    </soapenv:Body>
@@ -64,6 +97,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/EquipmentSoapService/EquipmentSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -85,6 +119,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/MedicalSupplySoapService/MedicalSupplySoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -99,6 +134,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/MedicalSupplySoapService/MedicalSupplySoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -115,17 +151,19 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/MedicalSupplySoapService/MedicalSupplySoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
    <soapenv:Body>
       <soap:save>
          <supply>
-            <name>SOAP Syringes</name>
-            <category>Consumables</category>
-            <quantity>250</quantity>
+            <name>Latex Examination Gloves</name>
+            <category>Personal Protective Equipment</category>
+            <quantity>1200</quantity>
             <unitOfMeasure>Boxes</unitOfMeasure>
-            <reorderLevel>25</reorderLevel>
+            <reorderLevel>100</reorderLevel>
+            <expiryDate>2027-06-30</expiryDate>
          </supply>
       </soap:save>
    </soapenv:Body>
@@ -137,6 +175,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/MedicalSupplySoapService/MedicalSupplySoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -158,6 +197,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/NurseSoapService/NurseSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -172,6 +212,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/NurseSoapService/NurseSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -188,17 +229,18 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/NurseSoapService/NurseSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
    <soapenv:Body>
       <soap:save>
          <nurse>
-            <name>Mercy Wanjiku</name>
-            <specialization>Pediatric</specialization>
-            <contactInfo>+254711223344</contactInfo>
+            <name>Esther Akinyi Omondi</name>
+            <specialization>Critical Care</specialization>
+            <contactInfo>+254712 556 789</contactInfo>
             <status>ACTIVE</status>
-            <email>mercy.wanjiku@hospital.com</email>
+            <email>esther.omondi@knh.or.ke</email>
          </nurse>
       </soap:save>
    </soapenv:Body>
@@ -210,6 +252,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/NurseSoapService/NurseSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -231,6 +274,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/MaintenanceLogSoapService/MaintenanceLogSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -245,6 +289,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/MaintenanceLogSoapService/MaintenanceLogSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -262,6 +307,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/MaintenanceLogSoapService/MaintenanceLogSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -270,8 +316,9 @@ Accept: text/xml
          <log>
             <equipmentId>1</equipmentId>
             <technicianId>1</technicianId>
-            <actionTaken>SOAP-based full system diagnostic</actionTaken>
-            <notes>Ran full diagnostic via SOAP service. All sensors within normal range.</notes>
+            <serviceDate>2026-05-28</serviceDate>
+            <actionTaken>Preventive maintenance and full calibration of patient monitor</actionTaken>
+            <notes>Replaced display backlight unit. Recalibrated SpO2 and NIBP sensors. All readings within acceptable tolerance. Equipment cleared for use in ICU Ward 3.</notes>
          </log>
       </soap:save>
    </soapenv:Body>
@@ -283,6 +330,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/MaintenanceLogSoapService/MaintenanceLogSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -304,6 +352,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/TechnicianSoapService/TechnicianSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -318,6 +367,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/TechnicianSoapService/TechnicianSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
@@ -334,17 +384,18 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/TechnicianSoapService/TechnicianSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>
    <soapenv:Body>
       <soap:save>
          <technician>
-            <name>Samuel Otieno</name>
-            <specialization>Radiological Equipment</specialization>
-            <contactInfo>+254799887766</contactInfo>
+            <name>Brian Kipchoge Ruto</name>
+            <specialization>Biomedical Equipment Engineering</specialization>
+            <contactInfo>+254722 334 891</contactInfo>
             <status>ACTIVE</status>
-            <email>samuel.otieno@hospital.com</email>
+            <email>brian.ruto@knh.or.ke</email>
          </technician>
       </soap:save>
    </soapenv:Body>
@@ -356,6 +407,7 @@ Accept: text/xml
 POST http://localhost:8080/VitalTrack/TechnicianSoapService/TechnicianSoapApi
 Content-Type: text/xml
 Accept: text/xml
+Authorization: Bearer <paste-your-token-here>
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.app/">
    <soapenv:Header/>

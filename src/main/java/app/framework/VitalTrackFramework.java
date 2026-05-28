@@ -14,9 +14,6 @@ import java.util.stream.Collectors;
 public class VitalTrackFramework {
 
     @Inject
-    private ClassScanner clazzScanner;
-
-    @Inject
     private HospitalEquipmentDao equipmentDao;
 
     private Map<String, List<SelectBox>> formSelections = new HashMap<>();

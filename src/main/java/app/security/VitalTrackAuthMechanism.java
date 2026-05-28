@@ -58,13 +58,12 @@ public class VitalTrackAuthMechanism implements HttpAuthenticationMechanism {
                     String principalName = result.getCallerPrincipal().getName();
                     String role = result.getCallerGroups().iterator().next();
 
-                    // Establish session attributes for backward compatibility with JSP/Actions
                     HttpSession session = request.getSession(true);
                     session.setAttribute("username", principalName);
                     session.setAttribute("role", role);
 
                     // Fetch the unified User object (can be User/Admin, HospitalTechnician, or HospitalNurse)
-                    User user = userEJB.authenticate(username, password);
+                    User user = userEJB.findByEmail(principalName);
                     session.setAttribute("loggedInUser", user);
 
                     if (user instanceof HospitalTechnician) {
@@ -80,7 +79,6 @@ public class VitalTrackAuthMechanism implements HttpAuthenticationMechanism {
 
                     auditTrailEvent.fire(new AuditTrail("User '" + principalName + "' (" + role + ") logged in successfully via Jakarta Security."));
 
-                    // Notify container about successful login
                     httpMessageContext.notifyContainerAboutLogin(result.getCallerPrincipal(), result.getCallerGroups());
 
                     // Redirect accordingly

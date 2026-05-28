@@ -8,14 +8,10 @@ import app.framework.ActionPostMethod;
 import app.framework.ActionResponse;
 import app.framework.VitalTrackFramework;
 import app.model.HospitalMedicalSupply;
-import app.model.MedicalSupplyConsumedEvent;
 import jakarta.ejb.EJB;
-import jakarta.enterprise.event.Event;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @RequestScoped
 @Action(value = "medicalsupply", label = "Medical Supplies", role = "ADMIN,NURSE")
@@ -26,9 +22,6 @@ public class SupplyAction {
 
     @Inject
     private VitalTrackFramework framework;
-
-    @Inject
-    private Event<MedicalSupplyConsumedEvent> consumptionEvent;
 
     @ActionGetMethod("list")
     public ActionResponse list() throws Exception {
@@ -48,7 +41,7 @@ public class SupplyAction {
             Long id = Long.parseLong(request.getParameter("id"));
             int qty = Integer.parseInt(request.getParameter("consumeQty"));
             String name = request.getParameter("name");
-            consumptionEvent.fire(new MedicalSupplyConsumedEvent(id, name, qty));
+            supplyEJB.consume(id, name, qty);
             return list();
         }
 

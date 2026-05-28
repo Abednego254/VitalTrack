@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.*;
 
 import java.lang.reflect.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ActionParamBinder {
@@ -70,13 +71,25 @@ public class ActionParamBinder {
         for (Map.Entry<String, String[]> e : req.getParameterMap().entrySet()) {
 
             try {
-                Field f = clazz.getDeclaredField(e.getKey());
+                Field f = findField(clazz, e.getKey());
                 f.setAccessible(true);
                 f.set(obj, convert(e.getValue()[0], f.getType()));
             } catch (NoSuchFieldException ignored) {}
         }
 
         return obj;
+    }
+
+    private static Field findField(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+        Class<?> current = clazz;
+        while (current != null) {
+            try {
+                return current.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                current = current.getSuperclass();
+            }
+        }
+        throw new NoSuchFieldException(fieldName);
     }
 
     @SuppressWarnings("unchecked")
@@ -93,9 +106,9 @@ public class ActionParamBinder {
         if (t == String.class) return v;
         if (t == int.class || t == Integer.class) return Integer.parseInt(v);
         if (t == long.class || t == Long.class) return Long.parseLong(v);
-        if (t == java.util.Date.class) {
+        if (t == Date.class) {
             try {
-                return new java.text.SimpleDateFormat("yyyy-MM-dd").parse(v);
+                return new SimpleDateFormat("yyyy-MM-dd").parse(v);
             } catch (Exception e) {
                 return null;
             }

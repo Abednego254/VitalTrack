@@ -1,6 +1,5 @@
 package app.websocket;
 
-import jakarta.websocket.CloseReason;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
@@ -18,12 +17,8 @@ public class ChatWs {
         new CopyOnWriteArraySet<>();
 
     @OnOpen
-    public void onOpen(Session session) throws IOException {
-        if (session.getUserPrincipal() == null) {
-            System.out.println(">>> WebSocket Chat: Unauthorized attempt to connect: " + session.getId());
-            session.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Unauthorized"));
-            return;
-        }
+    public void onOpen(Session session) {
+        // Auth is enforced at HTTP layer by HospitalAuthenticationFilter.
         chatSessions.add(session);
         System.out.println("Ws chat: session opened: " + session.getId());
         broadcastOnlineCount();

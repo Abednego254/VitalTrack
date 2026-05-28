@@ -1,6 +1,5 @@
 package app.websocket;
 
-import jakarta.websocket.CloseReason;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
@@ -17,14 +16,10 @@ public class AuditTrailWs {
         new CopyOnWriteArraySet<>();
 
     @OnOpen
-    public void onOpen(Session session) throws IOException {
-        if (session.getUserPrincipal() == null) {
-            System.out.println(">>> WebSocket Audit Trail: Unauthorized attempt to connect: " + session.getId());
-            session.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Unauthorized"));
-            return;
-        }
+    public void onOpen(Session session) {
+        // Auth is enforced at HTTP layer by HospitalAuthenticationFilter.
         auditSessions.add(session);
-        System.out.println("Ws: session opened: " + session.getId());
+        System.out.println("Ws audit trail: session opened: " + session.getId());
     }
 
     @OnClose
