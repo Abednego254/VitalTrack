@@ -1,6 +1,6 @@
 package app.rest;
 
-import app.ejb.HospitalMedicalSupplyEJB;
+import app.ejb.MedicalSupplyEJB;
 import app.model.HospitalMedicalSupply;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Path;
@@ -10,7 +10,7 @@ import java.util.List;
 public class HospitalMedicalSupplyRestApi extends GenericApi<HospitalMedicalSupply> {
 
     @EJB
-    private HospitalMedicalSupplyEJB supplyEJB;
+    private MedicalSupplyEJB supplyEJB;
 
     @Override
     protected void saveEntity(HospitalMedicalSupply supply) throws Exception {

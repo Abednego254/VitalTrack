@@ -4,5 +4,5 @@ import app.model.HospitalTechnician;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class HospitalTechnicianDao extends GenericDao<HospitalTechnician, Long> {
+public class TechnicianDao extends GenericDao<HospitalTechnician, Long> {
 }

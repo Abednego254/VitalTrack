@@ -18,11 +18,11 @@ import java.util.Date;
 
 @Entity
 @Table(name = "hospital_maintenance_log")
-@VitalTrackTable(label = "Maintenance History", addLink = "maintenancelog/add", deleteLink = "maintenancelog/delete")
+@VitalTrackTable(label = "Maintenance History", addLink = "maintenancelog/add", editLink = "maintenancelog/edit", deleteLink = "maintenancelog/delete")
 @VitalTrackForm(label = "Maintenance Log", actionUrl = "maintenancelog/save")
 @XmlRootElement(name = "maintenancelog")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class HospitalMaintenanceLog extends BaseEntity {
+public class MaintenanceLog extends BaseEntity {
 
     @Column(name = "equipment_id")
     @VitalTrackFormField(label = "Equipment", select = "equipmentId")
@@ -35,7 +35,7 @@ public class HospitalMaintenanceLog extends BaseEntity {
     @XmlTransient
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "equipment_id", insertable = false, updatable = false)
-    private HospitalEquipment equipment;
+    private Equipment equipment;
 
     @XmlTransient
     @ManyToOne(fetch = FetchType.LAZY)
@@ -69,7 +69,7 @@ public class HospitalMaintenanceLog extends BaseEntity {
     @Size(max = 2000, message = "Notes must not exceed 2000 characters")
     private String notes;
 
-    public HospitalMaintenanceLog(){}
+    public MaintenanceLog(){}
 
     public Long getEquipmentId() {
         return equipmentId;
@@ -88,11 +88,11 @@ public class HospitalMaintenanceLog extends BaseEntity {
     }
 
     @JsonIgnore
-    public HospitalEquipment getEquipment() {
+    public Equipment getEquipment() {
         return equipment;
     }
 
-    public void setEquipment(HospitalEquipment equipment) {
+    public void setEquipment(Equipment equipment) {
         this.equipment = equipment;
     }
 

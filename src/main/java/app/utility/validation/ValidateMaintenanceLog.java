@@ -1,6 +1,6 @@
 package app.utility.validation;
 
-import app.model.HospitalMaintenanceLog;
+import app.model.MaintenanceLog;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Named("ValidMaintenanceLog")
 @ApplicationScoped
-public class ValidateMaintenanceLog implements Validate<HospitalMaintenanceLog> {
+public class ValidateMaintenanceLog implements Validate<MaintenanceLog> {
 
     @Inject
     private Validator validator;
@@ -21,12 +21,12 @@ public class ValidateMaintenanceLog implements Validate<HospitalMaintenanceLog> 
     }
 
     @Override
-    public boolean process(HospitalMaintenanceLog log) {
+    public boolean process(MaintenanceLog log) {
         if (log == null) return false;
 
-        Set<ConstraintViolation<HospitalMaintenanceLog>> violations = validator.validate(log);
+        Set<ConstraintViolation<MaintenanceLog>> violations = validator.validate(log);
         if (!violations.isEmpty()) {
-            for (ConstraintViolation<HospitalMaintenanceLog> violation : violations) {
+            for (ConstraintViolation<MaintenanceLog> violation : violations) {
                 System.out.println(">>> Constraint violation in "
                     + violation.getPropertyPath() + ": " + violation.getMessage());
             }

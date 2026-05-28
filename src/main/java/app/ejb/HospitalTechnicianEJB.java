@@ -1,6 +1,6 @@
 package app.ejb;
 
-import app.dao.HospitalTechnicianDao;
+import app.dao.TechnicianDao;
 import app.model.AuditTrail;
 import app.model.HospitalTechnician;
 import app.model.TechnicianAddedEvent;
@@ -24,7 +24,7 @@ public class HospitalTechnicianEJB {
     private Event<AuditTrail> auditTrailEvent;
 
     @Inject
-    private HospitalTechnicianDao technicianDao;
+    private TechnicianDao technicianDao;
 
     @Inject
     private Event<TechnicianAddedEvent> technicianAddedEvent;

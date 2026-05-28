@@ -1,29 +1,29 @@
 package app.rest;
 
-import app.ejb.HospitalEquipmentEJB;
-import app.model.HospitalEquipment;
+import app.ejb.EquipmentEJB;
+import app.model.Equipment;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Path;
 import java.util.List;
 
 @Path("/equipment")
-public class HospitalEquipmentRestApi extends GenericApi<HospitalEquipment> {
+public class HospitalEquipmentRestApi extends GenericApi<Equipment> {
 
     @EJB
-    private HospitalEquipmentEJB equipmentEJB;
+    private EquipmentEJB equipmentEJB;
 
     @Override
-    protected void saveEntity(HospitalEquipment equipment) throws Exception {
+    protected void saveEntity(Equipment equipment) throws Exception {
         equipmentEJB.save(equipment);
     }
 
     @Override
-    protected HospitalEquipment findEntity(Long id) throws Exception {
+    protected Equipment findEntity(Long id) throws Exception {
         return equipmentEJB.findById(id);
     }
 
     @Override
-    protected List<HospitalEquipment> listEntities() throws Exception {
+    protected List<Equipment> listEntities() throws Exception {
         return equipmentEJB.findAll();
     }
 

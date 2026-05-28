@@ -6,7 +6,6 @@ import app.framework.VitalTrackTable;
 import app.framework.VitalTrackTableCol;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import jakarta.validation.constraints.NotBlank;
@@ -19,11 +18,11 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "hospital_equipment")
-@VitalTrackTable(label = "Equipment", addLink = "equipment/add", deleteLink = "equipment/delete")
+@VitalTrackTable(label = "Equipment", addLink = "equipment/add", editLink = "equipment/edit", deleteLink = "equipment/delete")
 @VitalTrackForm(label = "Equipment", actionUrl = "equipment/save")
 @XmlRootElement(name = "equipment")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class HospitalEquipment extends BaseEntity {
+public class Equipment extends BaseEntity {
     
     @Column(nullable = false)
     @VitalTrackTableCol(label = "Name")
@@ -70,7 +69,7 @@ public class HospitalEquipment extends BaseEntity {
     @VitalTrackFormField(label = "Maintenance Mode", select = "maintenanceCategory")
     private String maintenanceCategory;
 
-    public HospitalEquipment() {
+    public Equipment() {
     }
 
     public String getName() {

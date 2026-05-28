@@ -1,7 +1,7 @@
 package app.soap;
 
-import app.ejb.HospitalEquipmentEJB;
-import app.model.HospitalEquipment;
+import app.ejb.EquipmentEJB;
+import app.model.Equipment;
 import app.rest.*;
 import jakarta.ejb.*;
 import jakarta.jws.*;
@@ -11,10 +11,10 @@ import jakarta.jws.*;
 public class EquipmentSoapApi {
 
     @EJB
-    private HospitalEquipmentEJB equipmentEJB;
+    private EquipmentEJB equipmentEJB;
 
     @WebMethod
-    public ResponseStatus save(@WebParam(name = "equipment") HospitalEquipment equipment) {
+    public ResponseStatus save(@WebParam(name = "equipment") Equipment equipment) {
         try {
             equipmentEJB.save(equipment);
             return new ResponseStatus(SuccessError.SUCCESS, "Equipment saved successfully");
@@ -24,7 +24,7 @@ public class EquipmentSoapApi {
     }
 
     @WebMethod
-    public HospitalEquipment find(@WebParam(name = "id") Long id) {
+    public Equipment find(@WebParam(name = "id") Long id) {
         try {
             return equipmentEJB.findById(id);
         } catch (Exception e) {

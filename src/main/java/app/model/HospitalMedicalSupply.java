@@ -17,7 +17,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "hospital_medical_supply")
-@VitalTrackTable(label = "Medical Supplies", addLink = "medicalsupply/add", deleteLink = "medicalsupply/delete")
+@VitalTrackTable(label = "Medical Supplies", addLink = "medicalsupply/add", editLink = "medicalsupply/edit", deleteLink = "medicalsupply/delete")
 @VitalTrackForm(label = "Medical Supply", actionUrl = "medicalsupply/save")
 @XmlRootElement(name = "medicalsupply")
 @XmlAccessorType(XmlAccessType.FIELD)

@@ -1,7 +1,7 @@
 package app.soap;
 
-import app.ejb.HospitalMaintenanceLogEJB;
-import app.model.HospitalMaintenanceLog;
+import app.ejb.MaintenanceLogEJB;
+import app.model.MaintenanceLog;
 import app.rest.*;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
@@ -12,10 +12,10 @@ import jakarta.jws.*;
 public class MaintenanceLogSoapApi {
 
     @EJB
-    private HospitalMaintenanceLogEJB maintenanceEJB;
+    private MaintenanceLogEJB maintenanceEJB;
 
     @WebMethod
-    public ResponseStatus save(@WebParam(name = "log") HospitalMaintenanceLog log) {
+    public ResponseStatus save(@WebParam(name = "log") MaintenanceLog log) {
         try {
             maintenanceEJB.save(log);
             return new ResponseStatus(SuccessError.SUCCESS, "Log saved successfully");
@@ -25,7 +25,7 @@ public class MaintenanceLogSoapApi {
     }
 
     @WebMethod
-    public HospitalMaintenanceLog find(@WebParam(name = "id") Long id) {
+    public MaintenanceLog find(@WebParam(name = "id") Long id) {
         try {
             return maintenanceEJB.findById(id);
         } catch (Exception e) {

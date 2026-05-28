@@ -17,7 +17,7 @@ import jakarta.jms.Queue;
 public class StockMonitorBean {
 
     @EJB
-    private HospitalMedicalSupplyEJB supplyEJB;
+    private MedicalSupplyEJB supplyEJB;
 
     @Inject
     private JMSContext jmsContext;

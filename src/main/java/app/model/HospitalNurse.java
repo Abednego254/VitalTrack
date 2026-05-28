@@ -13,7 +13,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @DiscriminatorValue("NURSE")
-@VitalTrackTable(label = "Nurses", addLink = "nurse/add", deleteLink = "nurse/delete")
+@VitalTrackTable(label = "Nurses", addLink = "nurse/add", editLink = "nurse/edit", deleteLink = "nurse/delete")
 @VitalTrackForm(label = "Nurse", actionUrl = "nurse/save")
 @XmlRootElement(name = "nurse")
 @XmlAccessorType(XmlAccessType.FIELD)

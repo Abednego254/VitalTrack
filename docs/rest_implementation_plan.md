@@ -154,28 +154,32 @@ Add lookup support in EJBs where they are missing:
 Create dedicated REST API controllers mapping our entity endpoints.
 
 #### 1. Equipment REST API (`HospitalEquipmentRestApi.java`)
+
 ```java
 package app.rest;
 
+import app.ejb.EquipmentEJB;
 import app.ejb.HospitalEquipmentEJB;
+import app.model.Equipment;
 import app.model.HospitalEquipment;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import java.util.List;
 
 @Path("/equipment")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class HospitalEquipmentRestApi extends GenericApi<HospitalEquipment> {
+public class HospitalEquipmentRestApi extends GenericApi<Equipment> {
 
     @EJB
-    private HospitalEquipmentEJB equipmentEJB;
+    private EquipmentEJB equipmentEJB;
 
     @Path("/save")
     @POST
-    public Response save(HospitalEquipment equipment) {
+    public Response save(Equipment equipment) {
         try {
             equipmentEJB.save(equipment);
             return Response.ok(new ResponseStatus(SuccessError.SUCCESS, "Equipment saved successfully")).build();
@@ -189,7 +193,7 @@ public class HospitalEquipmentRestApi extends GenericApi<HospitalEquipment> {
     @GET
     public Response find(@PathParam("id") Long id) {
         try {
-            HospitalEquipment equipment = equipmentEJB.findById(id);
+            Equipment equipment = equipmentEJB.findById(id);
             if (equipment == null) {
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity(new ResponseStatus(SuccessError.ERROR, "Equipment not found")).build();
@@ -204,7 +208,7 @@ public class HospitalEquipmentRestApi extends GenericApi<HospitalEquipment> {
     @GET
     public Response list() {
         try {
-            List<HospitalEquipment> list = equipmentEJB.findAll();
+            List<Equipment> list = equipmentEJB.findAll();
             return Response.ok(list).build();
         } catch (Exception e) {
             return Response.serverError().entity(new ResponseStatus(SuccessError.ERROR, e.getMessage())).build();
@@ -214,15 +218,17 @@ public class HospitalEquipmentRestApi extends GenericApi<HospitalEquipment> {
 ```
 
 #### 2. Medical Supply REST API (`HospitalMedicalSupplyRestApi.java`)
+
 ```java
 package app.rest;
 
-import app.ejb.HospitalMedicalSupplyEJB;
+import app.ejb.MedicalSupplyEJB;
 import app.model.HospitalMedicalSupply;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import java.util.List;
 
 @Path("/supply")
@@ -231,7 +237,7 @@ import java.util.List;
 public class HospitalMedicalSupplyRestApi extends GenericApi<HospitalMedicalSupply> {
 
     @EJB
-    private HospitalMedicalSupplyEJB supplyEJB;
+    private MedicalSupplyEJB supplyEJB;
 
     @Path("/save")
     @POST
@@ -274,28 +280,30 @@ public class HospitalMedicalSupplyRestApi extends GenericApi<HospitalMedicalSupp
 ```
 
 #### 3. Maintenance Log REST API (`HospitalMaintenanceLogRestApi.java`)
+
 ```java
 package app.rest;
 
-import app.ejb.HospitalMaintenanceLogEJB;
-import app.model.HospitalMaintenanceLog;
+import app.ejb.MaintenanceLogEJB;
+import app.model.MaintenanceLog;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import java.util.List;
 
 @Path("/maintenance")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class HospitalMaintenanceLogRestApi extends GenericApi<HospitalMaintenanceLog> {
+public class HospitalMaintenanceLogRestApi extends GenericApi<MaintenanceLog> {
 
     @EJB
-    private HospitalMaintenanceLogEJB maintenanceEJB;
+    private MaintenanceLogEJB maintenanceEJB;
 
     @Path("/save")
     @POST
-    public Response save(HospitalMaintenanceLog log) {
+    public Response save(MaintenanceLog log) {
         try {
             maintenanceEJB.save(log);
             return Response.ok(new ResponseStatus(SuccessError.SUCCESS, "Maintenance log saved successfully")).build();
@@ -309,7 +317,7 @@ public class HospitalMaintenanceLogRestApi extends GenericApi<HospitalMaintenanc
     @GET
     public Response find(@PathParam("id") Long id) {
         try {
-            HospitalMaintenanceLog log = maintenanceEJB.findById(id);
+            MaintenanceLog log = maintenanceEJB.findById(id);
             if (log == null) {
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity(new ResponseStatus(SuccessError.ERROR, "Log not found")).build();
@@ -324,7 +332,7 @@ public class HospitalMaintenanceLogRestApi extends GenericApi<HospitalMaintenanc
     @GET
     public Response list() {
         try {
-            List<HospitalMaintenanceLog> list = maintenanceEJB.findAll();
+            List<MaintenanceLog> list = maintenanceEJB.findAll();
             return Response.ok(list).build();
         } catch (Exception e) {
             return Response.serverError().entity(new ResponseStatus(SuccessError.ERROR, e.getMessage())).build();

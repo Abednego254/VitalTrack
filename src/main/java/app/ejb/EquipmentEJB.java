@@ -1,8 +1,8 @@
 package app.ejb;
 
-import app.dao.HospitalEquipmentDao;
+import app.dao.EquipmentDao;
 import app.model.AuditTrail;
-import app.model.HospitalEquipment;
+import app.model.Equipment;
 import app.utility.validation.Validate;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.event.Event;
@@ -11,35 +11,35 @@ import jakarta.inject.Named;
 import java.util.List;
 
 @Stateless
-public class HospitalEquipmentEJB {
+public class EquipmentEJB {
     
     @Inject
     @Named("ValidEquipment")
-    private Validate<HospitalEquipment> validator;
+    private Validate<Equipment> validator;
 
     @Inject
     private Event<AuditTrail> auditTrailEvent;
 
     @Inject
-    private HospitalEquipmentDao equipmentDao;
+    private EquipmentDao equipmentDao;
 
-    public void save(HospitalEquipment hospitalEquipment) throws Exception {
+    public void save(Equipment equipment) throws Exception {
 
         validator.printValidation();
-        if (validator.process(hospitalEquipment)) {
-            auditTrailEvent.fire(new AuditTrail("Created new Hospital Equipment: " + hospitalEquipment.getName()));
-            equipmentDao.save(hospitalEquipment);
+        if (validator.process(equipment)) {
+            auditTrailEvent.fire(new AuditTrail("Created new Hospital Equipment: " + equipment.getName()));
+            equipmentDao.save(equipment);
         } else {
             System.out.println("Bouncer says: 'Sorry, this equipment has bad data! Cannot save.'");
             throw new IllegalArgumentException("Equipment data is invalid!");
         }
     }
 
-    public List<HospitalEquipment> findAll() throws Exception {
+    public List<Equipment> findAll() throws Exception {
         return equipmentDao.findAll();
     }
 
-    public HospitalEquipment findById(Long id) throws Exception {
+    public Equipment findById(Long id) throws Exception {
         return equipmentDao.findById(id);
     }
 

@@ -1,6 +1,6 @@
 package app.utility.validation;
 
-import app.model.HospitalEquipment;
+import app.model.Equipment;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.*;
 import jakarta.validation.ConstraintViolation;
@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Named("ValidEquipment")
 @ApplicationScoped
-public class ValidateEquipment implements Validate<HospitalEquipment> {
+public class ValidateEquipment implements Validate<Equipment> {
 
     @Inject
     private Validator validator;
@@ -20,12 +20,12 @@ public class ValidateEquipment implements Validate<HospitalEquipment> {
     }
 
     @Override
-    public boolean process(HospitalEquipment equipment) {
+    public boolean process(Equipment equipment) {
         if (equipment == null) return false;
 
-        Set<ConstraintViolation<HospitalEquipment>> violations = validator.validate(equipment);
+        Set<ConstraintViolation<Equipment>> violations = validator.validate(equipment);
         if (!violations.isEmpty()) {
-            for (ConstraintViolation<HospitalEquipment> violation : violations) {
+            for (ConstraintViolation<Equipment> violation : violations) {
                 System.out.println(">>> Constraint violation in " 
                     + violation.getPropertyPath() + ": " + violation.getMessage());
             }

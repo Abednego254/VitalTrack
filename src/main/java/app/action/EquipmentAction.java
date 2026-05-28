@@ -1,6 +1,6 @@
 package app.action;
 
-import app.ejb.HospitalEquipmentEJB;
+import app.ejb.EquipmentEJB;
 import app.framework.Action;
 import app.framework.ActionGetMethod;
 import app.framework.ActionPathParam;
@@ -8,7 +8,7 @@ import app.framework.ActionPostMethod;
 import app.framework.ActionResponse;
 import app.framework.ActionRequestBody;
 import app.framework.VitalTrackFramework;
-import app.model.HospitalEquipment;
+import app.model.Equipment;
 import app.model.User;
 import app.utility.MaintenanceChoice;
 import app.utility.MaintenanceQualifier;
@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpSession;
 public class EquipmentAction {
 
     @EJB
-    private HospitalEquipmentEJB equipmentEJB;
+    private EquipmentEJB equipmentEJB;
 
     @Inject
     private VitalTrackFramework framework;
@@ -39,16 +39,16 @@ public class EquipmentAction {
 
     @ActionGetMethod("list")
     public ActionResponse list() throws Exception {
-        return new ActionResponse(HospitalEquipment.class, equipmentEJB.findAll());
+        return new ActionResponse(Equipment.class, equipmentEJB.findAll());
     }
 
     @ActionGetMethod("add")
     public ActionResponse add() throws Exception {
-        return new ActionResponse(framework.htmlForm(HospitalEquipment.class));
+        return new ActionResponse(framework.htmlForm(Equipment.class));
     }
 
     @ActionPostMethod("save")
-    public ActionResponse save(@ActionRequestBody HospitalEquipment equipment, HttpServletRequest request) throws Exception {
+    public ActionResponse save(@ActionRequestBody Equipment equipment, HttpServletRequest request) throws Exception {
 
         // SMART LOGIC: Calculate next calibration date automatically
         String category = equipment.getMaintenanceCategory();
@@ -69,6 +69,31 @@ public class EquipmentAction {
             }
         }
 
+        equipmentEJB.save(equipment);
+        return list();
+    }
+
+    @ActionGetMethod("edit/{id}")
+    public ActionResponse edit(@ActionPathParam("id") Long id) throws Exception {
+        Equipment equipment = equipmentEJB.findById(id);
+        return new ActionResponse(framework.htmlEditForm(Equipment.class, equipment));
+    }
+
+    @ActionPostMethod("update")
+    public ActionResponse update(@ActionRequestBody Equipment equipment, HttpServletRequest request) throws Exception {
+        String idParam = request.getParameter("id");
+        if (idParam != null && !idParam.isEmpty()) {
+            equipment.setId(Long.parseLong(idParam));
+        }
+        // Recalculate next calibration date on update
+        String category = equipment.getMaintenanceCategory();
+        if (equipment.getLastCalibrationDate() != null) {
+            if ("URGENT".equals(category)) {
+                equipment.setNextCalibrationDate(urgentMaintenance.calculateNextMaintenanceDate(equipment.getLastCalibrationDate()));
+            } else {
+                equipment.setNextCalibrationDate(standardMaintenance.calculateNextMaintenanceDate(equipment.getLastCalibrationDate()));
+            }
+        }
         equipmentEJB.save(equipment);
         return list();
     }

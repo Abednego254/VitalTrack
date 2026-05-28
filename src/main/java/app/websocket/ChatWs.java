@@ -18,7 +18,7 @@ public class ChatWs {
 
     @OnOpen
     public void onOpen(Session session) {
-        // Auth is enforced at HTTP layer by HospitalAuthenticationFilter.
+        // Auth is enforced at HTTP layer by AuthenticationFilter.
         chatSessions.add(session);
         System.out.println("Ws chat: session opened: " + session.getId());
         broadcastOnlineCount();

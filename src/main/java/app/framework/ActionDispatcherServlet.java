@@ -25,7 +25,7 @@ public class ActionDispatcherServlet extends HttpServlet {
     // We override service() because it catches every type of HTTP method (GET, POST, DELETE, etc.)
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
         String requestPath = req.getPathInfo();
         String httpMethod = req.getMethod();
@@ -42,7 +42,7 @@ public class ActionDispatcherServlet extends HttpServlet {
 
         // Role Checking
         if (actionAnnotation != null && !"ALL".equalsIgnoreCase(actionAnnotation.role()) && !"USER"
-        .equalsIgnoreCase(actionAnnotation.role())) {
+                .equalsIgnoreCase(actionAnnotation.role())) {
             HttpSession session = req.getSession(false);
             String userRole = (session != null) ? (String) session.getAttribute("role") : null;
             String requiredRoles = actionAnnotation.role();
@@ -63,19 +63,19 @@ public class ActionDispatcherServlet extends HttpServlet {
 
         try {
             Object actionCtxInstance = CDI.current()
-                .select(actionMapMatch.getActionMap().getAction())
-                .get();
+                    .select(actionMapMatch.getActionMap().getAction())
+                    .get();
 
-            Object[] argsParams = ActionParamBinder.bind(actionMapMatch.getActionMap(), 
-            req,resp,
-            actionMapMatch.getPathVariables());
+            Object[] argsParams = ActionParamBinder.bind(actionMapMatch.getActionMap(),
+                    req,resp,
+                    actionMapMatch.getPathVariables());
 
 
             // Actually call the method and get back the response.
             ActionResponse actionResponse = (ActionResponse) actionMapMatch
-                .getActionMap()
-                .getMethod()
-                .invoke(actionCtxInstance, argsParams);
+                    .getActionMap()
+                    .getMethod()
+                    .invoke(actionCtxInstance, argsParams);
 
             String displayContent;
             if (actionResponse.getResponseText() != null) {
@@ -88,7 +88,7 @@ public class ActionDispatcherServlet extends HttpServlet {
 
             } else {
                 displayContent = vitalTrackFramework.htmlTable(actionResponse.getResponseClazz(),
-                    actionResponse.getResponseDataList());
+                        actionResponse.getResponseDataList());
             }
 
             appPage.display(req, resp, displayContent);

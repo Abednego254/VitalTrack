@@ -1,29 +1,29 @@
 package app.rest;
 
-import app.ejb.HospitalMaintenanceLogEJB;
-import app.model.HospitalMaintenanceLog;
+import app.ejb.MaintenanceLogEJB;
+import app.model.MaintenanceLog;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Path;
 import java.util.List;
 
 @Path("/maintenance")
-public class HospitalMaintenanceLogRestApi extends GenericApi<HospitalMaintenanceLog> {
+public class HospitalMaintenanceLogRestApi extends GenericApi<MaintenanceLog> {
 
     @EJB
-    private HospitalMaintenanceLogEJB maintenanceEJB;
+    private MaintenanceLogEJB maintenanceEJB;
 
     @Override
-    protected void saveEntity(HospitalMaintenanceLog log) throws Exception {
+    protected void saveEntity(MaintenanceLog log) throws Exception {
         maintenanceEJB.save(log);
     }
 
     @Override
-    protected HospitalMaintenanceLog findEntity(Long id) throws Exception {
+    protected MaintenanceLog findEntity(Long id) throws Exception {
         return maintenanceEJB.findById(id);
     }
 
     @Override
-    protected List<HospitalMaintenanceLog> listEntities() throws Exception {
+    protected List<MaintenanceLog> listEntities() throws Exception {
         return maintenanceEJB.findAll();
     }
 
