@@ -1,6 +1,6 @@
 package app.framework;
 
-import app.dao.HospitalEquipmentDao;
+import app.dao.EquipmentDao;
 import app.utility.helper.ClassScanner;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class VitalTrackFramework {
 
     @Inject
-    private HospitalEquipmentDao equipmentDao;
+    private EquipmentDao equipmentDao;
 
     private Map<String, List<SelectBox>> formSelections = new HashMap<>();
 
@@ -175,10 +175,17 @@ public class VitalTrackFramework {
                 idField.setAccessible(true);
                 Object id = idField.get(data);
 
-                /* EDIT BUTTON (Placeholder for now) */
-                tableBuilder.append("<a href='#' class='icon-btn' title='Edit' style='background: #3b82f6; color: white;'>");
-                tableBuilder.append("<i class='fa-solid fa-pen'></i>");
-                tableBuilder.append("</a>");
+                /* EDIT BUTTON — links to edit/{id} */
+                if (!vitalTrackTable.editLink().equalsIgnoreCase("")) {
+                    tableBuilder.append("<a href='")
+                        .append(ActionMap.APP_PATH)
+                        .append(vitalTrackTable.editLink())
+                        .append("/")
+                        .append(id)
+                        .append("' class='icon-btn' title='Edit' style='background: #3b82f6; color: white;'>")
+                        .append("<i class='fa-solid fa-pen'></i>")
+                        .append("</a>");
+                }
 
                 /* DELETE BUTTON */
                 tableBuilder.append("<a href='")
@@ -229,6 +236,99 @@ public class VitalTrackFramework {
 
         return tableBuilder.toString();
 
+    }
+
+    /**
+     * Generates a pre-filled HTML form for editing an existing entity.
+     * Renders the same fields as htmlForm() but with current values populated
+     * and the form action pointing to the update endpoint.
+     */
+    public String htmlEditForm(Class<?> clazz, Object entity) {
+        if (!clazz.isAnnotationPresent(VitalTrackForm.class))
+            return "";
+
+        VitalTrackForm formAnnot = clazz.getAnnotation(VitalTrackForm.class);
+        // Derive update URL: replace /save with /update at the end
+        String updateUrl = formAnnot.actionUrl().replaceAll("/save$", "/update");
+
+        StringBuilder formBuilder = new StringBuilder();
+        formBuilder.append("<header class='page-header'>");
+        formBuilder.append("<h1>Edit ").append(formAnnot.label()).append("</h1>");
+        formBuilder.append("<p>Update the details below and click Save Changes.</p>");
+        formBuilder.append("</header>");
+
+        formBuilder.append("<div class='container'>");
+        formBuilder.append("<div class='card glass'>");
+        formBuilder.append("<form method='POST' action='")
+            .append(ActionMap.APP_PATH)
+            .append(updateUrl)
+            .append("'>");
+
+        // Hidden ID field so the update handler knows which record to update
+        try {
+            Field idField = findField(clazz, "id");
+            idField.setAccessible(true);
+            Object idVal = idField.get(entity);
+            formBuilder.append("<input type='hidden' name='id' value='").append(idVal).append("' />");
+        } catch (Exception ignored) {}
+
+        formBuilder.append("<div class='form-grid'>");
+        for (Field field : getAllFields(clazz)) {
+            if (!field.isAnnotationPresent(VitalTrackFormField.class))
+                continue;
+
+            VitalTrackFormField fieldInfo = field.getAnnotation(VitalTrackFormField.class);
+            String fieldName = fieldInfo.name().isEmpty() ? field.getName() : fieldInfo.name();
+
+            // Get current value from the entity
+            String currentVal = "";
+            try {
+                field.setAccessible(true);
+                Object val = field.get(entity);
+                if (val != null) {
+                    // Format dates as yyyy-MM-dd for HTML date inputs
+                    if (val instanceof java.util.Date) {
+                        currentVal = new java.text.SimpleDateFormat("yyyy-MM-dd").format((java.util.Date) val);
+                    } else {
+                        currentVal = val.toString();
+                    }
+                }
+            } catch (Exception ignored) {}
+
+            formBuilder.append("<div class='form-group'>");
+            formBuilder.append("<label>").append(fieldInfo.label()).append("</label>");
+
+            if (!fieldInfo.select().equalsIgnoreCase("") && formSelections.containsKey(fieldInfo.select())) {
+                formBuilder.append("<select name='").append(fieldName).append("'>");
+                final String selectedVal = currentVal;
+                formSelections.get(fieldInfo.select()).forEach(opt -> {
+                    boolean selected = opt.getValue().equalsIgnoreCase(selectedVal);
+                    formBuilder.append("<option value='").append(opt.getValue()).append("'")
+                        .append(selected ? " selected" : "")
+                        .append(">").append(opt.getName()).append("</option>");
+                });
+                formBuilder.append("</select>");
+            } else {
+                formBuilder.append("<input type='").append(fieldInfo.type().isEmpty() ? "text" : fieldInfo.type()).append("'")
+                    .append(" name='").append(fieldName).append("'")
+                    .append(" value='").append(currentVal.replace("'", "&#39;")).append("'")
+                    .append(" placeholder='").append(fieldInfo.placeholder()).append("' />");
+            }
+            formBuilder.append("</div>");
+        }
+        formBuilder.append("</div>");
+
+        resetFormSelections();
+
+        formBuilder.append("<div style='margin-top: 2rem;'>");
+        formBuilder.append("<button type='submit' class='btn btn-primary'>Save Changes</button>");
+        formBuilder.append("<button type='reset' class='btn btn-outline' style='margin-left: 1rem;'>Reset</button>");
+        formBuilder.append("</div>");
+        formBuilder.append("</form>");
+        formBuilder.append("</div>");
+        formBuilder.append("</div>");
+
+        return formBuilder.toString();
     }
 
     public String generateMenuItem(){

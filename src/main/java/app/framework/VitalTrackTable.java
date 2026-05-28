@@ -13,5 +13,7 @@ public @interface VitalTrackTable {
 
     String addLink() default "";
 
+    String editLink() default "";
+
     String deleteLink() default "";
 }

@@ -1,6 +1,6 @@
 package app.action;
 
-import app.ejb.HospitalMedicalSupplyEJB;
+import app.ejb.MedicalSupplyEJB;
 import app.framework.Action;
 import app.framework.ActionGetMethod;
 import app.framework.ActionPathParam;
@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class SupplyAction {
 
     @EJB
-    private HospitalMedicalSupplyEJB supplyEJB;
+    private MedicalSupplyEJB supplyEJB;
 
     @Inject
     private VitalTrackFramework framework;
@@ -65,9 +65,44 @@ public class SupplyAction {
         return list();
     }
 
+    @ActionGetMethod("edit/{id}")
+    public ActionResponse edit(@ActionPathParam("id") Long id) throws Exception {
+        HospitalMedicalSupply supply = supplyEJB.findById(id);
+        return new ActionResponse(framework.htmlEditForm(HospitalMedicalSupply.class, supply));
+    }
+
+    @ActionPostMethod("update")
+    public ActionResponse update(HttpServletRequest request) throws Exception {
+        HospitalMedicalSupply supply = new HospitalMedicalSupply();
+
+        String idParam = request.getParameter("id");
+        if (idParam != null && !idParam.isEmpty()) {
+            supply.setId(Long.parseLong(idParam));
+        }
+
+        supply.setName(request.getParameter("name"));
+        supply.setCategory(request.getParameter("category"));
+        supply.setUnitOfMeasure(request.getParameter("unitOfMeasure"));
+
+        String qty = request.getParameter("quantity");
+        supply.setQuantity(qty != null && !qty.isEmpty() ? Integer.parseInt(qty) : 0);
+
+        String reorder = request.getParameter("reorderLevel");
+        supply.setReorderLevel(reorder != null && !reorder.isEmpty() ? Integer.parseInt(reorder) : 10);
+
+        String expiryDate = request.getParameter("expiryDate");
+        if (expiryDate != null && !expiryDate.isEmpty()) {
+            supply.setExpiryDate(java.sql.Date.valueOf(expiryDate));
+        }
+
+        supplyEJB.save(supply);
+        return list();
+    }
+
     @ActionGetMethod("delete/{id}")
     public ActionResponse delete(@ActionPathParam("id") Long id) throws Exception {
         supplyEJB.delete(id);
         return list();
     }
 }
+

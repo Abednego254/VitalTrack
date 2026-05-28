@@ -47,6 +47,22 @@ public class NurseAction {
         return list();
     }
 
+    @ActionGetMethod("edit/{id}")
+    public ActionResponse edit(@ActionPathParam("id") Long id) throws Exception {
+        HospitalNurse nurse = nurseEJB.findById(id);
+        return new ActionResponse(framework.htmlEditForm(HospitalNurse.class, nurse));
+    }
+
+    @ActionPostMethod("update")
+    public ActionResponse update(@ActionRequestBody HospitalNurse nurse, HttpServletRequest request) throws Exception {
+        String idParam = request.getParameter("id");
+        if (idParam != null && !idParam.isEmpty()) {
+            nurse.setId(Long.parseLong(idParam));
+        }
+        nurseEJB.save(nurse);
+        return list();
+    }
+
     @ActionGetMethod("delete/{id}")
     public ActionResponse delete(@ActionPathParam("id") Long id) throws Exception {
         nurseEJB.delete(id);

@@ -18,7 +18,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "hospital_maintenance_log")
-@VitalTrackTable(label = "Maintenance History", addLink = "maintenancelog/add", deleteLink = "maintenancelog/delete")
+@VitalTrackTable(label = "Maintenance History", addLink = "maintenancelog/add", editLink = "maintenancelog/edit", deleteLink = "maintenancelog/delete")
 @VitalTrackForm(label = "Maintenance Log", actionUrl = "maintenancelog/save")
 @XmlRootElement(name = "maintenancelog")
 @XmlAccessorType(XmlAccessType.FIELD)

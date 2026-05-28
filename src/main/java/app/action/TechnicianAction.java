@@ -50,6 +50,22 @@ public class TechnicianAction {
         return list();
     }
 
+    @ActionGetMethod("edit/{id}")
+    public ActionResponse edit(@ActionPathParam("id") Long id) throws Exception {
+        HospitalTechnician technician = technicianEJB.findById(id);
+        return new ActionResponse(framework.htmlEditForm(HospitalTechnician.class, technician));
+    }
+
+    @ActionPostMethod("update")
+    public ActionResponse update(@ActionRequestBody HospitalTechnician technician, HttpServletRequest request) throws Exception {
+        String idParam = request.getParameter("id");
+        if (idParam != null && !idParam.isEmpty()) {
+            technician.setId(Long.parseLong(idParam));
+        }
+        technicianEJB.save(technician);
+        return list();
+    }
+
     @ActionGetMethod("delete/{id}")
     public ActionResponse delete(@ActionPathParam("id") Long id) throws Exception {
         technicianEJB.delete(id);

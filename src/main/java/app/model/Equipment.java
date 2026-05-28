@@ -19,7 +19,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "hospital_equipment")
-@VitalTrackTable(label = "Equipment", addLink = "equipment/add", deleteLink = "equipment/delete")
+@VitalTrackTable(label = "Equipment", addLink = "equipment/add", editLink = "equipment/edit", deleteLink = "equipment/delete")
 @VitalTrackForm(label = "Equipment", actionUrl = "equipment/save")
 @XmlRootElement(name = "equipment")
 @XmlAccessorType(XmlAccessType.FIELD)
